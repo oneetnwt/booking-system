@@ -30,6 +30,10 @@
                 Nature’s Beauty.</p>
             <button>Book Now!</button>
         </div>
+        <div id="quote">
+            <q>Experience the unforgettable happiness with your family and<br>friends at K&A Natural Spring
+                Resort</q>
+        </div>
     </main>
 </body>
 
