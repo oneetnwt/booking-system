@@ -1,4 +1,4 @@
 <?php
-header("Location: pages/home.php");
+header("Location: client/src/pages/home.php");
 exit();
 ?>

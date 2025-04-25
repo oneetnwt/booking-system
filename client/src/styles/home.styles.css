@@ -63,16 +63,26 @@ header {
   margin-left: 25px;
   font-weight: 400;
   color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-links li:hover {
+  color: #ffcd6f;
 }
 
 #navbar {
   transition: all 0.2s ease-in-out;
 }
 
+.active {
+  color: #ffa500;
+  font-weight: 600;
+}
+
 /* Hero Section */
 .hero {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
-    url("../assets/banner.png");
+    url("../../assets/banner.png");
   background-size: cover;
   background-position: center;
   height: 600px;

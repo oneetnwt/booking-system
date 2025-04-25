@@ -1,0 +1,215 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-image: url("../../assets/banner.png");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+}
+
+.container {
+  display: flex;
+  width: 90%;
+  max-width: 1200px;
+  z-index: 1;
+  position: relative;
+}
+
+.form-container {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  color: white;
+  padding: 30px;
+  width: 45%;
+  min-width: 350px;
+}
+
+.form-container h1 {
+  font-size: 28px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.login-text {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.login-text a {
+  color: #4285f4;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
+.form-group {
+  margin-bottom: 6px;
+}
+
+.last-form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 14px;
+}
+
+.name-group {
+  display: flex;
+  gap: 10px;
+}
+
+.name-group .form-group {
+  flex: 1;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #3367d6;
+}
+
+.image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  margin-left: 20px;
+  position: relative;
+}
+
+.image-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 36px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  color: white;
+  text-align: right;
+}
+
+.logo-name {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.logo-subtext {
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  body {
+    padding: 15px;
+    align-items: flex-start;
+    padding-top: 80px;
+  }
+
+  .container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .form-container {
+    width: 100%;
+    min-width: auto;
+    padding: 20px;
+  }
+
+  .image-container {
+    display: none;
+    /* Hide image on mobile screens */
+    margin-left: 0;
+  }
+
+  .name-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .logo {
+    top: 15px;
+    right: 15px;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  .logo-name {
+    font-size: 22px;
+  }
+
+  .logo-subtext {
+    font-size: 12px;
+  }
+}
