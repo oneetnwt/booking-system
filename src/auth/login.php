@@ -12,15 +12,15 @@
 <body>
     <div class="header">
         <div class="logo">
-            <img src="../../../assets/K&ALogo.png" alt="K&A Natural Spring Resort Logo" class="logo-circle">
-            <img src="../../../assets/K&A.png" alt="K&A Natural Spring Resort Logo" class="resort-name">
+            <img src="../../assets/K&ALogo.png" alt="K&A Natural Spring Resort Logo" class="logo-circle">
+            <img src="../../assets/K&A.png" alt="K&A Natural Spring Resort Logo" class="resort-name">
         </div>
     </div>
 
     <div class="main-content">
         <div class="image-container">
             <div class="resort-image">
-                <img src="../../../assets/cabin-view.jpg" alt="Resort Pool View">
+                <img src="../../assets/cabin-view.jpg" alt="Resort Pool View">
                 <div class="image-caption">View From Upper Kubo</div>
             </div>
         </div>
@@ -32,15 +32,15 @@
                     <p>New to K&A Natural Spring Resort? <a href="signup.php" id="signupLink">Sign up</a></p>
                 </div>
 
-                <form id="loginForm">
+                <form id="loginForm" action="login.auth.php" method="POST">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" placeholder="Enter your email" name="email" required>
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" placeholder="Enter your password" required>
+                        <input type="password" id="password" placeholder="Enter your password" name="password" required>
                     </div>
 
                     <div class="forgot-password">

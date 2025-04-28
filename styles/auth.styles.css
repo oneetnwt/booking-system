@@ -1,0 +1,146 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  height: 100dvh;
+  width: 100%;
+}
+
+a {
+  color: #357ae8;
+  text-decoration: none;
+}
+
+.container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding: 1rem;
+}
+
+.left-banner {
+  height: 100%;
+}
+
+.left-banner-img {
+  background-image: url('../assets/cabin-view.jpg');
+  background-size: cover;
+  height: 100%;
+  border-radius: 1rem;
+}
+
+.right-banner {
+  height: 100%;
+}
+
+.right-banner-img {
+  background-image: url('../assets/a-house-night.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.form-container {
+  display: grid;
+  grid-template-rows: 50px 1fr 50px;
+}
+
+.left-header img {
+  height: 50px;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.right-header img {
+  height: 50px;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 25rem;
+  margin: 1rem;
+}
+
+label {
+  margin-bottom: 0.5rem;
+}
+
+form input {
+  width: 100%;
+  border: 1px solid #00000080;
+  margin-bottom: 0.5rem;
+}
+
+form input, form button {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+form button {
+  width: 100%;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: #357ae8;
+}
+
+form a {
+  margin: 0.5rem 0 1rem 0;
+  text-align: right;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.footer a {
+  text-align: center;
+  color: #00000080;
+}
+
+.name {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 0.25rem;
+}

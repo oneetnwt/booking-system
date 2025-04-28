@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         ]);
 
         unset($_SESSION['pending_user']);
-        header("Location: ../home.php");
+        $_SESSION['success'] = "User created successfully";
+        header("Location: ../login.php");
         exit();
     } else {
         $_SESSION['error'] = "Invalid Code";

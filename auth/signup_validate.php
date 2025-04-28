@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $email = $_POST['email'];
     $phone = $_POST['phone_number'];
     $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $confirm_password = $_POST['confirm-password'];
 
     $recaptchaSecret = $_ENV['RECAPTCHA_SECRET_KEY'];
     $recaptchaResponse = $_POST['g-recaptcha-response'];
@@ -28,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if (!$captchaSuccess->success) {
         $_SESSION['error'] = "Recaptcha Verification Failed";
-        header('Location: ../../client/src/pages/auth/signup.php');
+        header('Location: signup.php');
         exit();
     }
 
     if ($password !== $confirm_password) {
         $_SESSION['error'] = "Password do not match";
-        header('Location: ../../client/src/pages/auth/signup.php');
+        header('Location: signup.php');
         exit();
     }
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($stmt->rowCount() > 0) {
         $_SESSION['error'] = "Email exists";
-        header('Location: ../../client/src/pages/auth/signup.php');
+        header('Location: signup.php');
         exit();
     }
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($stmt->rowCount() > 0) {
         $_SESSION['error'] = "Phone Number exists";
-        header('Location: ../../client/src/pages/auth/signup.php');
+        header('Location: signup.php');
         exit();
     }
 
@@ -71,10 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     ];
 
     if (send_mail($email, $firstname, $lastname, $code)) {
-        header("Location: ../../client/src/pages/auth/verify.php");
+        header("Location: verify.php");
     } else {
         $_SESSION['error'] = "Failed to send verification email";
-        header('Location: ../../client/src/pages/auth/signup.php');
+        header('Location: signup.php');
     }
 }
 

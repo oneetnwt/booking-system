@@ -1,3 +1,23 @@
+<?php
+
+require __DIR__ . "/../vendor/autoload.php";
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+session_start();
+
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
+$secret_key = $_ENV['JWT_SECRET_KEY'];
+
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../styles/home.styles.css">
-    <link rel="icon" href="../../assets/K&ALogo.png">
+    <link rel="icon" href="../assets/K&ALogo.png">
     <title>K&A Resort</title>
 </head>
 
@@ -14,7 +34,7 @@
     <header id="navbar">
         <div class="container header-content">
             <div class="logo">
-                <img src="../../assets/K&A.png" alt="K&A Resort Logo">
+                <img src="../assets/K&A.png" alt="K&A Resort Logo">
             </div>
             <nav>
                 <ul class="nav-links">
@@ -32,15 +52,25 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Escape the Ordinary, <br><span>Discover Paradise.</span></h1>
-                <p style="width: 90%;"">Experience a blend of unparalleled hospitality with serene natural beauty at K&A Resort
-                    Spring
-                    Resort.</p>
-                <a href=" #" class="btn btn-primary">Book Now</a>
-                    <a href="#" class="btn btn-outline">Learn More</a>
+
+                <?php if (isset($_COOKIE['token'])): ?>
+                    <p style="width: 90%;"">Welcome to K&A NAtural Spring resort <?php echo $decoded->data->name; ?></p>
+                <?php else: ?>
+                    <p style=" width: 90%;"">Experience a blend of unparalleled hospitality with serene natural beauty
+                        at K&A Resort
+                        Spring
+                        Resort.</p>
+                <?php endif; ?>
+                <?php if (isset($_COOKIE['token'])): ?>
+                    <a href="../auth/logout.php" class="btn" style="background-color: red;"">Logout</a>
+                    <?php else: ?>
+                        <a href="../auth/login.php" class="btn btn-primary">Book Now</a>
+                        <a href="#" class="btn btn-outline">Learn More</a>
+                <?php endif; ?>
             </div>
         </div>
         <div class="hero-image">
-            <img src="../../assets/poolside.png" alt="Resort Pool View" style="object-fit: cover;">
+            <img src="../assets/poolside.png" alt="Resort Pool View" style="object-fit: cover;">
         </div>
     </section>
 
@@ -53,7 +83,7 @@
     <section class="about">
         <div class="container about-container">
             <div class="about-content">
-                <img src="../../assets/K&A_Dark.png" alt="" height="75px">
+                <img src="../assets/K&A_Dark.png" alt="" height="75px">
                 <h2>About Us</h2>
                 <p>Have your summer kicked-off and thoroughly enjoyed at K&A Natural Spring Resort. A tranquil paradise
                     nestled in San Antonio, Quezon City, where 97% chlorine-free pool, shaded by the sprawling pools and
@@ -61,7 +91,7 @@
                 <a href="#" class="btn btn-primary">Learn More</a>
             </div>
             <div class="about-image">
-                <img src="../../assets/poolside_night.jpg" alt="Resort Night View">
+                <img src="../assets/poolside_night.jpg" alt="Resort Night View">
             </div>
         </div>
     </section>
@@ -102,7 +132,7 @@
             <div class="room-cards">
                 <div class="room-card">
                     <div class="room-image">
-                        <img src="../../assets/cabin.jpg" alt="Upper Kubo">
+                        <img src="../assets/cabin.jpg" alt="Upper Kubo">
                     </div>
                     <div class="room-content">
                         <h3 class="room-title">Upper Kubo</h3>
@@ -114,7 +144,7 @@
                 </div>
                 <div class="room-card">
                     <div class="room-image">
-                        <img src="../../assets/a-house.jpg" alt="A-House">
+                        <img src="../assets/a-house.jpg" alt="A-House">
                     </div>
                     <div class="room-content">
                         <h3 class="room-title">A-House</h3>
@@ -125,7 +155,7 @@
                 </div>
                 <div class="room-card">
                     <div class="room-image">
-                        <img src="../../assets/cottage.jpg" alt="Cottage">
+                        <img src="../assets/cottage.jpg" alt="Cottage">
                     </div>
                     <div class="room-content">
                         <h3 class="room-title">Cottage</h3>
@@ -147,7 +177,7 @@
             <div class="amenity-grid">
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/pool.jpg" alt="Swimming Pool">
+                        <img src="../assets/pool.jpg" alt="Swimming Pool">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Swimming Pool</h3>
@@ -156,7 +186,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/karaoke.jpg" alt="Karaoke">
+                        <img src="../assets/karaoke.jpg" alt="Karaoke">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Karaoke</h3>
@@ -165,7 +195,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/poolbar.jpg" alt="Pool Bar">
+                        <img src="../assets/poolbar.jpg" alt="Pool Bar">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Pool Bar</h3>
@@ -174,7 +204,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/shower.jpg" alt="Shower Area">
+                        <img src="../assets/shower.jpg" alt="Shower Area">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Shower Area</h3>
@@ -183,7 +213,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/grill.jpg" alt="Slide Area">
+                        <img src="../assets/grill.jpg" alt="Slide Area">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Slide Area</h3>
@@ -192,7 +222,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/toilet.jpg" alt="Toilet Facilities">
+                        <img src="../assets/toilet.jpg" alt="Toilet Facilities">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Toilet Facilities</h3>
@@ -201,7 +231,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/sari.jpg" alt="Self-use Store">
+                        <img src="../assets/sari.jpg" alt="Self-use Store">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Self-use Store</h3>
@@ -210,7 +240,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/lifeJackets.jpg" alt="Videoke">
+                        <img src="../assets/lifeJackets.jpg" alt="Videoke">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Videoke</h3>
@@ -219,7 +249,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/bonfire.jpg" alt="Bonfire Area">
+                        <img src="../assets/bonfire.jpg" alt="Bonfire Area">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Bonfire Area</h3>
@@ -228,7 +258,7 @@
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../../assets/wifi.png" alt="WiFi Access">
+                        <img src="../assets/wifi.png" alt="WiFi Access">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">WiFi Access</h3>
@@ -250,7 +280,7 @@
                 <div class="testimonial-card">
                     <div class="testimonial-header">
                         <div class="testimonial-avatar">
-                            <img src="../../assets/Danz.png" alt="Guest Avatar">
+                            <img src="../assets/Danz.png" alt="Guest Avatar">
                         </div>
                         <div>
                             <div class="testimonial-name">Donna J.</div>
@@ -271,7 +301,7 @@
                 <div class="testimonial-card">
                     <div class="testimonial-header">
                         <div class="testimonial-avatar">
-                            <img src="../../assets/Jeff.png" alt="Guest Avatar">
+                            <img src="../assets/Jeff.png" alt="Guest Avatar">
                         </div>
                         <div>
                             <div class="testimonial-name">Jeff Ivan</div>
@@ -312,7 +342,7 @@
         <div class="container footer-container">
             <div class="footer-column">
                 <div class="footer-logo">
-                    <img src="../../assets/K&ALogo.png" alt="K&A Resort Logo">
+                    <img src="../assets/K&ALogo.png" alt="K&A Resort Logo">
                 </div>
                 <p>Escape the ordinary, discover paradise at K&A Natural Spring Resort.</p>
                 <div class="footer-social">

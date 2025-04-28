@@ -1,17 +1,16 @@
 <?php
 session_start();
 
-require_once __DIR__ . "/../../../../server/vendor/autoload.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
-// Load environment variables from the server directory
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../../../../server");
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../../");
 $dotenv->load();
 
 $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html  tml lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -22,8 +21,8 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
 
 <body>
     <div class="logo">
-        <img src="../../../assets/K&ALogo.png" alt="K&A Logo">
-        <img src="../../../assets/K&A.png" alt="" class="logo-text">
+        <img src="../../assets/K&ALogo.png" alt="K&A Logo">
+        <img src="../../assets/K&A.png" alt="" class="logo-text">
     </div>
 
     <div class="container">
@@ -36,7 +35,7 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
                     unset($_SESSION['error']); ?>
                 </p>
             <?php endif; ?>
-            <form id="signup-form" action="../../../../server/auth/signup.auth.php" method="POST">
+            <form id="signup-form" action="signup.auth.php" method="POST">
                 <div class="name-group">
                     <div class="form-group">
                         <label for="first-name">First Name</label>
@@ -76,7 +75,7 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
         </div>
 
         <div class="image-container">
-            <img src="../../../assets/a-house-night.jpg" alt="A-House Night View">
+            <img src="../../assets/a-house-night.jpg" alt="A-House Night View">
             <div class="image-caption">A-House Night View</div>
         </div>
     </div>
