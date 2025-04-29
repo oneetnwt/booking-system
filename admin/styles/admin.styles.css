@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');*/
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  height: 100dvh;
+  width: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-height: 75px;
+  padding: 0.75rem 1rem;
+  background-color: #1f2937;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo .circle-logo {
+  height: 50px;
+  width: auto;
+}
+
+.logo .logo-text {
+  height: 36px;
+  width: auto;
+}
+
+header a {
+  color: black;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+}
+
+header a span {
+  margin-left: 0.5rem;
+  font-size: 1.25rem;
+}
+
+header a:hover {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
