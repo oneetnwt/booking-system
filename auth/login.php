@@ -1,19 +1,15 @@
-<?php 
-session_start();
-
-if(isset($_COOKIE['token'])){
-    header("Location: ../home/home.php");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../assets/K&ALogo.png">
     <link rel="stylesheet" href="../styles/auth.styles.css">
-    <title>Login</title>
+    <title>K&A | Log in</title>
+    <title>Document</title>
 </head>
+
 <body>
     <div class="container">
         <div class="left-banner">
@@ -21,19 +17,24 @@ if(isset($_COOKIE['token'])){
         </div>
         <div class="form-container">
             <div class="right-header">
-                <img src="../assets/K&A_Dark.png" alt="">
+                <img src="../assets/K&A_Dark.png" alt="" class="">
             </div>
             <div class="login-container">
-                <h1>Welcome Back</h1>
+                <h1>Welcome Back!</h1>
                 <p>New to K&A Natural Spring Resort? <a href="signup.php">Sign up</a></p>
-                <form action="login_validate.php" method="POST">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" placeholder="johndoe@gmail.com">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" placeholder="Enter the password">
-                    <a href="">Forgot Password?</a>
-                    <button>Log in</button>
+                <form action="" method="POST">
+                    <div class="form-group">
+                        <label for="">Email:</label>
+                        <input type="email" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Confirm Password:</label>
+                        <input type="password" placeholder="Enter your password">
+                    </div>
+                    <button>Sign up</button>
                 </form>
+
+                <a href="../google-auth/google-login.php">Sign up with Google</a>
             </div>
             <div class="footer">
                 <a href="">Privacy Policy</a>
@@ -42,4 +43,5 @@ if(isset($_COOKIE['token'])){
         </div>
     </div>
 </body>
+
 </html>
