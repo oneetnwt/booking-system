@@ -13,7 +13,7 @@ input::-webkit-inner-spin-button {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   height: 100dvh;
   width: 100%;
 }
@@ -35,7 +35,7 @@ a {
 }
 
 .left-banner-img {
-  background-image: url('../assets/cabin-view.jpg');
+  background-image: url("../assets/cabin-view.jpg");
   background-size: cover;
   height: 100%;
   border-radius: 1rem;
@@ -46,7 +46,7 @@ a {
 }
 
 .right-banner-img {
-  background-image: url('../assets/a-house-night.jpg');
+  background-image: url("../assets/a-house-night.jpg");
   background-size: cover;
   background-position: center;
   height: 100%;
@@ -98,7 +98,8 @@ form input {
   margin-bottom: 0.5rem;
 }
 
-form input, form button {
+form input,
+form button {
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
 }
@@ -113,6 +114,7 @@ form button {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-weight: bold;
 }
 
 form button:hover {

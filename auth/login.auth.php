@@ -1,11 +1,12 @@
 <?php
 
+require '../db/connectDB.php';
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
@@ -20,7 +21,26 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-        header("Location: ../home.php");
+        $key = $_ENV['JWT_SECRET_KEY'];
+
+        $token = JWT::encode(
+            array(
+                'iat' => time(),
+                'nbf' => time(),
+                'exp' => time() + 3600,
+                'data' => array(
+                    'user_id' => $user['id'],
+                    'firstname' => $user['firstname'],
+                    'lastname' => $user['lastname']
+                )
+            ),
+            $key,
+            'HS256'
+        );
+
+        setcookie("token", $token, time() + 3600, "/", "", true, true);
+
+        header("Location: ../home/home.php");
         exit();
     } else {
         $_SESSION['error'] = "User not found";

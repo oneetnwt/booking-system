@@ -36,14 +36,28 @@ if (isset($_COOKIE['token'])) {
             <div class="logo">
                 <img src="../assets/K&A.png" alt="K&A Resort Logo">
             </div>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#" class="active">Home</a></li>
-                    <li><a href="#">Accommodation</a></li>
-                    <li><a href="#">Gallery</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
+            <div style="display: flex; gap: 3rem; align-items: center;">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#">Accommodation</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <nav class="auth-links">
+                    <ul>
+                        <?php if (!isset($_COOKIE['token'])): ?>
+                            <li><a href="../auth/login.php" class="login-btn">Log in</a></li>
+                            <li><a href="../auth/signup.php" class="signup-btn">Sign up</a></li>
+                        <?php else: ?>
+                            <li><a href="#" id="book-btn">Book Now</a></li>
+                            <div style="height: 24px; width: 24px; background: #FFF; border-radius: 50%;"></div>
+                            <li><a href="../auth/logout.php"><?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?></a></li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
 
@@ -52,21 +66,12 @@ if (isset($_COOKIE['token'])) {
         <div class="container">
             <div class="hero-content">
                 <h1>Escape the Ordinary, <br><span>Discover Paradise.</span></h1>
-
-                <?php if (isset($_COOKIE['token'])): ?>
-                    <p style="width: 90%;"">Welcome to K&A NAtural Spring resort <?php echo $decoded->data->name; ?></p>
-                <?php else: ?>
-                    <p style=" width: 90%;"">Experience a blend of unparalleled hospitality with serene natural beauty
+                <p style=" width: 90%;"">Experience a blend of unparalleled hospitality with serene natural beauty
                         at K&A Resort
                         Spring
                         Resort.</p>
-                <?php endif; ?>
-                <?php if (isset($_COOKIE['token'])): ?>
-                    <a href="../auth/logout.php" class="btn" style="background-color: red;"">Logout</a>
-                    <?php else: ?>
-                        <a href="../auth/login.php" class="btn btn-primary">Book Now</a>
-                        <a href="#" class="btn btn-outline">Learn More</a>
-                <?php endif; ?>
+                        <a href=" ../auth/login.php" class="btn btn-primary">Book Now</a>
+                    <a href="#" class="btn btn-outline">Learn More</a>
             </div>
         </div>
         <div class="hero-image">
@@ -380,12 +385,19 @@ if (isset($_COOKIE['token'])) {
     </footer>
 
     <script>
-        window.addEventListener("scroll", function () {
-            const element = document.getElementById("navbar");
+        window.addEventListener("scroll", function() {
+            const navbar = document.getElementById("navbar");
+            const bookBtn = document.getElementById("book-btn");
             if (window.scrollY > 500) {
-                element.style.backgroundColor = "#003366";
+                navbar.style.backgroundColor = "#003366";
+                if (bookBtn) {
+                    bookBtn.style.display = "flex";
+                }
             } else {
-                element.style.backgroundColor = "transparent";
+                if (bookBtn) {
+                    bookBtn.style.display = "none";
+                }
+                navbar.style.backgroundColor = "transparent";
             }
         });
     </script>

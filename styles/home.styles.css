@@ -70,6 +70,51 @@ header {
   color: #ffcd6f;
 }
 
+.auth-links ul {
+  display: flex;
+  list-style: none;
+  color: white;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.signup-btn,
+.login-btn,
+#book-btn {
+  transition: all 0.2s ease-in-out;
+  padding: 0.5rem 1rem;
+  color: #fff;
+}
+
+.signup-btn {
+  background-color: #007bff;
+  color: white;
+  border-radius: 1.5rem;
+  margin-left: 1rem;
+}
+
+.signup-btn:hover,
+#book-btn:hover {
+  background: #428edb;
+}
+
+.login-btn {
+  background: transparent;
+  border: 1px solid #fff;
+  border-radius: 1.5rem;
+}
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+#book-btn {
+  background-color: #007bff;
+  color: white;
+  border-radius: 1.5rem;
+  margin-right: 1rem;
+}
+
 #navbar {
   transition: all 0.2s ease-in-out;
 }

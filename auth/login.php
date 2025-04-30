@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (isset($_COOKIE['token'])) {
+    header("Location: ../home/home.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,17 +30,33 @@
             <div class="login-container">
                 <h1>Welcome Back!</h1>
                 <p>New to K&A Natural Spring Resort? <a href="signup.php">Sign up</a></p>
-                <form action="" method="POST">
+                <form action="login.auth.php" method="POST">
                     <div class="form-group">
                         <label for="">Email:</label>
-                        <input type="email" placeholder="Enter your email">
+                        <input type="email" placeholder="Enter your email" name="email">
                     </div>
                     <div class="form-group">
                         <label for="">Confirm Password:</label>
-                        <input type="password" placeholder="Enter your password">
+                        <input type="password" placeholder="Enter your password" name="password">
                     </div>
-                    <button>Sign up</button>
+                    <a href="">Forgot Password?</a>
+                    <button>Log in</button>
                 </form>
+                <?php if (isset($_SESSION['error'])): ?>
+                    <p
+                        style="color: #F74141; font-weight: 500; text-align: center; margin-bottom: 12px; font-style: italic;">
+                        <?= $_SESSION['error'];
+                        unset($_SESSION['error']); ?>
+                    </p>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['success'])): ?>
+                    <p
+                        style="color: #4CAF50; font-weight: 500; text-align: center; margin-bottom: 12px; font-style: italic;">
+                        <?= $_SESSION['success'];
+                        unset($_SESSION['success']); ?>
+                    </p>
+                <?php endif; ?>
 
                 <a href="../google-auth/google-login.php">Sign up with Google</a>
             </div>
