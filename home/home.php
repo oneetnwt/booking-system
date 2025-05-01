@@ -39,8 +39,8 @@ if (isset($_COOKIE['token'])) {
             <div style="display: flex; gap: 3rem; align-items: center;">
                 <nav>
                     <ul class="nav-links">
-                        <li><a href="#" class="active">Home</a></li>
-                        <li><a href="#">Accommodation</a></li>
+                        <li><a href="home.php" class="active">Home</a></li>
+                        <li><a href="accommodation.php">Accommodation</a></li>
                         <li><a href="#">Gallery</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
@@ -52,8 +52,17 @@ if (isset($_COOKIE['token'])) {
                             <li><a href="../auth/signup.php" class="signup-btn">Sign up</a></li>
                         <?php else: ?>
                             <li><a href="#" id="book-btn">Book Now</a></li>
-                            <div style="height: 24px; width: 24px; background: #FFF; border-radius: 50%;"></div>
-                            <li><a href="../auth/logout.php"><?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?></a></li>
+                            <div class="dropdown">
+                                <li><a href="../auth/logout.php">Hi,
+                                        <?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?><i
+                                            class="fa fa-caret-down" aria-hidden="true"
+                                            style="margin-left: 0.5rem;"></i></a></li>
+                                <div class="dropdown-menu">
+                                    <a href="">Edit Profile</a>
+                                    <a href="">My Bookings</a>
+                                    <a href="../auth/logout.php">Log out</a>
+                                </div>
+                            </div>
                         <?php endif; ?>
                     </ul>
                 </nav>
@@ -71,7 +80,7 @@ if (isset($_COOKIE['token'])) {
                         Spring
                         Resort.</p>
                         <a href=" ../auth/login.php" class="btn btn-primary">Book Now</a>
-                    <a href="#" class="btn btn-outline">Learn More</a>
+                    <!-- <a href="#" class="btn btn-outline">Learn More</a> -->
             </div>
         </div>
         <div class="hero-image">
@@ -384,8 +393,9 @@ if (isset($_COOKIE['token'])) {
             rights reserved.</p>
     </footer>
 
+    <script src="../js/loader.js"></script>
     <script>
-        window.addEventListener("scroll", function() {
+        window.addEventListener("scroll", function () {
             const navbar = document.getElementById("navbar");
             const bookBtn = document.getElementById("book-btn");
             if (window.scrollY > 500) {
