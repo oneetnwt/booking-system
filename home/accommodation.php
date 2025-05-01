@@ -1,11 +1,16 @@
 <?php
 
+session_start();
+
+if (isset($_SESSION['booking_details'])) {
+    unset($_SESSION['booking_details']);
+    unset($_SESSION['room_id']);
+}
+
 require __DIR__ . "/../vendor/autoload.php";
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-
-session_start();
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
@@ -16,6 +21,17 @@ if (isset($_COOKIE['token'])) {
     $token = $_COOKIE['token'];
     $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $room = $_POST['room'];
+    $room = (int)$room;
+
+    $_SESSION['room_id'] = $room;
+
+    header("Location: booking-confirmation.php");
+    exit();
+}
+
 ?>
 
 
@@ -94,7 +110,10 @@ if (isset($_COOKIE['token'])) {
                     </div>
                     <div class="price">
                         <h2>From ₱5,000.00</h2>
-                        <button>Book Now</button>
+                        <form action="" method="POST">
+                            <input type="hidden" name="room" value="1000">
+                            <button>Book Now</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -115,7 +134,10 @@ if (isset($_COOKIE['token'])) {
                     </div>
                     <div class="price">
                         <h2>From ₱2,500.00</h2>
-                        <button>Book Now</button>
+                        <form action="" method="POST">
+                            <input type="hidden" name="room" value="1001">
+                            <button>Book Now</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -133,7 +155,10 @@ if (isset($_COOKIE['token'])) {
                     </div>
                     <div class="price">
                         <h2>From ₱700 - ₱1,0000</h2>
-                        <button>Book Now</button>
+                        <form action="" method="POST">
+                            <input type="hidden" name="room" value="1002">
+                            <button>Book Now</button>
+                        </form>
                     </div>
                 </div>
             </div>

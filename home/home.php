@@ -1,11 +1,17 @@
 <?php
 
+session_start();
+
+if (isset($_SESSION['booking_details'])) {
+    unset($_SESSION['booking_details']);
+    unset($_SESSION['room_id']);
+}
+
+
 require __DIR__ . "/../vendor/autoload.php";
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-
-session_start();
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
@@ -53,7 +59,7 @@ if (isset($_COOKIE['token'])) {
                         <?php else: ?>
                             <li><a href="#" id="book-btn">Book Now</a></li>
                             <div class="dropdown">
-                                <li><a href="../auth/logout.php">Hi,
+                                <li><a href="">Hi,
                                         <?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?><i
                                             class="fa fa-caret-down" aria-hidden="true"
                                             style="margin-left: 0.5rem;"></i></a></li>
@@ -141,7 +147,7 @@ if (isset($_COOKIE['token'])) {
         <div class="container">
             <div class="section-header">
                 <h2>Accommodation</h2>
-                <a href="#" class="btn">See All →</a>
+                <a href="accommodation.php" class="btn">See All →</a>
             </div>
             <div class="room-cards">
                 <div class="room-card">
@@ -395,7 +401,7 @@ if (isset($_COOKIE['token'])) {
 
     <script src="../js/loader.js"></script>
     <script>
-        window.addEventListener("scroll", function () {
+        window.addEventListener("scroll", function() {
             const navbar = document.getElementById("navbar");
             const bookBtn = document.getElementById("book-btn");
             if (window.scrollY > 500) {
