@@ -31,12 +31,20 @@ body {
   padding: 2rem;
   border-radius: 1rem;
   display: flex;
+  max-width: 30rem;
   flex-direction: column;
   background-color: #fff;
+  justify-content: center;
+  align-items: center;
 }
 
-.form-container h1 {
+.form-container h1,
+.form-container p {
   text-align: center;
+}
+
+.sub-text {
+  width: 100%;
 }
 
 form {

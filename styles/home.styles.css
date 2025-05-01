@@ -109,6 +109,7 @@ header {
 }
 
 #book-btn {
+  display: none;
   background-color: #007bff;
   color: white;
   border-radius: 1.5rem;
@@ -117,6 +118,34 @@ header {
 
 #navbar {
   transition: all 0.2s ease-in-out;
+}
+
+.dropdown {
+  display: block;
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown-menu:hover a {
+  display: block;
+}
+
+.dropdown-menu > a {
+  display: block;
+  color: black;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background: #fff;
+  min-width: 165px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown-menu a:hover {
+  background: #94c8ff;
 }
 
 .active {
