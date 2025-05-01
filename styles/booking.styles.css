@@ -1,0 +1,266 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  color: #333;
+  line-height: 1.6;
+  background: #f9f9f9;
+  width: 100%;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 1rem 5rem;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.heading span {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: #808080;
+}
+
+#active {
+  background-color: #007bff;
+}
+
+.main-content {
+  padding: 2rem 5rem;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 800px 1fr;
+  gap: 2rem;
+}
+
+.details,
+.booking-policy,
+.order-details {
+  background: #fff;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.room-details {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #80808050;
+  padding: 1rem;
+  gap: 2rem;
+}
+
+.detail-sub {
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-sub p {
+  font-size: 0.9rem;
+  color: #808080;
+}
+
+.booking-policy a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 0.9rem;
+}
+
+.policy-header {
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: end;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.buttons a,
+.a-submit {
+  text-decoration: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.buttons a:first-child {
+  background-color: #808080;
+  width: 150px;
+  text-align: center;
+}
+
+.buttons a:last-child,
+.a-submit {
+  background-color: #007bff;
+  width: 200px;
+  text-align: center;
+}
+
+.buttons a:hover,
+.a-submit:hover {
+  transform: scale(1.05);
+}
+
+.buttons a:last-child:hover,
+.a-submit:hover {
+  background-color: #0056b3;
+}
+
+.buttons a:first-child:hover {
+  background-color: #666;
+}
+
+.buttons a:first-child > i {
+  margin-right: 0.5rem;
+}
+
+.buttons a:last-child > i,
+.a-submit > i {
+  margin-left: 0.5rem;
+}
+
+.a-submit {
+  border: none;
+}
+
+.date {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date p > span,
+.total p > span {
+  font-size: 0.9rem;
+  color: #808080;
+  font-weight: 400;
+}
+
+.prices {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.room,
+.entrance,
+.booking-fee,
+.total {
+  display: flex;
+  justify-content: space-between;
+}
+
+.amount {
+  font-weight: 600;
+}
+
+.total {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #007bff;
+  text-align: right;
+}
+
+.order-details {
+  height: fit-content;
+}
+
+/* Form */
+.details form {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.name,
+.email {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: #808080;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.5rem;
+  border: 1px solid #80808050;
+  border-radius: 0.5rem;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  resize: none;
+}
+
+.booking-container form {
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+}
+
+.booking-container form button {
+  background-color: #007bff;
+  height: fit-content;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  color: white;
+  font-weight: 500;
+}
+
+.overnight {
+  display: flex;
+  justify-content: space-between;
+}

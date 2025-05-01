@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             array(
                 'iat' => time(),
                 'nbf' => time(),
-                'exp' => time() + 3600,
                 'data' => array(
                     'user_id' => $user['id'],
                     'firstname' => $user['firstname'],
