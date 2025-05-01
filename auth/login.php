@@ -14,6 +14,7 @@ if (isset($_COOKIE['token'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../assets/K&ALogo.png">
     <link rel="stylesheet" href="../styles/auth.styles.css">
+    <script src="../js/loader.js"></script>
     <title>K&A | Log in</title>
     <title>Document</title>
 </head>
@@ -39,7 +40,7 @@ if (isset($_COOKIE['token'])) {
                         <label for="">Confirm Password:</label>
                         <input type="password" placeholder="Enter your password" name="password">
                     </div>
-                    <a href="">Forgot Password?</a>
+                    <a href="forgot-password.php">Forgot Password?</a>
                     <button>Log in</button>
                 </form>
                 <?php if (isset($_SESSION['error'])): ?>

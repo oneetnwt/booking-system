@@ -17,6 +17,7 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../assets/K&ALogo.png">
     <link rel="stylesheet" href="../styles/auth.styles.css">
+    <script src="../js/loader.js"></script>
     <title>K&A | Create an Account</title>
 </head>
 

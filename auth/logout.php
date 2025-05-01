@@ -2,5 +2,5 @@
 
 setcookie("token", "", time() - 3600, "/", "", true, true);
 
-header("Location: ../auth/login.php");
+header("Location: ../home/home.php");
 exit();
