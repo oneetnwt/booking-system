@@ -20,7 +20,6 @@ $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $payment_method = $_POST['payment_method'];
     $user = $decoded->data->user_id;
-    $transaction_id = uniqid('txn_', true);
 
     switch ($payment_method) {
         case 'paypal':
@@ -33,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt = $pdo->prepare("INSERT INTO paypal_payment(payment_id, paypal_email) VALUES (?, ?)");
             $stmt->execute([$payment_id, $paypal_email]);
+
+            $transaction_id = uniqid('knsr_', true);
 
             $stmt = $pdo->prepare("INSERT INTO booking(check_in, check_out, room_id, payment_id, comment, transaction_id) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$_SESSION['booking_details']['check_in'], $_SESSION['booking_details']['check_out'], $_SESSION['booking_details']['room_id'], $payment_id, $_SESSION['booking_details']['comment'], $transaction_id]);
@@ -56,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO gcash_payment(payment_id, gcash_number, gcash_name) VALUES (?, ?, ?)");
             $stmt->execute([$payment_id, $gcash_number, $gcash_name]);
 
+
+            $transaction_id = uniqid('knsr_', true);
+
             $stmt = $pdo->prepare("INSERT INTO booking(check_in, check_out, room_id, payment_id, comment, transaction_id) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$_SESSION['booking_details']['check_in'], $_SESSION['booking_details']['check_out'], $_SESSION['booking_details']['room_id'], $payment_id, $_SESSION['booking_details']['comment'], $transaction_id]);
 
@@ -78,6 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt = $pdo->prepare("INSERT INTO bank_payment(payment_id, bank_name, account_number, account_name) VALUES (?, ?, ?, ?)");
             $stmt->execute([$payment_id, $bank_name, $account_number, $account_name]);
+
+
+            $transaction_id = uniqid('knsr_', true);
 
             $stmt = $pdo->prepare("INSERT INTO booking(check_in, check_out, room_id, payment_id, comment, transaction_id) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$_SESSION['booking_details']['check_in'], $_SESSION['booking_details']['check_out'], $_SESSION['booking_details']['room_id'], $payment_id, $_SESSION['booking_details']['comment'], $transaction_id]);

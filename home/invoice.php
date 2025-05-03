@@ -24,6 +24,9 @@
                     <p>Room Price</p>
                     <p></p>
                 </div>
+                <div>
+
+                </div>
             </div>
         </div>
     </div>

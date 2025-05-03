@@ -59,7 +59,7 @@ if (isset($_COOKIE['token'])) {
                     </p>
                 <?php endif; ?>
 
-                <a href="../google-auth/google-login.php">Sign up with Google</a>
+                <!-- <a href="../google-auth/google-login.php">Sign up with Google</a> -->
             </div>
             <div class="footer">
                 <a href="">Privacy Policy</a>
