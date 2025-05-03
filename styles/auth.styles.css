@@ -99,9 +99,32 @@ form input {
 }
 
 form input,
-form button {
+form button,
+.google-button {
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid #4285f4;
+  color: #4285f4;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  width: 25rem;
+}
+
+.google-button i {
+  margin-right: 0.5rem;
+}
+
+.google-button:hover {
+  background-color: #4285f4;
+  color: white;
 }
 
 form button {

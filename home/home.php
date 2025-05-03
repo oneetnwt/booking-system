@@ -59,12 +59,14 @@ if (isset($_COOKIE['token'])) {
                         <?php else: ?>
                             <li><a href="#" id="book-btn">Book Now</a></li>
                             <div class="dropdown">
-                                <li><a href="">Hi,
+                                <li>
+                                    <p style="cursor: pointer" href="">Hi,
                                         <?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?><i
-                                            class="fa fa-caret-down" aria-hidden="true"
-                                            style="margin-left: 0.5rem;"></i></a></li>
+                                            class="fa fa-caret-down" aria-hidden="true" style="margin-left: 0.5rem;"></i>
+                                    </p>
+                                </li>
                                 <div class="dropdown-menu">
-                                    <a href="">Edit Profile</a>
+                                    <a href="../profile/profile.php">Edit Profile</a>
                                     <a href="">My Bookings</a>
                                     <a href="../auth/logout.php">Log out</a>
                                 </div>
@@ -401,7 +403,7 @@ if (isset($_COOKIE['token'])) {
 
     <script src="../js/loader.js"></script>
     <script>
-        window.addEventListener("scroll", function() {
+        window.addEventListener("scroll", function () {
             const navbar = document.getElementById("navbar");
             const bookBtn = document.getElementById("book-btn");
             if (window.scrollY > 500) {

@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  height: 100dvh;
+  width: 100%;
+  background: #f1f1e6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 18rem 1fr;
+}
+
+.sidebar {
+  padding: 1rem;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  gap: 1rem;
+  height: 100%;
+  width: 18rem;
+  word-break: break-all;
+}
+
+.profile {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.profile img {
+  border-radius: 50%;
+}
+
+.name h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.name p {
+  font-size: 0.66rem;
+}
+
+.sidebar-content > nav ul {
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+}
+
+.navlink > li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.navlink li:hover:not(.active) {
+  background: #94c8ff;
+}
+
+.navlink li a > i {
+  margin-right: 0.5rem;
+}
+
+.active {
+  font-weight: 500;
+  color: #357ae8;
+}
+
+#logout {
+  padding: 0.5rem 1rem;
+  color: #f74141;
+  transition: all 0.1s ease-in-out;
+}
+
+#logout:hover {
+  background: #f74141;
+  color: white;
+  font-weight: 500;
+}
+
+#logout i {
+  margin-right: 0.5rem;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  padding: 1rem;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  width: 100%;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.main-header {
+  margin-bottom: 1rem;
+}
+
+.main-header h3 {
+  font-size: 1.5rem;
+}
+
+.main-header p {
+  font-size: 0.9rem;
+  color: #00000090;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-group label {
+  width: 200px;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.form-group input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #00000080;
+  width: 100%;
+}
+
+.form-group input[value] {
+  color: #00000075;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #357ae8;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  align-self: flex-start;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #2868c7;
+}
+
+.card {
+  background: #f3f3f3;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+  border-radius: 0.25rem;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

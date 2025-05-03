@@ -14,6 +14,7 @@ if (isset($_COOKIE['token'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../assets/K&ALogo.png">
     <link rel="stylesheet" href="../styles/auth.styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../js/loader.js"></script>
     <title>K&A | Log in</title>
     <title>Document</title>
@@ -58,8 +59,12 @@ if (isset($_COOKIE['token'])) {
                         unset($_SESSION['success']); ?>
                     </p>
                 <?php endif; ?>
+                <p style="margin-bottom: 1rem; color:#00000080;">or</p>
 
-                <!-- <a href="../google-auth/google-login.php">Sign up with Google</a> -->
+                <a class="google-button" href="../google-auth/google-login.php">
+                    <i class="fa-brands fa-google"></i>
+                    Continue with Google
+                </a>
             </div>
             <div class="footer">
                 <a href="">Privacy Policy</a>
