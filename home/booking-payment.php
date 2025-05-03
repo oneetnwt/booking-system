@@ -1,43 +1,6 @@
 <?php
-
-require __DIR__ . "/../vendor/autoload.php";
-require '../db/connectDB.php';
-
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
 session_start();
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
-
-$secret_key = $_ENV['JWT_SECRET_KEY'];
-$user = null;
-
-if (isset($_COOKIE['token'])) {
-    try {
-        $token = $_COOKIE['token'];
-        $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
-
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-        $stmt->execute([$decoded->data->user_id]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (Exception $e) {
-        // Handle invalid token
-        header('Location: ../login.php');
-        exit();
-    }
-} else {
-    // No token found, redirect to login
-    header('Location: ../login.php');
-    exit();
-}
-
-// Check if booking details exist in session
-if (!isset($_SESSION['booking_details'])) {
-    header('Location: booking-confirmation.php');
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +36,7 @@ if (!isset($_SESSION['booking_details'])) {
             <div class="content">
                 <div class="details">
                     <h3>Payment Method</h3>
-                    <form action="" method="POST" id="payment-form">
+                    <form action="payment-verification.php" method="POST" id="payment-form">
                         <div class="payment-methods">
                             <div class="payment-method">
                                 <input type="radio" id="paypal" name="payment_method" value="paypal" checked>
@@ -113,11 +76,12 @@ if (!isset($_SESSION['booking_details'])) {
                             <div class="form-group">
                                 <label for="gcash_number">GCash Number</label>
                                 <input type="text" id="gcash_number" name="gcash_number"
-                                    placeholder="Enter your GCash number" pattern="[0-9]{11}">
+                                    placeholder="Enter your GCash number" pattern="[0-9]{11}" required>
                             </div>
                             <div class="form-group">
                                 <label for="gcash_name">Account Name</label>
-                                <input type="text" id="gcash_name" name="gcash_name" placeholder="Enter account name">
+                                <input type="text" id="gcash_name" name="gcash_name" placeholder="Enter account name"
+                                    required>
                             </div>
                         </div>
 
@@ -136,12 +100,12 @@ if (!isset($_SESSION['booking_details'])) {
                             <div class="form-group">
                                 <label for="account_number">Account Number</label>
                                 <input type="text" id="account_number" name="account_number"
-                                    placeholder="Enter account number">
+                                    placeholder="Enter account number" required>
                             </div>
                             <div class="form-group">
                                 <label for="account_name">Account Name</label>
                                 <input type="text" id="account_name" name="account_name"
-                                    placeholder="Enter account name">
+                                    placeholder="Enter account name" required>
                             </div>
                         </div>
 
@@ -182,6 +146,12 @@ if (!isset($_SESSION['booking_details'])) {
                         $bookingFee = $_SESSION['booking_details']['bookingFee'] ?? 0;
                         echo is_float($bookingFee) ? number_format($bookingFee, 2, '.', '') : $bookingFee . '.00';
                         ?></p>
+                    </div>
+                    <div class="booking-fee">
+                        <p>Number of Days</p>
+                        <p class="amount">
+                            <?= $_SESSION['booking_details']['days'] ?>
+                        </p>
                     </div>
                 </div>
                 <div class="total">

@@ -57,7 +57,7 @@ header {
 
 .container {
   display: grid;
-  grid-template-columns: 55rem 1fr;
+  grid-template-columns: 52rem 1fr;
   gap: 2rem;
 }
 
@@ -160,6 +160,7 @@ header {
 
 .a-submit {
   border: none;
+  cursor: pointer;
 }
 
 .date {

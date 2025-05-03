@@ -40,12 +40,33 @@ if (!isset($_SESSION['booking_details'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstname = $user['firstname'];
-    $lastname = $user['lastname'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
     $email = $_POST['email'];
     $contact = $_POST['phone_number'];
     $comment = $_POST['comment'];
 
+    $_SESSION['booking_details'] = [
+        'room_id' => $_SESSION['booking_details']['room_id'],
+        'days' => $_SESSION['booking_details']['days'],
+        'check_in' => $_SESSION['booking_details']['check_in'],
+        'check_out' => $_SESSION['booking_details']['check_out'],
+        'adult' => $_SESSION['booking_details']['adult'],
+        'children' => $_SESSION['booking_details']['children'],
+        'overnight' => $_SESSION['booking_details']['overnight'],
+        'roomPrice' => $_SESSION['booking_details']['roomPrice'],
+        'entranceFee' => $_SESSION['booking_details']['entranceFee'],
+        'bookingFee' => $_SESSION['booking_details']['bookingFee'],
+        'totalPrice' => $_SESSION['booking_details']['totalPrice'],
+        'firstname' => $firstname,
+        'lastname' => $lastname,
+        'email' => $email,
+        'phone_number' => $contact,
+        'comment' => $comment ?? ' '
+    ];
+
+    header('Location: booking-payment.php');
+    exit();
 }
 ?>
 
@@ -80,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="content">
                 <div class="details">
                     <h3>Guest Details</h3>
-                    <form action="booking-payment.php" method="POST">
+                    <form action="" method="POST">
                         <div class="name">
                             <div class="form-group">
                                 <label for="firstname">First Name:</label>
@@ -97,13 +118,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="text" placeholder="Email" name="email"
-                                    value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required>
+                                    value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" disabled required>
                             </div>
                             <div class="form-group">
                                 <label for="phone_number">Contact Number:</label>
                                 <input type="number" placeholder="Contact Number"
                                     value="<?php echo htmlspecialchars($user['phone_number'] ?? ''); ?>"
-                                    name="phone_number" required>
+                                    name="phone_number" disabled required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -112,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="buttons">
                             <a href="booking-confirmation.php"><i class="fa-solid fa-arrow-left"></i>Back</a>
-                            <button class="a-submit">Next <i class="fa-solid fa-arrow-right"></i></button>
+                            <button type="submit" class="a-submit">Next <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                     </form>
                 </div>
@@ -146,6 +167,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $bookingFee = $_SESSION['booking_details']['bookingFee'] ?? 0;
                         echo is_float($bookingFee) ? number_format($bookingFee, 2, '.', '') : $bookingFee . '.00';
                         ?></p>
+                    </div>
+                    <div class="booking-fee">
+                        <p>Number of Days</p>
+                        <p class="amount">
+                            <?= $_SESSION['booking_details']['days'] ?>
+                        </p>
                     </div>
                 </div>
                 <div class="total">

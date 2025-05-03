@@ -21,10 +21,11 @@ if (!isset($_SESSION['booking_details'])) {
     $_SESSION['booking_details'] = [
         'check_in' => '',
         'check_out' => '',
-        'adult' => 0,
+        'days' => 0,
+        'adult' => 1,
         'children' => 0,
         'roomPrice' => $room['room_price'],
-        'entranceFee' => 0,
+        'entranceFee' => '50.00',
         'bookingFee' => $bookingFee,
         'totalPrice' => $totalPrice
     ];
@@ -37,6 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $children = (int) ($_POST['children'] ?? 0);
     $overnight = $_POST['overnight'] ?? 'no';
 
+    $stmt = $pdo->prepare("SELECT * FROM room WHERE id = ?");
+    $stmt->execute([$_SESSION['room_id']]);
+    $room = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $check_in = new DateTime($check_in);
+    $check_out = new DateTime($check_out);
+
+    $interval = $check_in->diff($check_out);
+    $days = $interval->days;
+
+    if ($days > 0) {
+        $overnight = 'yes';
+    }
+
     if ($overnight == 'no') {
         $adultFee = 50;
         $childrenFee = 30;
@@ -47,18 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $entranceFee = $total * 200;
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM room WHERE id = ?");
-    $stmt->execute([$_SESSION['room_id']]);
-    $room = $stmt->fetch(PDO::FETCH_ASSOC);
-
     $bookingFee = 0.01 * ($entranceFee + $room['room_price']);
-    $totalPrice = $entranceFee + $room['room_price'] + $bookingFee;
+    $totalPrice = $entranceFee + ($days * $room['room_price']) + $bookingFee;
 
     // Update the booking details in session variables
     $_SESSION['booking_details'] = [
         'room_id' => $_SESSION['room_id'],
-        'check_in' => $check_in,
-        'check_out' => $check_out,
+        'check_in' => $check_in->format('Y-m-d\TH:i'),
+        'check_out' => $check_out->format('Y-m-d\TH:i'),
+        'days' => $days,
         'adult' => $adult,
         'children' => $children,
         'overnight' => $overnight,
@@ -113,13 +125,13 @@ if (isset($_SESSION['room_id'])) {
                             <label for="">Check in:</label>
                             <input type="datetime-local"
                                 value="<?= htmlspecialchars($_SESSION['booking_details']['check_in']); ?>"
-                                name="check_in">
+                                name="check_in" required>
                         </div>
                         <div class="form-group">
                             <label for="">Check out:</label>
                             <input type="datetime-local"
                                 value="<?= htmlspecialchars($_SESSION['booking_details']['check_out']); ?>"
-                                name="check_out">
+                                name="check_out" required>
                         </div>
                         <div class="form-group">
                             <label for="">Adult:</label>
@@ -206,6 +218,12 @@ if (isset($_SESSION['room_id'])) {
                         <p>Booking Fee (1%)</p>
                         <p class="amount">₱
                             <?= number_format($_SESSION['booking_details']['bookingFee'], 2, '.', ''); ?>
+                        </p>
+                    </div>
+                    <div class="booking-fee">
+                        <p>Number of Days</p>
+                        <p class="amount">
+                            <?= $_SESSION['booking_details']['days'] ?>
                         </p>
                     </div>
                 </div>
