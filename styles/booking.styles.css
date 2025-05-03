@@ -57,7 +57,7 @@ header {
 
 .container {
   display: grid;
-  grid-template-columns: 800px 1fr;
+  grid-template-columns: 55rem 1fr;
   gap: 2rem;
 }
 
@@ -234,7 +234,8 @@ header {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+select {
   padding: 0.5rem;
   border: 1px solid #80808050;
   border-radius: 0.5rem;
@@ -263,4 +264,57 @@ header {
 .overnight {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.overnight .form-group {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem;
+  border: 2px solid #80808050;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.overnight .form-group:hover {
+  border-color: #007bff;
+  background-color: #007bff10;
+}
+
+.overnight .form-group input[type="radio"] {
+  display: none;
+  padding: 0 1rem;
+}
+
+.overnight .form-group input[type="radio"]:checked + label {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.overnight .form-group input[type="radio"]:checked {
+  background-color: #007bff;
+}
+
+.overnight .form-group label {
+  cursor: pointer;
+  display: block;
+  padding: 0.5rem;
+  color: #808080;
+  transition: all 0.3s ease;
+}
+
+.overnight .form-group input[type="radio"]:checked + label {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.overnight .form-group input[type="radio"]:checked ~ .form-group {
+  border-color: #007bff;
+  background-color: #007bff10;
+}
+
+#overnight-yes {
+  padding: 0.5rem 1rem;
 }

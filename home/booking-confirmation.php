@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'check_out' => $check_out,
         'adult' => $adult,
         'children' => $children,
+        'overnight' => $overnight,
         'roomPrice' => $room['room_price'],
         'entranceFee' => $entranceFee,
         'bookingFee' => $bookingFee,
@@ -134,15 +135,15 @@ if (isset($_SESSION['room_id'])) {
                         <div class="form-group">
                             <label for="">Overnight:</label>
                             <div class="overnight">
-                                <div class="form-group" style="text-align: center;">
-                                    <label for="">Yes</label>
-                                    <input type="radio" value="yes" name="overnight"
+                                <div class="form-group">
+                                    <input type="radio" id="overnight-yes" value="yes" name="overnight"
                                         <?= ($_SESSION['booking_details']['overnight'] ?? 'no') == 'yes' ? 'checked' : ''; ?>>
+                                    <label for="overnight-yes">Yes</label>
                                 </div>
-                                <div class="form-group" style="text-align: center;">
-                                    <label for="">No</label>
-                                    <input type="radio" value="no" name="overnight"
+                                <div class="form-group">
+                                    <input type="radio" id="overnight-no" value="no" name="overnight"
                                         <?= ($_SESSION['booking_details']['overnight'] ?? 'no') == 'no' ? 'checked' : ''; ?>>
+                                    <label for="overnight-no">No</label>
                                 </div>
                             </div>
                         </div>
@@ -181,11 +182,13 @@ if (isset($_SESSION['room_id'])) {
             <div class="order-details">
                 <h3>Price Summary</h3>
                 <div class="date">
-                    <p><?= date('D, d M Y', strtotime($_SESSION['booking_details']['check_in'])); ?><br><span>From:
-                            <?= date('h:i A', strtotime($_SESSION['booking_details']['check_in'])); ?></span></p>
+                    <p><?= !empty($_SESSION['booking_details']['check_in']) ? date('D, d M Y', strtotime($_SESSION['booking_details']['check_in'])) : '-'; ?><br><span>From:
+                            <?= !empty($_SESSION['booking_details']['check_in']) ? date('h:i A', strtotime($_SESSION['booking_details']['check_in'])) : '-'; ?></span>
+                    </p>
                     <i class="fa-solid fa-arrow-right"></i>
-                    <p><?= date('D, d M Y', strtotime($_SESSION['booking_details']['check_out'])); ?><br><span>Until:
-                            <?= date('h:i A', strtotime($_SESSION['booking_details']['check_out'])); ?></span></p>
+                    <p><?= !empty($_SESSION['booking_details']['check_out']) ? date('D, d M Y', strtotime($_SESSION['booking_details']['check_out'])) : '-'; ?><br><span>Until:
+                            <?= !empty($_SESSION['booking_details']['check_out']) ? date('h:i A', strtotime($_SESSION['booking_details']['check_out'])) : '-'; ?></span>
+                    </p>
                 </div>
                 <div class="prices">
                     <div class="room">

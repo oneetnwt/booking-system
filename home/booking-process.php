@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="content">
                 <div class="details">
                     <h3>Guest Details</h3>
-                    <form action="" method="POST">
+                    <form action="booking-payment.php" method="POST">
                         <div class="name">
                             <div class="form-group">
                                 <label for="firstname">First Name:</label>

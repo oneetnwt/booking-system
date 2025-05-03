@@ -1,0 +1,94 @@
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.payment-method {
+  position: relative;
+  border: 2px solid #80808050;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-method:hover {
+  border-color: #007bff;
+  background-color: #007bff10;
+}
+
+.payment-method input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.payment-method label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.payment-method img {
+  width: 50px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.payment-method i {
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+.payment-method input[type="radio"]:checked + label {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.payment-method input[type="radio"]:checked ~ .payment-method {
+  border-color: #007bff;
+  background-color: #007bff10;
+}
+
+/* New styles for selected payment method */
+.payment-method input[type="radio"]:checked + label {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.payment-method input[type="radio"]:checked {
+  border-color: #007bff;
+  background-color: #007bff10;
+}
+
+.payment-method input[type="radio"]:checked + label::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #007bff;
+  border-radius: 0.5rem;
+  pointer-events: none;
+}
+
+.payment-method input[type="radio"]:checked + label img,
+.payment-method input[type="radio"]:checked + label i {
+  filter: brightness(0) saturate(100%) invert(35%) sepia(100%) saturate(2000%)
+    hue-rotate(200deg) brightness(100%) contrast(100%);
+}
+
+.payment-details {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid #80808050;
+  border-radius: 0.5rem;
+}
+
+.payment-details h4 {
+  margin-bottom: 1rem;
+  color: #333;
+}
