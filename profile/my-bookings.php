@@ -101,30 +101,32 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <div class="main">
             <div class="main-content">
+                <nav>
+                    <ul class="main-navlink">
+                        <li>
+                            <a href="">
+                                All
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Completed
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Upcoming
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Cancelled
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
                 <div class="card-container">
-                    <?php foreach ($data as $d): ?>
-                        <div class="card">
-                            <img src="" alt="">
-                            <div class="details">
-                                <div class="left">
-                                    <h3>
-                                        <?= $d['room_name']; ?>
-                                    </h3>
-                                    <p>
-                                        <?= $d['check_in']; ?>
-                                    </p>
-                                    <p>
-                                        <?= $d['check_out']; ?>
-                                    </p>
-                                </div>
-                                <div class="right">
-                                    <h3>
-                                        <?= $d['amount']; ?>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+
                 </div>
             </div>
         </div>

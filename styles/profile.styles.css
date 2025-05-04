@@ -181,20 +181,67 @@ button:hover {
   background-color: #2868c7;
 }
 
-.card {
-  background: #f3f3f3;
-  padding: 0.5rem 1rem;
-  gap: 1rem;
-  border-radius: 0.25rem;
-}
-
-.details {
+.main-navlink {
+  list-style: none;
   display: flex;
-  justify-content: space-between;
+  gap: 2rem;
 }
 
 .card-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.card {
+  background: #f3f3f3;
+  padding: 0.5rem;
+  gap: 1rem;
+  border-radius: 0.75rem;
+  display: flex;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.card > img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 0.15rem;
+  flex-shrink: 0;
+}
+
+.details {
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex: 1;
+  gap: 1rem;
+}
+
+.details .left,
+.details .right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  height: 100%;
+}
+
+.left p {
+  font-size: 0.75rem;
+  color: #00000090;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.details .right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  justify-content: space-between;
 }
