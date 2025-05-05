@@ -129,8 +129,8 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
                             <tr>
                                 <td>1</td>
                                 <td><?= $data['room_name'] ?></td>
-                                <td>₱ <?= $data['room_price'] ?></td>
-                                <td>₱ <?= $data['room_price'] ?></td>
+                                <td>₱ <?= number_format($data['room_price'], 2) ?></td>
+                                <td>₱ <?= number_format($data['room_price'], 2) ?></td>
                             </tr>
                             <tr>
                                 <td><?= $data['adult'] ?></td>
@@ -152,13 +152,13 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <td></td>
                                 <td></td>
                                 <td>Booking Fee</td>
-                                <td>₱ <?= $data['booking_fee'] ?></td>
+                                <td>₱ <?= number_format($data['booking_fee'], 2) ?></td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td>Total</td>
-                                <td>₱ <?= $data['amount'] ?></td>
+                                <td>₱ <?= number_format($data['amount'], 2) ?></td>
                             </tr>
                         </tbody>
                     </table>

@@ -204,8 +204,8 @@ button:hover {
 }
 
 .card > img {
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
   border-radius: 0.15rem;
   flex-shrink: 0;

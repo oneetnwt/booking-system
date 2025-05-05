@@ -21,8 +21,6 @@ $token = $_COOKIE['token'];
 
 $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 
-$user_id = $decoded->data->user_id;
-
 $stmt = $pdo->prepare("
     SELECT
         bi.*,
@@ -44,9 +42,9 @@ $stmt = $pdo->prepare("
     JOIN
         payment p on b.payment_id = p.id
     WHERE
-        bi.user_id = ?
+        b.transaction_id = ?
 ");
-$stmt->execute([$user_id]);
+$stmt->execute([$_SESSION['transact']]);
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
@@ -128,8 +126,8 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
                             <tr>
                                 <td>1</td>
                                 <td><?= $data['room_name'] ?></td>
-                                <td>₱ <?= $data['room_price'] ?></td>
-                                <td>₱ <?= $data['room_price'] ?></td>
+                                <td>₱ <?= number_format($data['room_price'], 2) ?></td>
+                                <td>₱ <?= number_format($data['room_price'], 2) ?></td>
                             </tr>
                             <tr>
                                 <td><?= $data['adult'] ?></td>
@@ -157,7 +155,7 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <td></td>
                                 <td></td>
                                 <td>Total</td>
-                                <td>₱ <?= $data['amount'] ?></td>
+                                <td>₱ <?= number_format($data['amount'], 2) ?></td>
                             </tr>
                         </tbody>
                     </table>

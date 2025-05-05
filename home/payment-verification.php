@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $payment_method = $_POST['payment_method'];
     $user = $decoded->data->user_id;
     $transaction_id = uniqid('KA_', true);
+    $_SESSION['transact'] = $transaction_id;
 
     switch ($payment_method) {
         case 'paypal':
