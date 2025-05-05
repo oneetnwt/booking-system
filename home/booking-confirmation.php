@@ -50,6 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($days > 0) {
         $overnight = 'yes';
+    } else {
+        $overnight = 'no';
+        $days = 1;
     }
 
     if ($overnight == 'no') {

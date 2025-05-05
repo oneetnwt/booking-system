@@ -30,7 +30,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $stmt = $pdo->prepare("
 SELECT 
     bi.*, 
-    b.*, 
+    b.*,
+    bd.*,
     u.*,
     r.*,
     p.*
@@ -38,6 +39,8 @@ FROM
     booking_invoice bi
 JOIN 
     booking b ON bi.booking_id = b.id
+JOIN
+    booking_details bd ON b.booking_details_id = bd.id
 JOIN 
     users u ON bi.user_id = u.id
 JOIN
@@ -48,7 +51,25 @@ WHERE
     bi.user_id = ?
 ");
 $stmt->execute([$user_id]);
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Categorize bookings
+$allBookings = $bookings;
+$completedBookings = [];
+$upcomingBookings = [];
+
+// Current date for comparison
+$currentDate = date('Y-m-d');
+
+foreach ($bookings as $booking) {
+    // Check if the booking is completed (check-out date is in the past)
+    if (strtotime($booking['check_out']) < strtotime($currentDate)) {
+        $completedBookings[] = $booking;
+    } else {
+        // If check-out date is in the future or today, it's upcoming
+        $upcomingBookings[] = $booking;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -101,36 +122,164 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <div class="main">
             <div class="main-content">
-                <nav>
+                <h3>My Bookings</h3>
+                <nav style="margin-top: 1rem;">
                     <ul class="main-navlink">
-                        <li>
-                            <a href="">
-                                All
-                            </a>
+                        <li id="all-nav" class="active" onclick="showAll()">
+                            All
                         </li>
-                        <li>
-                            <a href="">
-                                Completed
-                            </a>
+                        <li id="complete-nav" onclick="showCompleted()">
+                            Completed
                         </li>
-                        <li>
-                            <a href="">
-                                Upcoming
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                Cancelled
-                            </a>
+                        <li id="upcoming-nav" onclick="showUpcoming()">
+                            Upcoming
                         </li>
                     </ul>
                 </nav>
-                <div class="card-container">
 
+                <!-- All Bookings Section -->
+                <div id="all" class="booking-section" style="display: block">
+                    <div class="card-container">
+                        <?php if (empty($allBookings)): ?>
+                            <p class="no-bookings">No bookings found.</p>
+                        <?php else: ?>
+                            <?php foreach ($allBookings as $booking): ?>
+                                <div class="card">
+                                    <img src="../assets/<?= $booking['image_path'] ?>" alt="Room Image">
+                                    <div class="details">
+                                        <div class="left">
+                                            <h3><?= $booking['room_name'] ?></h3>
+                                            <p>Check-in: <?= $booking['check_in'] ?></p>
+                                            <p>Check-out: <?= $booking['check_out'] ?></p>
+                                            <p>Transaction ID: <?= $booking['transaction_id'] ?></p>
+                                        </div>
+                                        <div class="right">
+                                            <p>₱ <?= $booking['room_price'] ?></p>
+                                            <p>₱ <?= $booking['overnight'] === 'yes' ? $booking['adult'] * 200 : $booking['adult'] * 50 ?>.00
+                                            </p>
+                                            <p>₱ <?= $booking['overnight'] === 'yes' ? $booking['child'] * 200 : $booking['child'] * 50 ?>.00
+                                            </p>
+                                            <p>Booking Fee 1%: <?= $booking['booking_fee'] ?? 0 ?></p>
+                                            <p style="color: #F74141; font-size: 1rem;"><?= strtoupper($booking['status']) ?>
+                                            </p>
+                                            <p id="totalAmount">Total Amount: ₱ <?= $booking['amount'] ?></p>
+                                            <form action="booking-details.php" method="POST">
+                                                <input type="hidden" name="bookingId" value="<?= $booking['booking_id'] ?>">
+                                                <button>View Details</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Completed Bookings Section -->
+                <div id="completed" class="booking-section" style="display: none">
+                    <div class="card-container">
+                        <?php if (empty($completedBookings)): ?>
+                            <p class="no-bookings">No completed bookings found.</p>
+                        <?php else: ?>
+                            <?php foreach ($completedBookings as $booking): ?>
+                                <div class="card">
+                                    <img src="../assets/<?= $booking['image_path'] ?>" alt="Room Image">
+                                    <div class="details">
+                                        <div class="left">
+                                            <h3><?= $booking['room_name'] ?></h3>
+                                            <p>Check-in: <?= $booking['check_in'] ?></p>
+                                            <p>Check-out: <?= $booking['check_out'] ?></p>
+                                            <p>Transaction ID: <?= $booking['transaction_id'] ?></p>
+                                        </div>
+                                        <div class="right">
+                                            <p>₱ <?= $booking['room_price'] ?></p>
+                                            <p>₱ <?= $booking['overnight'] === 'yes' ? $booking['adult'] * 200 : $booking['adult'] * 50 ?>.00
+                                            </p>
+                                            <p>₱ <?= $booking['overnight'] === 'yes' ? $booking['child'] * 200 : $booking['child'] * 50 ?>.00
+                                            </p>
+                                            <p>Booking Fee 1%: <?= $booking['booking_fee'] ?? 0 ?></p>
+                                            <p style="color: #F74141; font-size: 1rem;"><?= strtoupper($booking['status']) ?>
+                                            </p>
+                                            <p id="totalAmount">Total Amount: ₱ <?= $booking['amount'] ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Upcoming Bookings Section -->
+                <div id="upcoming" class="booking-section" style="display: none">
+                    <div class="card-container">
+                        <?php if (empty($upcomingBookings)): ?>
+                            <p class="no-bookings">No upcoming bookings found.</p>
+                        <?php else: ?>
+                            <?php foreach ($upcomingBookings as $booking): ?>
+                                <div class="card">
+                                    <img src="../assets/<?= $booking['image_path'] ?>" alt="Room Image">
+                                    <div class="details">
+                                        <div class="left">
+                                            <h3><?= $booking['room_name'] ?></h3>
+                                            <p>Check-in: <?= $booking['check_in'] ?></p>
+                                            <p>Check-out: <?= $booking['check_out'] ?></p>
+                                            <p>Transaction ID: <?= $booking['transaction_id'] ?></p>
+                                        </div>
+                                        <div class="right">
+                                            <p>₱ <?= $booking['room_price'] ?></p>
+                                            <p>₱ <?= $booking['overnight'] === 'yes' ? $booking['adult'] * 200 : $booking['adult'] * 50 ?>.00
+                                            </p>
+                                            <p>₱ <?= $booking['overnight'] === 'yes' ? $booking['child'] * 200 : $booking['child'] * 50 ?>.00
+                                            </p>
+                                            <p>Booking Fee 1%: <?= $booking['booking_fee'] ?? 0 ?></p>
+                                            <p style="color: #F74141; font-size: 1rem;"><?= strtoupper($booking['status']) ?>
+                                            </p>
+                                            <p id="totalAmount">Total Amount: ₱ <?= $booking['amount'] ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        var allBtn = document.getElementById('all-nav');
+        var completeBtn = document.getElementById('complete-nav');
+        var upcomingBtn = document.getElementById('upcoming-nav');
+
+        function showAll() {
+            allBtn.classList.add('active');
+            completeBtn.classList.remove('active');
+            upcomingBtn.classList.remove('active');
+
+            document.getElementById('all').style.display = 'block';
+            document.getElementById('completed').style.display = 'none';
+            document.getElementById('upcoming').style.display = 'none';
+        }
+
+        function showCompleted() {
+            allBtn.classList.remove('active');
+            completeBtn.classList.add('active');
+            upcomingBtn.classList.remove('active');
+
+            document.getElementById('all').style.display = 'none';
+            document.getElementById('completed').style.display = 'block';
+            document.getElementById('upcoming').style.display = 'none';
+        }
+
+        function showUpcoming() {
+            allBtn.classList.remove('active');
+            completeBtn.classList.remove('active');
+            upcomingBtn.classList.add('active');
+
+            document.getElementById('all').style.display = 'none';
+            document.getElementById('completed').style.display = 'none';
+            document.getElementById('upcoming').style.display = 'block';
+        }
+    </script>
 </body>
 
 </html>

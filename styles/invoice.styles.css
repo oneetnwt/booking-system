@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  color: #333;
+  line-height: 1.6;
+  height: 100dvh;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.card {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.details {
+  border: 1px solid #60a5fa;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  height: auto;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header img {
+  height: auto;
+}
+
+.header img:first-child {
+  width: 20rem;
+}
+
+.header img:last-child {
+  width: 5rem;
+}
+
+.detail-group {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+}
+
+.detail-group p {
+  flex-shrink: 0;
+}
+
+.bookedby {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bookedby p {
+  font-size: 0.9rem;
+}
+
+.status-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.status-group p:first-child {
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+}
+
+table,
+th,
+td {
+  border-collapse: collapse;
+}
+
+thead {
+  background: #3165e8;
+  color: white;
+}
+
+th {
+  font-weight: 500;
+}
+
+th,
+td {
+  padding: 0.25rem 1rem;
+}

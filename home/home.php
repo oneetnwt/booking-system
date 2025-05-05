@@ -67,7 +67,7 @@ if (isset($_COOKIE['token'])) {
                                 </li>
                                 <div class="dropdown-menu">
                                     <a href="../profile/profile.php">Edit Profile</a>
-                                    <a href="">My Bookings</a>
+                                    <a href="../profile/my-bookings.php">My Bookings</a>
                                     <a href="../auth/logout.php">Log out</a>
                                 </div>
                             </div>

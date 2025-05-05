@@ -6,22 +6,23 @@ if (!isset($_COOKIE['token'])) {
     exit();
 }
 
-use Dotenv\Dotenv;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $booking_id = $_POST['bookingId'];
+}
+
+if (!isset($booking_id)) {
+    header("Location: my-bookings.php");
+    exit();
+}
+
+if (!isset($_POST['bookingId']) || empty($_POST['bookingId'])) {
+    header("Location: my-bookings.php");
+    exit();
+}
+
 
 require_once '../vendor/autoload.php';
 require '../db/connectDB.php';
-
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
-
-$secret_key = $_ENV['JWT_SECRET_KEY'];
-$token = $_COOKIE['token'];
-
-$decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
-
-$user_id = $decoded->data->user_id;
 
 $stmt = $pdo->prepare("
     SELECT
@@ -44,9 +45,9 @@ $stmt = $pdo->prepare("
     JOIN
         payment p on b.payment_id = p.id
     WHERE
-        bi.user_id = ?
+        bi.booking_id = ?
 ");
-$stmt->execute([$user_id]);
+$stmt->execute([$booking_id]);
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
@@ -164,10 +165,8 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
             </div>
             <p style="text-align: center; margin-top: 1rem;">&copy; <?= date("Y") ?> K&A Natural Spring Resort</p>
-            <a href="home.php"
-                style="padding: 0.5rem 1rem; background-color: #3165e8; color: white; text-decoration: none; border-radius: 0.5rem; text-align: center; align-self: center; margin-top: 1rem;">Return
-                to
-                Home</a>
+            <a href="my-bookings.php"
+                style="padding: 0.5rem 1rem; background-color: #3165e8; color: white; text-decoration: none; border-radius: 0.5rem; text-align: center; align-self: center; margin-top: 1rem;">Return</a>
         </div>
     </div>
 </body>
