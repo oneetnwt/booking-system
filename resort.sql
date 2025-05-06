@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2025 at 02:22 PM
+-- Generation Time: May 06, 2025 at 07:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,13 +43,43 @@ CREATE TABLE `bank_payment` (
 
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
-  `check_in` datetime DEFAULT NULL,
-  `check_out` datetime DEFAULT NULL,
   `room_id` int(11) DEFAULT NULL,
   `payment_id` int(11) DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL,
-  `transaction_id` varchar(255) DEFAULT NULL
+  `transaction_id` varchar(255) DEFAULT NULL,
+  `booking_details_id` int(11) DEFAULT NULL,
+  `status` enum('pending','done') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`id`, `room_id`, `payment_id`, `comment`, `transaction_id`, `booking_details_id`, `status`) VALUES
+(100000, 1001, 1002, '', 'KA_6819a1c1225814.68655571', 1, 'pending');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_details`
+--
+
+CREATE TABLE `booking_details` (
+  `id` int(11) NOT NULL,
+  `check_in` datetime DEFAULT NULL,
+  `check_out` datetime DEFAULT NULL,
+  `adult` int(11) DEFAULT 0,
+  `child` int(11) DEFAULT 0,
+  `overnight` varchar(5) DEFAULT NULL,
+  `booking_fee` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking_details`
+--
+
+INSERT INTO `booking_details` (`id`, `check_in`, `check_out`, `adult`, `child`, `overnight`, `booking_fee`) VALUES
+(1, '2025-05-24 10:00:00', '2025-05-25 10:30:00', 2, 0, 'yes', 29.00);
 
 -- --------------------------------------------------------
 
@@ -61,6 +91,13 @@ CREATE TABLE `booking_invoice` (
   `user_id` int(11) NOT NULL,
   `booking_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking_invoice`
+--
+
+INSERT INTO `booking_invoice` (`user_id`, `booking_id`) VALUES
+(100000001, 100000);
 
 -- --------------------------------------------------------
 
@@ -90,6 +127,13 @@ CREATE TABLE `payment` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`id`, `user_id`, `amount`, `payment_method`, `created_at`, `updated_at`) VALUES
+(1002, 100000001, 2929.00, 'paypal', '2025-05-06 05:44:33', '2025-05-06 05:44:33');
+
 -- --------------------------------------------------------
 
 --
@@ -101,6 +145,13 @@ CREATE TABLE `paypal_payment` (
   `payment_id` int(11) NOT NULL,
   `paypal_email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `paypal_payment`
+--
+
+INSERT INTO `paypal_payment` (`id`, `payment_id`, `paypal_email`) VALUES
+(3, 1002, 'jeffivanbiosanomayor@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -131,17 +182,18 @@ CREATE TABLE `room` (
   `id` int(11) NOT NULL,
   `room_name` varchar(255) DEFAULT NULL,
   `room_description` varchar(255) DEFAULT NULL,
-  `room_price` decimal(10,2) DEFAULT NULL
+  `room_price` decimal(10,2) DEFAULT NULL,
+  `image_path` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room`
 --
 
-INSERT INTO `room` (`id`, `room_name`, `room_description`, `room_price`) VALUES
-(1000, 'Upper Kubo', '2 kubos that can accommodate up to 15 persons, featuring a kitchen, dining area, toilet, and shower on the ground floor.', 5000.00),
-(1001, 'A-House', 'Suitable for up to 2 persons, maximum up to 4 persons.', 2500.00),
-(1002, 'Cottage', 'Fits up to 5 - 10 persons with tables inside.', 700.00);
+INSERT INTO `room` (`id`, `room_name`, `room_description`, `room_price`, `image_path`) VALUES
+(1000, 'Upper Kubo', '2 kubos that can accommodate up to 15 persons, featuring a kitchen, dining area, toilet, and shower on the ground floor.', 5000.00, 'cabin.jpg'),
+(1001, 'A-House', 'Suitable for up to 2 persons, maximum up to 4 persons.', 2500.00, 'a-house.jpg'),
+(1002, 'Cottage', 'Fits up to 5 - 10 persons with tables inside.', 700.00, 'cottage.jpg');
 
 -- --------------------------------------------------------
 
@@ -160,6 +212,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role_id`) VALUES
+(100000001, 'Jeff Ivan', 'Mayor', 'jeffivanbiosanomayor@gmail.com', '09630229550', '$2y$10$HmkE4w763ZmEzbvJwLpAF./Xv0b/CRDKRpaH/3hUID6v2lOdfFsYy', 1);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -176,7 +235,14 @@ ALTER TABLE `bank_payment`
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`id`),
   ADD KEY `room_id` (`room_id`),
-  ADD KEY `fk_booking_payment` (`payment_id`);
+  ADD KEY `fk_booking_payment` (`payment_id`),
+  ADD KEY `booking_details_id` (`booking_details_id`);
+
+--
+-- Indexes for table `booking_details`
+--
+ALTER TABLE `booking_details`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `booking_invoice`
@@ -240,7 +306,13 @@ ALTER TABLE `bank_payment`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100001;
+
+--
+-- AUTO_INCREMENT for table `booking_details`
+--
+ALTER TABLE `booking_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `gcash_payment`
@@ -252,13 +324,13 @@ ALTER TABLE `gcash_payment`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1002;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1003;
 
 --
 -- AUTO_INCREMENT for table `paypal_payment`
 --
 ALTER TABLE `paypal_payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -276,7 +348,7 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000001;
+  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000002;
 
 --
 -- Constraints for dumped tables
@@ -293,6 +365,7 @@ ALTER TABLE `bank_payment`
 --
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
+  ADD CONSTRAINT `fk_booking_details` FOREIGN KEY (`booking_details_id`) REFERENCES `booking_details` (`id`),
   ADD CONSTRAINT `fk_booking_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`);
 
 --
