@@ -8,6 +8,7 @@ A web-based booking system with user authentication, including Google OAuth inte
 - Booking management
 - User profile management
 - Admin dashboard
+- Conflict Booking Auto Checker
 
 ## Requirements
 
