@@ -32,56 +32,80 @@ if (!isset($_SESSION['booking_details'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $check_in = $_POST['check_in'];
-    $check_out = $_POST['check_out'];
-    $adult = (int) ($_POST['adult'] ?? 0);
-    $children = (int) ($_POST['children'] ?? 0);
-    $overnight = $_POST['overnight'] ?? 'no';
+    try {
+        $check_in = $_POST['check_in'];
+        $check_out = $_POST['check_out'];
+        $adult = (int) ($_POST['adult'] ?? 0);
+        $children = (int) ($_POST['children'] ?? 0);
+        $overnight = $_POST['overnight'] ?? 'no';
 
-    $stmt = $pdo->prepare("SELECT * FROM room WHERE id = ?");
-    $stmt->execute([$_SESSION['room_id']]);
-    $room = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Check if room is already booked for these dates
+        $stmt = $pdo->prepare("SELECT b.* FROM booking b 
+            INNER JOIN booking_details bd ON b.booking_details_id = bd.id 
+            WHERE b.room_id = ? AND b.status != 'cancelled' AND
+            ((bd.check_in BETWEEN ? AND ?) OR 
+            (bd.check_out BETWEEN ? AND ?) OR 
+            (? BETWEEN bd.check_in AND bd.check_out))");
+        $stmt->execute([
+            $_SESSION['room_id'],
+            $check_in,
+            $check_out,
+            $check_in,
+            $check_out,
+            $check_in
+        ]);
 
-    $check_in = new DateTime($check_in);
-    $check_out = new DateTime($check_out);
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['error'] = "This room is already booked for the selected dates. Please choose different dates.";
+        } else {
+            $stmt = $pdo->prepare("SELECT * FROM room WHERE id = ?");
+            $stmt->execute([$_SESSION['room_id']]);
+            $room = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $interval = $check_in->diff($check_out);
-    $days = $interval->days;
+            $check_in = new DateTime($check_in);
+            $check_out = new DateTime($check_out);
 
-    if ($days > 0) {
-        $overnight = 'yes';
-    } else {
-        $overnight = 'no';
-        $days = 1;
+            $interval = $check_in->diff($check_out);
+            $days = $interval->days;
+
+            if ($days > 0) {
+                $overnight = 'yes';
+            } else {
+                $overnight = 'no';
+                $days = 1;
+            }
+
+            if ($overnight == 'no') {
+                $adultFee = 50;
+                $childrenFee = 30;
+
+                $entranceFee = ($adult * $adultFee) + ($children * $childrenFee);
+            } else {
+                $total = $adult + $children;
+                $entranceFee = $total * 200;
+            }
+
+            $bookingFee = 0.01 * ($entranceFee + $room['room_price']);
+            $totalPrice = $entranceFee + ($days * $room['room_price']) + $bookingFee;
+
+            // Update the booking details in session variables
+            $_SESSION['booking_details'] = [
+                'room_id' => $_SESSION['room_id'],
+                'check_in' => $check_in->format('Y-m-d\TH:i'),
+                'check_out' => $check_out->format('Y-m-d\TH:i'),
+                'days' => $days,
+                'adult' => $adult,
+                'children' => $children,
+                'overnight' => $overnight,
+                'roomPrice' => $room['room_price'],
+                'entranceFee' => $entranceFee,
+                'bookingFee' => $bookingFee,
+                'totalPrice' => $totalPrice
+            ];
+        }
+    } catch (Exception $e) {
+        $_SESSION['error'] = "An error occurred: " . $e->getMessage();
     }
-
-    if ($overnight == 'no') {
-        $adultFee = 50;
-        $childrenFee = 30;
-
-        $entranceFee = ($adult * $adultFee) + ($children * $childrenFee);
-    } else {
-        $total = $adult + $children;
-        $entranceFee = $total * 200;
-    }
-
-    $bookingFee = 0.01 * ($entranceFee + $room['room_price']);
-    $totalPrice = $entranceFee + ($days * $room['room_price']) + $bookingFee;
-
-    // Update the booking details in session variables
-    $_SESSION['booking_details'] = [
-        'room_id' => $_SESSION['room_id'],
-        'check_in' => $check_in->format('Y-m-d\TH:i'),
-        'check_out' => $check_out->format('Y-m-d\TH:i'),
-        'days' => $days,
-        'adult' => $adult,
-        'children' => $children,
-        'overnight' => $overnight,
-        'roomPrice' => $room['room_price'],
-        'entranceFee' => $entranceFee,
-        'bookingFee' => $bookingFee,
-        'totalPrice' => $totalPrice
-    ];
 }
 
 // Get room details if room_id is set
@@ -190,7 +214,7 @@ if (isset($_SESSION['room_id'])) {
                     <a href="">View all policies</a>
                 </div>
                 <div class="buttons">
-                    <a href="accommodation.php"><i class="fa-solid fa-arrow-left"></i>Back</a>
+                    <a href="javascript:history.go(-1)"><i class="fa-solid fa-arrow-left"></i>Back</a>
                     <a href="booking-process.php">Next <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
@@ -240,6 +264,12 @@ if (isset($_SESSION['room_id'])) {
                         </span>
                     </p>
                 </div>
+                <?php if (isset($_SESSION['error'])): ?>
+                    <p style="color: #F74141; font-weight: 500; text-align: center; margin-top: 12px; font-style: italic;">
+                        <?= $_SESSION['error'];
+                        unset($_SESSION['error']); ?>
+                    </p>
+                <?php endif; ?>
             </div>
         </div>
     </main>

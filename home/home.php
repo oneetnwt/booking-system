@@ -60,16 +60,25 @@ if (isset($_COOKIE['token'])) {
                             <li><a href="#" id="book-btn">Book Now</a></li>
                             <div class="dropdown">
                                 <li>
-                                    <p style="cursor: pointer" href="">Hi,
+                                    <p style="cursor: pointer">Hi,
                                         <?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?><i
                                             class="fa fa-caret-down" aria-hidden="true" style="margin-left: 0.5rem;"></i>
                                     </p>
                                 </li>
-                                <div class="dropdown-menu">
-                                    <a href="../profile/profile.php">Edit Profile</a>
-                                    <a href="../profile/my-bookings.php">My Bookings</a>
-                                    <a href="../auth/logout.php">Log out</a>
-                                </div>
+                                <?php if ($decoded->data->role === 'admin'): ?>
+                                    <div class="dropdown-menu">
+                                        <a href="../admin/dashboard.php">Admin</a>
+                                        <a href="../profile/profile.php">Edit Profile</a>
+                                        <a href="../profile/my-bookings.php">My Bookings</a>
+                                        <a href="../auth/logout.php">Log out</a>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="dropdown-menu">
+                                        <a href="../profile/profile.php">Edit Profile</a>
+                                        <a href="../profile/my-bookings.php">My Bookings</a>
+                                        <a href="../auth/logout.php">Log out</a>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                     </ul>
