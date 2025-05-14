@@ -5,7 +5,7 @@ require '../db/connectDB.php';
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $enteredCode = $_POST['code'];
-    $enteredCode = (int)$enteredCode;
+    $enteredCode = (int) $enteredCode;
     $storedCode = $_SESSION['reset_code'] ?? null;
 
     if ($enteredCode === $storedCode) {

@@ -30,7 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 'data' => array(
                     'user_id' => $user['id'],
                     'firstname' => $user['firstname'],
-                    'lastname' => $user['lastname']
+                    'lastname' => $user['lastname'],
+                    'role' => $user['role']
                 )
             ),
             $key,
