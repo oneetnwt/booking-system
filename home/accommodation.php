@@ -24,7 +24,7 @@ if (isset($_COOKIE['token'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $room = $_POST['room'];
-    $room = (int)$room;
+    $room = (int) $room;
 
     $_SESSION['room_id'] = $room;
 
@@ -68,15 +68,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <li><a href="../auth/login.php" class="login-btn">Log in</a></li>
                             <li><a href="../auth/signup.php" class="signup-btn">Sign up</a></li>
                         <?php else: ?>
-                            <li><a href="#" id="book-btn">Book Now</a></li>
+                            <li><a href="accommodation.php" id="book-btn">Book Now</a></li>
                             <div class="dropdown">
                                 <li><a href="../auth/logout.php">Hi,
                                         <?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?><i
                                             class="fa fa-caret-down" aria-hidden="true"
                                             style="margin-left: 0.5rem;"></i></a></li>
                                 <div class="dropdown-menu">
-                                    <a href="">Edit Profile</a>
-                                    <a href="">My Bookings</a>
+                                    <a href="../profile/profile.php">Edit Profile</a>
+                                    <a href="../profile/my-bookings.php">My Bookings</a>
                                     <a href="../auth/logout.php">Log out</a>
                                 </div>
                             </div>

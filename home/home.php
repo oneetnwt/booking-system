@@ -57,7 +57,7 @@ if (isset($_COOKIE['token'])) {
                             <li><a href="../auth/login.php" class="login-btn">Log in</a></li>
                             <li><a href="../auth/signup.php" class="signup-btn">Sign up</a></li>
                         <?php else: ?>
-                            <li><a href="#" id="book-btn">Book Now</a></li>
+                            <li><a href="accommodation.php" id="book-btn">Book Now</a></li>
                             <div class="dropdown">
                                 <li>
                                     <p style="cursor: pointer">Hi,
@@ -116,10 +116,11 @@ if (isset($_COOKIE['token'])) {
             <div class="about-content">
                 <img src="../assets/K&A_Dark.png" alt="" height="75px">
                 <h2>About Us</h2>
-                <p>Have your summer kicked-off and thoroughly enjoyed at K&A Natural Spring Resort. A tranquil paradise
-                    nestled in San Antonio, Quezon City, where 97% chlorine-free pool, shaded by the sprawling pools and
-                    trees to ensure tranquil leisure in an undisturbed environment.</p>
-                <a href="#" class="btn btn-primary">Learn More</a>
+                <p>Leave your worries behind and find tranquility at <strong>K&A Natural Spring Resort</strong>, a
+                    beautiful escape into
+                    nature. Stroll through our green grounds, unwind by the sparkling pool, and enjoy friendly service
+                    in our comfortable rooms. A relaxing getaway is waiting for you.</p>
+                <!-- <a href="#" class="btn btn-primary">Learn More</a> -->
             </div>
             <div class="about-image">
                 <img src="../assets/poolside_night.jpg" alt="Resort Night View">
