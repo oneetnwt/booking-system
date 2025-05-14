@@ -41,7 +41,8 @@ if (isset($_GET['code'])) {
             'data' => array(
                 'user_id' => $user['id'],
                 'firstname' => $user['firstname'],
-                'lastname' => $user['lastname']
+                'lastname' => $user['lastname'],
+                'role' => $user['role']
             )
         ),
         $key,

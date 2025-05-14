@@ -1,13 +1,27 @@
 <?php
 session_start();
 
-// Uncomment this for production to ensure only admins can access
-// if (!isset($_COOKIE['admin_token'])) {
-//     header("Location: ../auth/login.php");
-//     exit();
-// }
-
 require_once '../db/connectDB.php';
+require __DIR__ . "/../vendor/autoload.php";
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
+$secret_key = $_ENV['JWT_SECRET_KEY'];
+
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
+}
+
+
+if (!isset($_COOKIE['token']) || $decoded->data->role !== 'admin') {
+    header("Location: ../auth/login.php");
+    exit();
+}
 
 // Fetch all users
 $stmt = $pdo->prepare("SELECT * FROM users");
@@ -94,18 +108,28 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tbody>
                             <?php if (count($users) > 0): ?>
                                 <?php foreach ($users as $user): ?>
-                                    <tr>
-                                        <td><?= $user['id'] ?></td>
-                                        <td><?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?></td>
-                                        <td><?= htmlspecialchars($user['email']) ?></td>
-                                        <td><?= htmlspecialchars($user['phone_number']) ?></td>
-                                        <td>
-                                            <form action="" method="POST">
-                                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                                                <button type="submit" class="block-btn">See bookings</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                    <?php if ($user['role'] !== 'admin'): ?>
+                                        <tr>
+                                            <td><?= $user['id'] ?></td>
+                                            <td><?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?></td>
+                                            <td><?= htmlspecialchars($user['email']) ?></td>
+                                            <td><?= htmlspecialchars($user['phone_number']) ?></td>
+                                            <td>
+                                                <form action="" method="POST">
+                                                    <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                                    <button type="submit" class="block-btn">See bookings</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td><?= $user['id'] ?></td>
+                                            <td><?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?></td>
+                                            <td><?= htmlspecialchars($user['email']) ?></td>
+                                            <td><?= htmlspecialchars($user['phone_number']) ?></td>
+                                            <td><?= ucfirst(htmlspecialchars($user['role'])) ?></td>
+                                        </tr>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>

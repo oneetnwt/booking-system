@@ -114,7 +114,8 @@ header {
 }
 
 .buttons a,
-.a-submit {
+.a-submit,
+#submitForm {
   text-decoration: none;
   color: white;
   padding: 0.5rem 1rem;
@@ -128,15 +129,28 @@ header {
   text-align: center;
 }
 
+#submitForm {
+  background-color: #007bff;
+  width: 200px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1rem;
+}
+
 .buttons a:last-child,
-.a-submit {
+.a-submit,
+#submitForm {
   background-color: #007bff;
   width: 200px;
   text-align: center;
 }
 
 .buttons a:hover,
-.a-submit:hover {
+.a-submit:hover,
+#submitForm:hover {
   transform: scale(1.05);
 }
 
