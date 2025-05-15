@@ -12,19 +12,63 @@ $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
 
-if (isset($_COOKIE['token'])) {
-    $token = $_COOKIE['token'];
-    $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
-}
-
-
-if (!isset($_COOKIE['token']) || $decoded->data->role !== 'admin') {
+// Check if user is logged in and is admin
+if (!isset($_COOKIE['token'])) {
     header("Location: ../auth/login.php");
     exit();
 }
 
-// Fetch all users
-$stmt = $pdo->prepare("SELECT * FROM users");
+try {
+    $token = $_COOKIE['token'];
+    $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
+
+    if ($decoded->data->role !== 'admin') {
+        header("Location: ../home/home.php");
+        exit();
+    }
+} catch (Exception $e) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+// Handle user actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'delete':
+                if (isset($_POST['user_id'])) {
+                    $stmt = $pdo->prepare("DELETE FROM users WHERE id = ? AND role != 'admin'");
+                    $stmt->execute([$_POST['user_id']]);
+                }
+                break;
+
+            case 'update':
+                if (isset($_POST['user_id']) && isset($_POST['status'])) {
+                    $stmt = $pdo->prepare("UPDATE users SET status = ? WHERE id = ?");
+                    $stmt->execute([$_POST['status'], $_POST['user_id']]);
+                }
+                break;
+        }
+    }
+}
+
+// Fetch users with pagination
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$per_page = 10;
+$offset = ($page - 1) * $per_page;
+
+$stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'user'");
+$total_users = $stmt->fetchColumn();
+$total_pages = ceil($total_users / $per_page);
+
+$stmt = $pdo->prepare("
+    SELECT * FROM users 
+    WHERE role = 'user' 
+    ORDER BY id DESC 
+    LIMIT ?, ?
+");
+$stmt->bindValue(1, $offset, PDO::PARAM_INT);
+$stmt->bindValue(2, $per_page, PDO::PARAM_INT);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -46,9 +90,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <img src="../assets/K&ALogo.png" alt="" class="circle-logo">
             <img src="../assets/K&A.png" alt="" class="logo-text">
         </div>
-        <a href="../auth/logout.php">
-            Log out
-            <span class="mdi mdi-logout"></span>
+        <a href="../home/home.php">
+            <span class="mdi mdi-home"></span>
+            Home
         </a>
     </header>
     <div class="main">

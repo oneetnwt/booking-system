@@ -1,18 +1,52 @@
 <?php
 session_start();
 
-// Uncomment this for production to ensure only admins can access
-// if (!isset($_COOKIE['admin_token'])) {
-//     header("Location: ../auth/login.php");
-//     exit();
-// }
-
 require_once '../db/connectDB.php';
+require_once '../vendor/autoload.php';
 
-// Fetch all users
-$stmt = $pdo->prepare("SELECT * FROM users");
-$stmt->execute();
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
+$secret_key = $_ENV['JWT_SECRET_KEY'];
+
+$token = $_COOKIE['token'];
+$decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
+
+if (!isset($token) || $decoded->data->role !== 'admin') {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+// Summary Stats
+$total_users = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'user'")->fetchColumn();
+$total_bookings = $pdo->query("SELECT COUNT(*) FROM booking")->fetchColumn();
+$total_rooms = $pdo->query("SELECT COUNT(*) FROM room")->fetchColumn();
+$total_revenue = $pdo->query("SELECT SUM(amount) FROM payment")->fetchColumn() ?? 0;
+
+// Recent Bookings
+$recent_bookings = $pdo->query("
+    SELECT b.id, u.firstname, u.lastname, r.room_name, b.status, p.amount, b.created_at
+    FROM booking b
+    JOIN booking_invoice bi ON b.id = bi.booking_id
+    JOIN users u ON bi.user_id = u.id
+    JOIN room r ON b.room_id = r.id
+    LEFT JOIN payment p ON b.payment_id = p.id
+    ORDER BY b.created_at DESC
+    LIMIT 5
+")->fetchAll(PDO::FETCH_ASSOC);
+
+// Recent Reviews
+$recent_reviews = $pdo->query("
+    SELECT r.id, u.firstname, u.lastname, rm.room_name, r.rating, r.status, r.created_at
+    FROM reviews r
+    JOIN users u ON r.user_id = u.id
+    JOIN room rm ON r.room_id = rm.id
+    ORDER BY r.created_at DESC
+    LIMIT 5
+")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -32,9 +66,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <img src="../assets/K&ALogo.png" alt="" class="circle-logo">
             <img src="../assets/K&A.png" alt="" class="logo-text">
         </div>
-        <a href="../auth/logout.php">
-            Log out
-            <span class="mdi mdi-logout"></span>
+        <a href="../home/home.php">
+            <span class="mdi mdi-home"></span>
+            Home
         </a>
     </header>
     <div class="main">
@@ -79,65 +113,93 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <div class="main-content">
             <div class="main-container">
-                <h3>DASHBOARD</h3>
-                <div class="dashboard-main">
-                    <div class="ds-card">
-                        <h3>New Bookings</h3>
-                        <p>
-                            <?php
-                            $stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM booking WHERE status = 'pending'");
-                            $stmt->execute();
-                            $count = $stmt->fetch(PDO::FETCH_ASSOC);
-                            echo $count['total'];
-                            ?>
-                        </p>
-                    </div>
-                    <div class="ds-card">
-                        <h3>Completed Bookings</h3>
-                        <p>
-                            <?php
-                            $stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM booking WHERE status = 'done'");
-                            $stmt->execute();
-                            $count = $stmt->fetch(PDO::FETCH_ASSOC);
-                            echo $count['total'];
-                            ?>
-                        </p>
-                    </div>
-                </div>
-                <div class="booking-analytics">
-                    <h3>Booking Analytics</h3>
-                    <div class="ds-card">
-                        <h3>Total Bookings</h3>
-                        <p>
-                            <?php
-                            $stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM users");
-                            $stmt->execute();
-                            $userCount = $stmt->fetch(PDO::FETCH_ASSOC);
-                            echo $userCount['total'];
-                            ?>
-                        </p>
-                        <p style="font-size: 1rem;">₱
-                            <?php
-                            $stmt = $pdo->prepare("SELECT SUM(amount) AS total FROM payment");
-                            $stmt->execute();
-                            $userCount = $stmt->fetch(PDO::FETCH_ASSOC);
-                            echo number_format($userCount['total'], 2);
-                            ?>
-                        </p>
-                    </div>
-                </div>
-                <div class="user-reviews">
-                    <h3>User and Reviews Analytics</h3>
+                <h3>Dashboard</h3>
+                <div class="dashboard-main" style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
                     <div class="ds-card">
                         <h3>Total Users</h3>
-                        <p>
-                            <?php
-                            $stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM users");
-                            $stmt->execute();
-                            $userCount = $stmt->fetch(PDO::FETCH_ASSOC);
-                            echo $userCount['total'];
-                            ?>
-                        </p>
+                        <p><?= $total_users ?></p>
+                    </div>
+                    <div class="ds-card">
+                        <h3>Total Bookings</h3>
+                        <p><?= $total_bookings ?></p>
+                    </div>
+                    <div class="ds-card">
+                        <h3>Total Rooms</h3>
+                        <p><?= $total_rooms ?></p>
+                    </div>
+                    <div class="ds-card">
+                        <h3>Total Revenue</h3>
+                        <p>₱<?= number_format($total_revenue, 2) ?></p>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <div>
+                        <h3>Recent Bookings</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Guest</th>
+                                        <th>Room</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($recent_bookings as $b): ?>
+                                        <tr>
+                                            <td>#<?= $b['id'] ?></td>
+                                            <td><?= htmlspecialchars($b['firstname'] . ' ' . $b['lastname']) ?></td>
+                                            <td><?= htmlspecialchars($b['room_name']) ?></td>
+                                            <td><span
+                                                    class="status-badge <?= $b['status'] ?>"><?= ucfirst($b['status']) ?></span>
+                                            </td>
+                                            <td>₱<?= number_format($b['amount'] ?? 0, 2) ?></td>
+                                            <td><?= date('M d, Y', strtotime($b['created_at'])) ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Recent Reviews</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Guest</th>
+                                        <th>Room</th>
+                                        <th>Rating</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($recent_reviews as $r): ?>
+                                        <tr>
+                                            <td>#<?= $r['id'] ?></td>
+                                            <td><?= htmlspecialchars($r['firstname'] . ' ' . $r['lastname']) ?></td>
+                                            <td><?= htmlspecialchars($r['room_name']) ?></td>
+                                            <td>
+                                                <div class="stars">
+                                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                        <i class="fas fa-star <?= $i <= $r['rating'] ? 'active' : '' ?>"></i>
+                                                    <?php endfor; ?>
+                                                </div>
+                                            </td>
+                                            <td><span
+                                                    class="status-badge <?= $r['status'] ?>"><?= ucfirst($r['status']) ?></span>
+                                            </td>
+                                            <td><?= date('M d, Y', strtotime($r['created_at'])) ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
