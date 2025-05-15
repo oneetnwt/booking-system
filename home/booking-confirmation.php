@@ -102,6 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'bookingFee' => $bookingFee,
                 'totalPrice' => $totalPrice
             ];
+
+            // Redirect to next page after successful form submission
+            header('Location: booking-process.php');
+            exit();
         }
     } catch (Exception $e) {
         $_SESSION['error'] = "An error occurred: " . $e->getMessage();
@@ -147,17 +151,17 @@ if (isset($_SESSION['room_id'])) {
         <div class="container">
             <div class="content">
                 <div class="booking-container">
-                    <form action="" method="POST" id="booking-confirmation-form">
+                    <form action="" method="POST" id="booking-confirmation-form" onsubmit="return handleSubmit(event)">
                         <div class="form-group">
                             <label for="">Check in:</label>
                             <input type="datetime-local"
-                                value="<?= htmlspecialchars($_SESSION['booking_details']['check_in']); ?>"
+                                value="<?= !empty($_SESSION['booking_details']['check_in']) ? htmlspecialchars($_SESSION['booking_details']['check_in']) : ''; ?>"
                                 name="check_in" required>
                         </div>
                         <div class="form-group">
                             <label for="">Check out:</label>
                             <input type="datetime-local"
-                                value="<?= htmlspecialchars($_SESSION['booking_details']['check_out']); ?>"
+                                value="<?= !empty($_SESSION['booking_details']['check_out']) ? htmlspecialchars($_SESSION['booking_details']['check_out']) : ''; ?>"
                                 name="check_out" required>
                         </div>
                         <div class="form-group">
@@ -215,7 +219,8 @@ if (isset($_SESSION['room_id'])) {
                 </div>
                 <div class="buttons">
                     <a href="javascript:history.go(-1)"><i class="fa-solid fa-arrow-left"></i>Back</a>
-                    <a href="booking-process.php">Next <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="javascript:void(0)" onclick="submitAndProceed()">Next <i
+                            class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
             <div class="order-details">
@@ -273,6 +278,32 @@ if (isset($_SESSION['room_id'])) {
             </div>
         </div>
     </main>
+    <script>
+        function handleSubmit(event) {
+            const checkIn = document.querySelector('input[name="check_in"]').value;
+            const checkOut = document.querySelector('input[name="check_out"]').value;
+
+            if (!checkIn || !checkOut) {
+                event.preventDefault();
+                alert('Please select both check-in and check-out dates before proceeding.');
+                return false;
+            }
+            return true;
+        }
+
+        function submitAndProceed() {
+            const form = document.getElementById('booking-confirmation-form');
+            const checkIn = document.querySelector('input[name="check_in"]').value;
+            const checkOut = document.querySelector('input[name="check_out"]').value;
+
+            if (!checkIn || !checkOut) {
+                alert('Please select both check-in and check-out dates before proceeding.');
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
 </body>
 
 </html>

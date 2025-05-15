@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->addAddress($email, "THIS IS YOUR CLIENT");
 
             $mail->isHTML(true);
-            $mail->Subject = "Verify Your Email - K&A Resort";
+            $mail->Subject = "Password Reset Code - K&A Resort";
 
             // Embed images - these will be referenced in the HTML with Content-IDs
             $logoPath = '../assets/K&A_Dark.png';  // Path to your logo file
@@ -129,13 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="content">
                     <p>Hi ' . htmlspecialchars($user['firstname']) . ',</p>
-                    <p>You have successfully created an account at K&A Resort. Please use the code below to verify your email.</p>
+                    <p>We received a request to reset your password for your K&A Resort account. Please use the code below to reset your password.</p>
                     
                     <div class="verification-code">
                         ' . $reset_code . '
                     </div>
                     
-                    <p class="disclaimer">Didn\'t create a K&A Resort account? Ignore this email. Someone may have typed your email address by mistake.</p>
+                    <p class="disclaimer">If you didn\'t request a password reset, please ignore this email. Your account security is important to us.</p>
                 </div>
                 <div class="footer">
                     &copy; 2025 K&A Natural Spring Resort<br>
