@@ -9,6 +9,7 @@ if (isset($_SESSION['booking_details'])) {
 
 
 require __DIR__ . "/../vendor/autoload.php";
+require '../db/connectDB.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -22,6 +23,10 @@ if (isset($_COOKIE['token'])) {
     $token = $_COOKIE['token'];
     $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 }
+
+$stmt = $pdo->prepare("SELECT * FROM room");
+$stmt->execute();
+$accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -47,8 +52,7 @@ if (isset($_COOKIE['token'])) {
                     <ul class="nav-links">
                         <li><a href="home.php" class="active">Home</a></li>
                         <li><a href="accommodation.php">Accommodation</a></li>
-                        <li><a href="#">Gallery</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#footer">Contact</a></li>
                     </ul>
                 </nav>
                 <nav class="auth-links">
@@ -96,7 +100,7 @@ if (isset($_COOKIE['token'])) {
                         at K&A Resort
                         Spring
                         Resort.</p>
-                        <a href=" ../auth/login.php" class="btn btn-primary">Book Now</a>
+                        <a href=" accommodation.php" class="btn btn-primary">Book Now</a>
                     <!-- <a href="#" class="btn btn-outline">Learn More</a> -->
             </div>
         </div>
@@ -129,7 +133,7 @@ if (isset($_COOKIE['token'])) {
     </section>
 
     <!-- Entrance Rates -->
-    <section class="rates">
+    <section class="rates" id="rates">
         <div class="container">
             <h2>Entrance Rate</h2>
             <div class="rate-cards">
@@ -162,46 +166,27 @@ if (isset($_COOKIE['token'])) {
                 <a href="accommodation.php" class="btn">See All →</a>
             </div>
             <div class="room-cards">
-                <div class="room-card">
-                    <div class="room-image">
-                        <img src="../assets/cabin.jpg" alt="Upper Kubo">
+                <?php foreach ($accommodations as $accommodation): ?>
+                    <div class="room-card">
+                        <div class="room-image">
+                            <img src="../assets/<?= $accommodation['image_path']; ?>"
+                                alt="<?= $accommodation['room_name']; ?>">
+                        </div>
+                        <div class="room-content">
+                            <h3 class="room-title"><?= $accommodation['room_name']; ?></h3>
+                            <div class="room-price">₱<?= number_format($accommodation['room_price'], 2) ?></div>
+                            <div class="room-details"><?= $accommodation['room_description']; ?></div>
+                            <a href="booking-confirmation.php?room_id=<?= $accommodation['id']; ?>" class="btn btn-primary"
+                                style="float: bottom">Book Now</a>
+                        </div>
                     </div>
-                    <div class="room-content">
-                        <h3 class="room-title">Upper Kubo</h3>
-                        <div class="room-price">₱1,500</div>
-                        <div class="room-details">Perfect for families, group of friends, stunning pool views —
-                            accommodating 10-15 people.</div>
-                        <a href="#" class="btn btn-primary">Book Now</a>
-                    </div>
-                </div>
-                <div class="room-card">
-                    <div class="room-image">
-                        <img src="../assets/a-house.jpg" alt="A-House">
-                    </div>
-                    <div class="room-content">
-                        <h3 class="room-title">A-House</h3>
-                        <div class="room-price">₱2,500</div>
-                        <div class="room-details">Good for 2 persons maximum. <br> Aircon + CR</div>
-                        <a href="#" class="btn btn-primary">Book Now</a>
-                    </div>
-                </div>
-                <div class="room-card">
-                    <div class="room-image">
-                        <img src="../assets/cottage.jpg" alt="Cottage">
-                    </div>
-                    <div class="room-content">
-                        <h3 class="room-title">Cottage</h3>
-                        <div class="room-price">From ₱500</div>
-                        <div class="room-details">Different types available to suit your needs.</div>
-                        <a href="#" class="btn btn-primary">Book Now</a>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
 
     <!-- Amenities -->
-    <section class="amenities">
+    <section class="amenities" id="amenities">
         <div class="container">
             <div class="section-header">
                 <h2>Amenities</h2>
@@ -364,13 +349,14 @@ if (isset($_COOKIE['token'])) {
                     width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div style="text-align: center; margin-top: 20px;">
-                <a href="#" class="btn btn-primary">Driving Directions</a>
+                <a href="https://maps.app.goo.gl/Y5838LU71En3mBZG7" target="_blank" class="btn btn-primary">Driving
+                    Directions</a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer id="footer">
         <div class="container footer-container">
             <div class="footer-column">
                 <div class="footer-logo">
@@ -378,33 +364,30 @@ if (isset($_COOKIE['token'])) {
                 </div>
                 <p>Escape the ordinary, discover paradise at K&A Natural Spring Resort.</p>
                 <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/KANaturalSpringResort" target="_blank"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/kandaresort2021/" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
                 </div>
             </div>
             <div class="footer-column footer-links">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Accommodation</a></li>
-                    <li><a href="#">Amenities</a></li>
-                    <li><a href="#">Rates</a></li>
-                    <li><a href="#">Gallery</a></li>
-                </ul>
-            </div>
-            <div class="footer-column footer-links">
-                <h3>Help</h3>
-                <ul>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Refund Policy</a></li>
+                    <li><a href="home.php">Home</a></li>
+                    <li><a href="accommodation.php">Accommodation</a></li>
+                    <li><a href="#amenities">Amenities</a></li>
+                    <li><a href="#rates">Rates</a></li>
                 </ul>
             </div>
             <div class="footer-column footer-contact">
                 <h3>Contact Us</h3>
-                <ul></ul>
+                <ul style="margin-top: 1rem;">
+                    <li><a href="mailto:kandaresort2021@gmail.com"><i class="fa fa-envelope"
+                                aria-hidden="true"></i>kandaresort2021@gmail.com</a></li>
+                    <li><a href="https://www.facebook.com/KANaturalSpringResort" target="_blank"><i
+                                class="fa-brands fa-facebook-f"></i>K&A Natural Spring Resort</a></li>
+                    <li><i class="fa fa-phone" aria-hidden="true"></i>+63 985 230 6512</li>
+                </ul>
             </div>
         </div>
         <p style="text-align: center; margin-top: 50px; font-weight: 200;">&copy; 2025 K&A Natural Spring Resort. All

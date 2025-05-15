@@ -350,6 +350,8 @@ header {
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .room-image {
@@ -365,6 +367,9 @@ header {
 
 .room-content {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .room-title {
@@ -383,6 +388,23 @@ header {
   color: #666;
   font-size: 14px;
   margin-bottom: 20px;
+  flex: 1;
+}
+
+.btn-primary {
+  margin-top: auto;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: #005b8f;
+  color: white;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #004b7a;
 }
 
 /* Amenities */

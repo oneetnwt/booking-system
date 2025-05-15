@@ -8,6 +8,7 @@ if (isset($_SESSION['booking_details'])) {
 }
 
 require __DIR__ . "/../vendor/autoload.php";
+require '../db/connectDB.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -16,6 +17,10 @@ $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
+
+$stmt = $pdo->prepare("SELECT * FROM room");
+$stmt->execute();
+$accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_COOKIE['token'])) {
     $token = $_COOKIE['token'];
@@ -58,8 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <ul class="nav-links">
                         <li><a href="home.php">Home</a></li>
                         <li><a href="accommodation.php" class="active">Accommodation</a></li>
-                        <li><a href="#">Gallery</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#footer">Contact</a></li>
                     </ul>
                 </nav>
                 <nav class="auth-links">
@@ -93,78 +97,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="accommodation-list">
             <!-- Card -->
-            <div class="accommodation-card">
-                <img src="../assets/cabin.jpg" alt="">
-                <div class="accommodation-details">
-                    <h1>Upper Kubo</h1>
-                    <p>2 Kubos that can accommodate up to 15 persons, featuring a kitchen, dining area, toilet, and
-                        shower on the ground floor</p>
-                    <div class="amenities">
-                        <h3>Kubo #1 Amenities</h3>
-                        <ul>
-                            <li>2 Queen-size Bed</li>
-                            <li>55" TV with Netflix</li>
-                            <li>Wall Fan</li>
-                            <li>Hot & Cold Water Dispenser</li>
-                        </ul>
-                    </div>
-                    <div class="price">
-                        <h2>From ₱5,000.00</h2>
-                        <form action="" method="POST">
-                            <input type="hidden" name="room" value="1000">
-                            <button>Book Now</button>
-                        </form>
+            <?php foreach ($accommodations as $accommodation): ?>
+                <div class="accommodation-card">
+                    <img src="../assets/<?= $accommodation['image_path']; ?>" alt="<?= $accommodation['room_name']; ?>">
+                    <div class="accommodation-details">
+                        <h1><?= $accommodation['room_name']; ?></h1>
+                        <p><?= $accommodation['room_description']; ?></p>
+                        <div class="price">
+                            <h2>₱<?= number_format($accommodation['room_price'], 2); ?></h2>
+                            <form action="" method="POST">
+                                <input type="hidden" name="room" value="<?= $accommodation['id']; ?>">
+                                <button>Book Now</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Card -->
-            <div class="accommodation-card">
-                <img src="../assets/a-house.jpg" alt="">
-                <div class="accommodation-details">
-                    <h1>A-House</h1>
-                    <p>Suitable for 2 persons with maximum up to 4 persons.<br> <strong>+₱200 per person beyond
-                            2</strong></p>
-                    <div class="amenities">
-                        <h3>Room Amenities: </h3>
-                        <ul>
-                            <li>Private Bathroom</li>
-                            <li>Water Heater and Basic Utensils</li>
-                            <li>Ground Floor Dining Table</li>
-                        </ul>
-                    </div>
-                    <div class="price">
-                        <h2>From ₱2,500.00</h2>
-                        <form action="" method="POST">
-                            <input type="hidden" name="room" value="1001">
-                            <button>Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- Card -->
-            <div class="accommodation-card">
-                <img src="../assets/cottage.jpg" alt="">
-                <div class="accommodation-details">
-                    <h1>Cottage</h1>
-                    <p>Fits up to 5-10 persons inside.</p>
-                    <div class="amenities">
-                        <h3>Cottage Amenities:</h3>
-                        <ul>
-                            <li>1 Table</li>
-                        </ul>
-                    </div>
-                    <div class="price">
-                        <h2>From ₱700 - ₱1,0000</h2>
-                        <form action="" method="POST">
-                            <input type="hidden" name="room" value="1002">
-                            <button>Book Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </section>
-    <footer>
+    <footer id="footer">
         <div class="container footer-container">
             <div class="footer-column">
                 <div class="footer-logo">
@@ -172,33 +123,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <p>Escape the ordinary, discover paradise at K&A Natural Spring Resort.</p>
                 <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/KANaturalSpringResort" target="_blank"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/kandaresort2021/" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
                 </div>
             </div>
             <div class="footer-column footer-links">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Accommodation</a></li>
-                    <li><a href="#">Amenities</a></li>
-                    <li><a href="#">Rates</a></li>
-                    <li><a href="#">Gallery</a></li>
-                </ul>
-            </div>
-            <div class="footer-column footer-links">
-                <h3>Help</h3>
-                <ul>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Refund Policy</a></li>
+                    <li><a href="home.php">Home</a></li>
+                    <li><a href="home.php">Accommodation</a></li>
+                    <li><a href="home.php">Amenities</a></li>
+                    <li><a href="home.php">Rates</a></li>
                 </ul>
             </div>
             <div class="footer-column footer-contact">
                 <h3>Contact Us</h3>
-                <ul></ul>
+                <ul style="margin-top: 1rem;">
+                    <li><a href="mailto:kandaresort2021@gmail.com"><i class="fa fa-envelope"
+                                aria-hidden="true"></i>kandaresort2021@gmail.com</a></li>
+                    <li><a href="https://www.facebook.com/KANaturalSpringResort" target="_blank"><i
+                                class="fa-brands fa-facebook-f"></i>K&A Natural Spring Resort</a></li>
+                    <li><i class="fa fa-phone" aria-hidden="true"></i>+63 985 230 6512</li>
+                </ul>
             </div>
         </div>
         <p style="text-align: center; margin-top: 50px; font-weight: 200;">&copy; 2025 K&A Natural Spring Resort. All
