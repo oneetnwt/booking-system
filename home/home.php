@@ -198,7 +198,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Swimming Pool</h3>
-                        <p class="amenity-description">Natural spring water, 97% chlorine-free</p>
+                        <p class="amenity-description">Three big pools, with dedicated children's pool.</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -207,7 +207,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Karaoke</h3>
-                        <p class="amenity-description">Modern karaoke system</p>
+                        <p class="amenity-description">Entertainment room video-singko karaoke system</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -215,8 +215,8 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../assets/poolbar.jpg" alt="Pool Bar">
                     </div>
                     <div class="amenity-content">
-                        <h3 class="amenity-title">Pool Bar</h3>
-                        <p class="amenity-description">Refreshing drinks by the pool</p>
+                        <h3 class="amenity-title">Mini Pool Bar</h3>
+                        <p class="amenity-description">Refreshing drinks and snacks served poolside</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -225,7 +225,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Shower Area</h3>
-                        <p class="amenity-description">Clean and modern facilities</p>
+                        <p class="amenity-description">Clean and spacious shower facilities</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -233,8 +233,8 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../assets/grill.jpg" alt="Slide Area">
                     </div>
                     <div class="amenity-content">
-                        <h3 class="amenity-title">Slide Area</h3>
-                        <p class="amenity-description">Fun for all ages</p>
+                        <h3 class="amenity-title">Grilling Area</h3>
+                        <p class="amenity-description">Well-equipped BBQ stations for outdoor cooking</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -243,7 +243,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">Toilet Facilities</h3>
-                        <p class="amenity-description">Clean and well-maintained</p>
+                        <p class="amenity-description">Modern and well-maintained restoroom facilities.</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -251,8 +251,8 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../assets/sari.jpg" alt="Self-use Store">
                     </div>
                     <div class="amenity-content">
-                        <h3 class="amenity-title">Self-use Store</h3>
-                        <p class="amenity-description">Convenience items available</p>
+                        <h3 class="amenity-title">Sari-Sari Store</h3>
+                        <p class="amenity-description">Convenience store for items and snacks.</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -260,8 +260,8 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="../assets/lifeJackets.jpg" alt="Videoke">
                     </div>
                     <div class="amenity-content">
-                        <h3 class="amenity-title">Videoke</h3>
-                        <p class="amenity-description">Entertainment for guests</p>
+                        <h3 class="amenity-title">Lifejackets</h3>
+                        <p class="amenity-description">Safety equipment available for all ages.</p>
                     </div>
                 </div>
                 <div class="amenity-item">
@@ -279,7 +279,8 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">WiFi Access</h3>
-                        <p class="amenity-description">Stay connected during your visit</p>
+                        <p class="amenity-description">Piso WiFi is available and have internet access throughout the
+                            entire resort.</p>
                     </div>
                 </div>
             </div>
@@ -300,7 +301,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <img src="../assets/Danz.png" alt="Guest Avatar">
                         </div>
                         <div>
-                            <div class="testimonial-name">Donna J.</div>
+                            <div class="testimonial-name">Danziel J.</div>
                             <div class="rating">
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
