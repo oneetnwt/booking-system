@@ -39,7 +39,7 @@ $booking_id = (int) $_GET['id'];
 
 try {
     $stmt = $pdo->prepare("
-        SELECT b.*, u.firstname, u.lastname, u.email, u.phone, r.room_name, r.room_type, r.price, p.amount as total_amount, p.payment_method, p.payment_status, bd.check_in, bd.check_out, bd.guests
+            SELECT b.*, u.*, r.*, p.*, bd.*
         FROM booking b 
         JOIN booking_invoice bi ON b.id = bi.booking_id
         JOIN users u ON bi.user_id = u.id 
@@ -56,7 +56,7 @@ try {
         exit();
     }
 } catch (PDOException $e) {
-    header("Location: bookings.php");
+    echo "Error";
     exit();
 }
 ?>
@@ -67,75 +67,65 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Details - K&A Resort</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles/admin.styles.css">
+    <title>Booking Details - K&A Resort</title>
 </head>
 
 <body>
-    <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <img src="../assets/K&A.png" alt="K&A Resort Logo">
-                <h2>Admin Panel</h2>
+    <header>
+        <div class="logo">
+            <img src="../assets/K&ALogo.png" alt="" class="circle-logo">
+            <img src="../assets/K&A.png" alt="" class="logo-text">
+        </div>
+        <a href="../home/home.php">
+            <span class="mdi mdi-home"></span>
+            Home
+        </a>
+    </header>
+    <div class="main">
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <h3>ADMIN PANEL</h3>
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="mdi mdi-view-dashboard"></span>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="bookings.php">
+                                <span class="mdi mdi-file-tree"></span>
+                                Bookings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="users.php">
+                                <span class="mdi mdi-account-multiple"></span>
+                                Users
+                            </a>
+                        </li>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="mdi mdi-star-box"></span>
+                                Reviews and Ratings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="rooms.php">
+                                <span class="mdi mdi-bed"></span>
+                                Rooms
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <a href="dashboard.php">
-                            <i class="fas fa-home"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="bookings.php">
-                            <i class="fas fa-calendar-check"></i>
-                            Bookings
-                        </a>
-                    </li>
-                    <li>
-                        <a href="users.php">
-                            <i class="fas fa-users"></i>
-                            Users
-                        </a>
-                    </li>
-                    <li>
-                        <a href="reviews.php">
-                            <i class="fas fa-star"></i>
-                            Reviews
-                        </a>
-                    </li>
-                    <li>
-                        <a href="rooms.php">
-                            <i class="fas fa-bed"></i>
-                            Rooms
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="main-header">
-                <div class="header-search">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search...">
-                </div>
-                <div class="header-actions">
-                    <div class="notifications">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">3</span>
-                    </div>
-                    <div class="admin-profile">
-                        <img src="../assets/default-avatar.png" alt="Admin">
-                        <span><?php echo $decoded->data->firstname . ' ' . $decoded->data->lastname; ?></span>
-                    </div>
-                </div>
-            </header>
-
-            <div class="dashboard-content">
+        </div>
+        <div class="main-content">
+            <div class="main-container">
                 <div class="content-header">
                     <h1>Booking Details</h1>
                     <div class="header-actions">
@@ -176,7 +166,7 @@ try {
                             </div>
                             <div class="detail-item">
                                 <span class="label">Number of Guests:</span>
-                                <span class="value"><?php echo $booking['guests']; ?></span>
+                                <span class="value"><?php echo $booking['adult'] + $booking['child']; ?></span>
                             </div>
                             <div class="detail-item">
                                 <span class="label">Booking Date:</span>
@@ -200,7 +190,7 @@ try {
                             </div>
                             <div class="detail-item">
                                 <span class="label">Phone:</span>
-                                <span class="value"><?php echo $booking['phone']; ?></span>
+                                <span class="value"><?php echo $booking['phone_number']; ?></span>
                             </div>
                         </div>
                     </div>
@@ -213,12 +203,8 @@ try {
                                 <span class="value"><?php echo $booking['room_name']; ?></span>
                             </div>
                             <div class="detail-item">
-                                <span class="label">Room Type:</span>
-                                <span class="value"><?php echo ucfirst($booking['room_type']); ?></span>
-                            </div>
-                            <div class="detail-item">
                                 <span class="label">Price per Night:</span>
-                                <span class="value">₱<?php echo number_format($booking['price'], 2); ?></span>
+                                <span class="value">₱<?php echo number_format($booking['room_price'], 2); ?></span>
                             </div>
                         </div>
                     </div>
@@ -228,8 +214,7 @@ try {
                         <div class="details-grid">
                             <div class="detail-item">
                                 <span class="label">Total Amount:</span>
-                                <span
-                                    class="value">₱<?php echo number_format($booking['total_amount'] ?? 0, 2); ?></span>
+                                <span class="value">₱<?php echo number_format($booking['amount'] ?? 0, 2); ?></span>
                             </div>
                             <div class="detail-item">
                                 <span class="label">Payment Method:</span>
@@ -247,7 +232,7 @@ try {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- Status Update Modal -->

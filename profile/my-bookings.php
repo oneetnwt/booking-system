@@ -163,10 +163,16 @@ foreach ($bookings as $booking) {
                                             <p style="color: #F74141; font-size: 1rem;"><?= strtoupper($booking['status']) ?>
                                             </p>
                                             <p id="totalAmount">Total Amount: ₱ <?= $booking['amount'] ?></p>
-                                            <form action="booking-details.php" method="POST">
-                                                <input type="hidden" name="bookingId" value="<?= $booking['booking_id'] ?>">
-                                                <button>View Details</button>
-                                            </form>
+                                            <div class="button-group">
+                                                <?php if ($booking['status'] === 'done'): ?>
+                                                    <a href="rate_us.php?id=<?= $booking['booking_id'] ?>" class="rate-btn">Rate
+                                                        Us</a>
+                                                <?php endif; ?>
+                                                <form action="booking-details.php" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="bookingId" value="<?= $booking['booking_id'] ?>">
+                                                    <button>View Details</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

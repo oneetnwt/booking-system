@@ -63,7 +63,6 @@ $total_pages = ceil($total_users / $per_page);
 
 $stmt = $pdo->prepare("
     SELECT * FROM users 
-    WHERE role = 'user' 
     ORDER BY id DESC 
     LIMIT ?, ?
 ");
@@ -146,38 +145,23 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th>Name</th>
                                 <th>Email Address</th>
                                 <th>Contact Number</th>
-                                <th>Action</th>
+                                <th>Role</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (count($users) > 0): ?>
                                 <?php foreach ($users as $user): ?>
-                                    <?php if ($user['role'] !== 'admin'): ?>
-                                        <tr>
-                                            <td><?= $user['id'] ?></td>
-                                            <td><?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?></td>
-                                            <td><?= htmlspecialchars($user['email']) ?></td>
-                                            <td><?= htmlspecialchars($user['phone_number']) ?></td>
-                                            <td>
-                                                <form action="" method="POST">
-                                                    <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                                                    <button type="submit" class="block-btn">See bookings</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td><?= $user['id'] ?></td>
-                                            <td><?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?></td>
-                                            <td><?= htmlspecialchars($user['email']) ?></td>
-                                            <td><?= htmlspecialchars($user['phone_number']) ?></td>
-                                            <td><?= ucfirst(htmlspecialchars($user['role'])) ?></td>
-                                        </tr>
-                                    <?php endif; ?>
+                                    <tr>
+                                        <td><?= $user['id'] ?></td>
+                                        <td><?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?></td>
+                                        <td><?= htmlspecialchars($user['email']) ?></td>
+                                        <td><?= htmlspecialchars($user['phone_number']) ?></td>
+                                        <td><?= ucfirst(htmlspecialchars($user['role'])) ?></td>
+                                    </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="5" style="text-align: center;">No users found</td>
+                                    <td colspan="4" style="text-align: center;">No users found</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>

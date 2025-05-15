@@ -35,41 +35,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'add':
-                if (isset($_POST['room_name'], $_POST['room_type'], $_POST['price'], $_POST['capacity'], $_POST['description'])) {
+                if (isset($_POST['room_name'], $_POST['room_price'], $_POST['room_description'], $_POST['image_path'])) {
                     $stmt = $pdo->prepare("
-                        INSERT INTO room (room_name, room_type, price, capacity, description, status) 
-                        VALUES (?, ?, ?, ?, ?, 'available')
+                        INSERT INTO room (room_name, room_price, room_description, image_path) 
+                        VALUES (?, ?, ?, ?)
                     ");
                     $stmt->execute([
                         $_POST['room_name'],
-                        $_POST['room_type'],
-                        $_POST['price'],
-                        $_POST['capacity'],
-                        $_POST['description']
+                        $_POST['room_price'],
+                        $_POST['room_description'],
+                        $_POST['image_path']
                     ]);
+                    // Redirect to prevent form resubmission
+                    header("Location: rooms.php?success=added");
+                    exit();
                 }
                 break;
             case 'update':
-                if (isset($_POST['room_id'], $_POST['room_name'], $_POST['room_type'], $_POST['price'], $_POST['capacity'], $_POST['description'])) {
+                if (isset($_POST['room_id'], $_POST['room_name'], $_POST['room_price'], $_POST['room_description'], $_POST['image_path'])) {
                     $stmt = $pdo->prepare("
                         UPDATE room 
-                        SET room_name = ?, room_type = ?, price = ?, capacity = ?, description = ? 
+                        SET room_name = ?, room_price = ?, room_description = ?, image_path = ? 
                         WHERE id = ?
                     ");
                     $stmt->execute([
                         $_POST['room_name'],
-                        $_POST['room_type'],
-                        $_POST['price'],
-                        $_POST['capacity'],
-                        $_POST['description'],
+                        $_POST['room_price'],
+                        $_POST['room_description'],
+                        $_POST['image_path'],
                         $_POST['room_id']
                     ]);
+                    // Redirect to prevent form resubmission
+                    header("Location: rooms.php?success=updated");
+                    exit();
                 }
                 break;
             case 'delete':
                 if (isset($_POST['room_id'])) {
                     $stmt = $pdo->prepare("DELETE FROM room WHERE id = ?");
                     $stmt->execute([$_POST['room_id']]);
+                    // Redirect to prevent form resubmission
+                    header("Location: rooms.php?success=deleted");
+                    exit();
                 }
                 break;
             case 'update_status':
@@ -79,6 +86,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 break;
         }
+    }
+}
+
+// Add success message display
+$success_message = '';
+if (isset($_GET['success'])) {
+    switch ($_GET['success']) {
+        case 'added':
+            $success_message = 'Room added successfully!';
+            break;
+        case 'updated':
+            $success_message = 'Room updated successfully!';
+            break;
+        case 'deleted':
+            $success_message = 'Room deleted successfully!';
+            break;
     }
 }
 
@@ -105,7 +128,7 @@ if ($type_filter) {
 }
 
 if ($search) {
-    $where_conditions[] = "(room_name LIKE ? OR description LIKE ?)";
+    $where_conditions[] = "(room_name LIKE ? OR room_description LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
@@ -203,6 +226,11 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
                             <i class="fas fa-plus"></i> Add Room
                         </button>
                     </div>
+                    <?php if ($success_message): ?>
+                        <div class="alert alert-success" id="successMessage">
+                            <?php echo $success_message; ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="table-container">
                         <table>
                             <thead>
@@ -226,10 +254,6 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
                                                 </button>
                                                 <button class="btn-icon" onclick="editRoom(<?php echo $room['id']; ?>)">
                                                     <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn-icon"
-                                                    onclick="updateRoomStatus(<?php echo $room['id']; ?>)">
-                                                    <i class="fas fa-cog"></i>
                                                 </button>
                                                 <button class="btn-icon delete"
                                                     onclick="deleteRoom(<?php echo $room['id']; ?>)">
@@ -282,25 +306,17 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
                     <input type="text" name="room_name" id="room_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="room_type">Room Type:</label>
-                    <select name="room_type" id="room_type" required>
-                        <option value="standard">Standard</option>
-                        <option value="deluxe">Deluxe</option>
-                        <option value="suite">Suite</option>
-                        <option value="family">Family</option>
-                    </select>
+                    <label for="room_price">Price per Night:</label>
+                    <input type="number" name="room_price" id="room_price" min="0" step="0.01" required>
                 </div>
                 <div class="form-group">
-                    <label for="price">Price per Night:</label>
-                    <input type="number" name="price" id="price" min="0" step="0.01" required>
+                    <label for="image_path">Image Path:</label>
+                    <input type="text" name="image_path" id="image_path" placeholder="e.g., ../assets/rooms/room1.jpg"
+                        required>
                 </div>
                 <div class="form-group">
-                    <label for="capacity">Capacity:</label>
-                    <input type="number" name="capacity" id="capacity" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <textarea name="description" id="description" rows="4" required></textarea>
+                    <label for="room_description">Description:</label>
+                    <textarea name="room_description" id="room_description" rows="4" required></textarea>
                 </div>
                 <button type="submit" class="btn-primary">Add Room</button>
             </form>
@@ -320,48 +336,19 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
                     <input type="text" name="room_name" id="edit_room_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit_room_type">Room Type:</label>
-                    <select name="room_type" id="edit_room_type" required>
-                        <option value="standard">Standard</option>
-                        <option value="deluxe">Deluxe</option>
-                        <option value="suite">Suite</option>
-                        <option value="family">Family</option>
-                    </select>
+                    <label for="edit_room_price">Price per Night:</label>
+                    <input type="number" name="room_price" id="edit_room_price" min="0" step="0.01" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit_price">Price per Night:</label>
-                    <input type="number" name="price" id="edit_price" min="0" step="0.01" required>
+                    <label for="edit_image_path">Image Path:</label>
+                    <input type="text" name="image_path" id="edit_image_path"
+                        placeholder="e.g., ../assets/rooms/room1.jpg" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit_capacity">Capacity:</label>
-                    <input type="number" name="capacity" id="edit_capacity" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit_description">Description:</label>
-                    <textarea name="description" id="edit_description" rows="4" required></textarea>
+                    <label for="edit_room_description">Description:</label>
+                    <textarea name="room_description" id="edit_room_description" rows="4" required></textarea>
                 </div>
                 <button type="submit" class="btn-primary">Update Room</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Status Update Modal -->
-    <div id="statusModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Update Room Status</h2>
-            <form id="statusForm" method="POST">
-                <input type="hidden" name="action" value="update_status">
-                <input type="hidden" name="room_id" id="status_room_id">
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <select name="status" id="status" required>
-                        <option value="available">Available</option>
-                        <option value="occupied">Occupied</option>
-                        <option value="maintenance">Maintenance</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary">Update Status</button>
             </form>
         </div>
     </div>
@@ -376,82 +363,91 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
     </div>
 
     <script>
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', function (e) {
-            const searchTerm = e.target.value;
-            const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('search', searchTerm);
-            currentUrl.searchParams.set('page', '1');
-            window.location.href = currentUrl.toString();
-        });
+        // Initialize modals
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle success message
+            const successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                // Remove success message from URL without refreshing
+                const url = new URL(window.location.href);
+                url.searchParams.delete('success');
+                window.history.replaceState({}, '', url);
 
-        // Status filter
-        document.getElementById('statusFilter').addEventListener('change', function (e) {
-            const status = e.target.value;
-            const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('status', status);
-            currentUrl.searchParams.set('page', '1');
-            window.location.href = currentUrl.toString();
-        });
+                // Hide message after 3 seconds
+                setTimeout(() => {
+                    successMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        successMessage.remove();
+                    }, 300);
+                }, 3000);
+            }
 
-        // Type filter
-        document.getElementById('typeFilter').addEventListener('change', function (e) {
-            const type = e.target.value;
-            const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('type', type);
-            currentUrl.searchParams.set('page', '1');
-            window.location.href = currentUrl.toString();
-        });
+            const addRoomModal = document.getElementById('addRoomModal');
+            const editRoomModal = document.getElementById('editRoomModal');
+            const viewModal = document.getElementById('viewModal');
+            const closeBtns = document.getElementsByClassName('close');
 
-        // Modal functionality
-        const addRoomModal = document.getElementById('addRoomModal');
-        const editRoomModal = document.getElementById('editRoomModal');
-        const statusModal = document.getElementById('statusModal');
-        const viewModal = document.getElementById('viewModal');
-        const closeBtns = document.getElementsByClassName('close');
+            // Add Room button click handler
+            document.querySelector('.btn-primary').addEventListener('click', function () {
+                addRoomModal.style.display = 'flex';
+            });
+
+            // Close button click handlers
+            Array.from(closeBtns).forEach(btn => {
+                btn.onclick = function () {
+                    const modal = this.closest('.modal');
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Click outside modal to close
+            window.onclick = function (event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            }
+        });
 
         function showAddRoomModal() {
-            addRoomModal.style.display = 'block';
+            const modal = document.getElementById('addRoomModal');
+            modal.style.display = 'flex';
         }
 
         function editRoom(roomId) {
-            // Fetch room details and populate form
             fetch(`get_room.php?id=${roomId}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('edit_room_id').value = data.id;
                     document.getElementById('edit_room_name').value = data.room_name;
-                    document.getElementById('edit_room_type').value = data.room_type;
-                    document.getElementById('edit_price').value = data.price;
-                    document.getElementById('edit_capacity').value = data.capacity;
-                    document.getElementById('edit_description').value = data.description;
-                    editRoomModal.style.display = 'block';
+                    document.getElementById('edit_room_price').value = data.room_price;
+                    document.getElementById('edit_room_description').value = data.room_description;
+                    document.getElementById('editRoomModal').style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to load room details');
                 });
         }
 
-        function updateRoomStatus(roomId) {
-            document.getElementById('status_room_id').value = roomId;
-            statusModal.style.display = 'block';
-        }
-
         function viewRoom(roomId) {
-            // Fetch room details and display in modal
             fetch(`get_room.php?id=${roomId}`)
                 .then(response => response.json())
                 .then(data => {
                     const details = document.getElementById('roomDetails');
                     details.innerHTML = `
                         <div class="room-details">
+                        <img src="../assets/${data.image_path}" alt="${data.room_name}" style="max-width: 100%; height: auto; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
                             <p><strong>Room Name:</strong> ${data.room_name}</p>
-                            <p><strong>Type:</strong> ${data.room_type}</p>
-                            <p><strong>Price:</strong> ₱${data.price}</p>
-                            <p><strong>Capacity:</strong> ${data.capacity} persons</p>
-                            <p><strong>Status:</strong> <span class="status-badge ${data.status}">${data.status}</span></p>
-                            <p><strong>Description:</strong></p>
-                            <p class="room-description">${data.description}</p>
+                            <p><strong>Price:</strong> ₱${data.room_price}</p>
+                            <p><strong>Description:</strong> ${data.room_description}</p>
                         </div>
                     `;
-                    viewModal.style.display = 'block';
+                    const modal = document.getElementById('viewModal');
+                    modal.style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to load room details');
                 });
         }
 
@@ -467,31 +463,22 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
                 form.submit();
             }
         }
-
-        Array.from(closeBtns).forEach(btn => {
-            btn.onclick = function () {
-                addRoomModal.style.display = 'none';
-                editRoomModal.style.display = 'none';
-                statusModal.style.display = 'none';
-                viewModal.style.display = 'none';
-            }
-        });
-
-        window.onclick = function (event) {
-            if (event.target == addRoomModal) {
-                addRoomModal.style.display = 'none';
-            }
-            if (event.target == editRoomModal) {
-                editRoomModal.style.display = 'none';
-            }
-            if (event.target == statusModal) {
-                statusModal.style.display = 'none';
-            }
-            if (event.target == viewModal) {
-                viewModal.style.display = 'none';
-            }
-        }
     </script>
+
+    <style>
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            transition: opacity 0.3s ease;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
 </body>
 
 </html>

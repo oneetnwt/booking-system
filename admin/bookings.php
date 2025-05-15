@@ -95,7 +95,7 @@ $query = "
     LEFT JOIN payment p ON b.payment_id = p.id
     LEFT JOIN booking_details bd ON b.booking_details_id = bd.id
     $where_clause
-    ORDER BY b.id DESC 
+    ORDER BY bd.check_in ASC 
     LIMIT $offset, $per_page
 ";
 
@@ -205,21 +205,27 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </thead>
                             <tbody>
                                 <?php foreach ($bookings as $booking): ?>
-                                    <tr>
-                                        <td>#<?php echo $booking['id']; ?></td>
-                                        <td><?php echo $booking['firstname'] . ' ' . $booking['lastname']; ?></td>
-                                        <td><?php echo $booking['room_name']; ?></td>
-                                        <td><?php echo date('M d, Y', strtotime($booking['check_in'])); ?></td>
-                                        <td><?php echo date('M d, Y', strtotime($booking['check_out'])); ?></td>
-                                        <td>₱<?php echo number_format($booking['total_amount'] ?? 0, 2); ?></td>
+                                    <tr style="<?php
+                                    if ($booking['check_in'] < date('Y-m-d') && $booking['status'] == 'pending') {
+                                        echo 'background-color: #F74141; color: white;';
+                                    } elseif ($booking['status'] == 'done') {
+                                        echo 'background-color: #77DD77; color: black;';
+                                    }
+                                    ?>">
+                                        <td>#<?= $booking['id']; ?></td>
+                                        <td><?= $booking['firstname'] . ' ' . $booking['lastname']; ?></td>
+                                        <td><?= $booking['room_name']; ?></td>
+                                        <td><?= date('M d, Y', strtotime($booking['check_in'])); ?></td>
+                                        <td><?= date('M d, Y', strtotime($booking['check_out'])); ?></td>
+                                        <td>₱<?= number_format($booking['total_amount'] ?? 0, 2); ?></td>
                                         <td>
                                             <span class="status-badge <?php echo $booking['status']; ?>">
-                                                <?php echo ucfirst($booking['status']); ?>
+                                                <?= ucfirst($booking['status']); ?>
                                             </span>
                                         </td>
                                         <td>
                                             <div class="action-buttons">
-                                                <a href="view-booking.php?id=<?php echo $booking['id']; ?>" class="btn-icon"
+                                                <a href="view-booking.php?id=<?= $booking['id']; ?>" class="btn-icon"
                                                     title="View Booking">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
@@ -278,7 +284,6 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <label for="status">Status:</label>
                     <select name="status" id="status" required>
                         <option value="pending">Pending</option>
-                        <option value="confirmed">Confirmed</option>
                         <option value="cancelled">Cancelled</option>
                         <option value="done">Done</option>
                     </select>

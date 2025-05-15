@@ -40,11 +40,11 @@ $recent_bookings = $pdo->query("
 
 // Recent Reviews
 $recent_reviews = $pdo->query("
-    SELECT r.id, u.firstname, u.lastname, rm.room_name, r.rating, r.status, r.created_at
+    SELECT r.id, u.firstname, u.lastname, rm.room_name, r.*
     FROM reviews r
     JOIN users u ON r.user_id = u.id
     JOIN room rm ON r.room_id = rm.id
-    ORDER BY r.created_at DESC
+    ORDER BY r.created_at ASC
     LIMIT 5
 ")->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -55,6 +55,7 @@ $recent_reviews = $pdo->query("
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="styles/admin.styles.css">
     <title>Admin - User Management</title>
@@ -128,11 +129,11 @@ $recent_reviews = $pdo->query("
                         <p><?= $total_rooms ?></p>
                     </div>
                     <div class="ds-card">
-                        <h3>Total Revenue</h3>
-                        <p>₱<?= number_format($total_revenue, 2) ?></p>
+                        <h3 style="color: #27AE60">Total Revenue</h3>
+                        <p style="color: #27AE60">₱<?= number_format($total_revenue, 2) ?></p>
                     </div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div style=" display: flex; flex-direction: column; gap: 2rem;">
                     <div>
                         <h3>Recent Bookings</h3>
                         <div class="table-container">
@@ -149,53 +150,18 @@ $recent_reviews = $pdo->query("
                                 </thead>
                                 <tbody>
                                     <?php foreach ($recent_bookings as $b): ?>
-                                        <tr>
-                                            <td>#<?= $b['id'] ?></td>
-                                            <td><?= htmlspecialchars($b['firstname'] . ' ' . $b['lastname']) ?></td>
-                                            <td><?= htmlspecialchars($b['room_name']) ?></td>
-                                            <td><span
-                                                    class="status-badge <?= $b['status'] ?>"><?= ucfirst($b['status']) ?></span>
-                                            </td>
-                                            <td>₱<?= number_format($b['amount'] ?? 0, 2) ?></td>
-                                            <td><?= date('M d, Y', strtotime($b['created_at'])) ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div>
-                        <h3>Recent Reviews</h3>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Guest</th>
-                                        <th>Room</th>
-                                        <th>Rating</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($recent_reviews as $r): ?>
-                                        <tr>
-                                            <td>#<?= $r['id'] ?></td>
-                                            <td><?= htmlspecialchars($r['firstname'] . ' ' . $r['lastname']) ?></td>
-                                            <td><?= htmlspecialchars($r['room_name']) ?></td>
-                                            <td>
-                                                <div class="stars">
-                                                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                        <i class="fas fa-star <?= $i <= $r['rating'] ? 'active' : '' ?>"></i>
-                                                    <?php endfor; ?>
-                                                </div>
-                                            </td>
-                                            <td><span
-                                                    class="status-badge <?= $r['status'] ?>"><?= ucfirst($r['status']) ?></span>
-                                            </td>
-                                            <td><?= date('M d, Y', strtotime($r['created_at'])) ?></td>
-                                        </tr>
+                                        <?php if ($b['status'] == 'pending'): ?>
+                                            <tr>
+                                                <td>#<?= $b['id'] ?></td>
+                                                <td><?= htmlspecialchars($b['firstname'] . ' ' . $b['lastname']) ?></td>
+                                                <td><?= htmlspecialchars($b['room_name']) ?></td>
+                                                <td><span
+                                                        class="status-badge <?= $b['status'] ?>"><?= ucfirst($b['status']) ?></span>
+                                                </td>
+                                                <td>₱<?= number_format($b['amount'] ?? 0, 2) ?></td>
+                                                <td><?= date('M d, Y', strtotime($b['created_at'])) ?></td>
+                                            </tr>
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -205,6 +171,47 @@ $recent_reviews = $pdo->query("
             </div>
         </div>
     </div>
+
+    <script>
+        // Function to load reviews
+        function loadReviews() {
+            fetch('get_review.php')
+                .then(response => response.json())
+                .then(reviews => {
+                    const tbody = document.getElementById('reviewsTableBody');
+                    tbody.innerHTML = '';
+
+                    reviews.forEach(review => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td>#${review.id}</td>
+                    <td>${review.firstname} ${review.lastname}</td>
+                    <td>${review.room_name}</td>
+                    <td>
+                        <div class="stars">
+                            ${Array(5).fill().map((_, i) =>
+                            `<i class="fas fa-star ${i < review.rating ? 'active' : ''}"></i>`
+                        ).join('')}
+                        </div>
+                    </td>
+                    <td>${review.comment || ''}</td>
+                    <td>${new Date(review.created_at).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        })}</td>
+                `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading reviews:', error);
+                });
+        }
+
+        // Load reviews when page loads
+        document.addEventListener('DOMContentLoaded', loadReviews);
+    </script>
 </body>
 
 </html>

@@ -109,7 +109,7 @@ $stmt->execute($params);
 $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get average rating
-$avg_rating_query = "SELECT AVG(rating) as avg_rating FROM reviews WHERE status = 'approved'";
+$avg_rating_query = "SELECT AVG(rating) as avg_rating FROM reviews";
 $avg_rating = $pdo->query($avg_rating_query)->fetch(PDO::FETCH_ASSOC)['avg_rating'];
 ?>
 
@@ -192,7 +192,6 @@ $avg_rating = $pdo->query($avg_rating_query)->fetch(PDO::FETCH_ASSOC)['avg_ratin
                                     <th>Rating</th>
                                     <th>Review</th>
                                     <th>Date</th>
-                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -210,27 +209,14 @@ $avg_rating = $pdo->query($avg_rating_query)->fetch(PDO::FETCH_ASSOC)['avg_ratin
                                                 <?php endfor; ?>
                                             </div>
                                         </td>
-                                        <td><?php echo substr($review['comment'], 0, 50) . '...'; ?></td>
+                                        <td class="comment-cell">
+                                            <div class="comment-content">
+                                                <?php echo $review['comment']; ?>
+                                            </div>
+                                        </td>
                                         <td><?php echo date('M d, Y', strtotime($review['created_at'])); ?></td>
                                         <td>
-                                            <span class="status-badge <?php echo $review['status']; ?>">
-                                                <?php echo ucfirst($review['status']); ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="btn-icon" onclick="viewReview(<?php echo $review['id']; ?>)">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn-icon"
-                                                    onclick="updateStatus(<?php echo $review['id']; ?>)">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn-icon delete"
-                                                    onclick="deleteReview(<?php echo $review['id']; ?>)">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
+                                            <?php echo $review['room_name']; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -388,6 +374,61 @@ $avg_rating = $pdo->query($avg_rating_query)->fetch(PDO::FETCH_ASSOC)['avg_ratin
                 viewModal.style.display = 'none';
             }
         }
+
+        // Get modal elements
+        const modal = document.getElementById('viewModal');
+        const closeBtn = document.querySelector('.close');
+        const reviewDetails = document.getElementById('reviewDetails');
+
+        // Function to load review details
+        function loadReviewDetails(reviewId) {
+            fetch(`get_review.php?id=${reviewId}`)
+                .then(response => response.json())
+                .then(review => {
+                    reviewDetails.innerHTML = `
+                        <div class="review-info">
+                            <p><strong>Guest:</strong> ${review.firstname} ${review.lastname}</p>
+                            <p><strong>Room:</strong> ${review.room_name}</p>
+                            <p><strong>Check-in:</strong> ${new Date(review.check_in).toLocaleDateString()}</p>
+                            <p><strong>Check-out:</strong> ${new Date(review.check_out).toLocaleDateString()}</p>
+                            <p><strong>Rating:</strong> 
+                                <div class="stars">
+                                    ${Array(5).fill().map((_, i) =>
+                        `<i class="fas fa-star ${i < review.rating ? 'active' : ''}"></i>`
+                    ).join('')}
+                                </div>
+                            </p>
+                            <p><strong>Comment:</strong></p>
+                            <p class="review-comment">${review.comment || 'No comment provided'}</p>
+                            <p><strong>Date:</strong> ${new Date(review.created_at).toLocaleDateString()}</p>
+                        </div>
+                    `;
+                    modal.style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error loading review details:', error);
+                });
+        }
+
+        // Add click event to view buttons
+        document.querySelectorAll('.view-review').forEach(button => {
+            button.addEventListener('click', () => {
+                const reviewId = button.getAttribute('data-id');
+                loadReviewDetails(reviewId);
+            });
+        });
+
+        // Close modal when clicking the close button
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
     </script>
 </body>
 
