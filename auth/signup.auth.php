@@ -38,6 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         exit();
     }
 
+    if (strlen($password) < 8) {
+        $_SESSION['error'] = "Password must be at least 8 characters long";
+        header('Location: signup.php');
+        exit();
+    }
+
+    if (!preg_match('/[A-Z]/', $password)) {
+        $_SESSION['error'] = "Password must contain at least one uppercase letter";
+        header('Location: signup.php');
+        exit();
+    }
+
+
+
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
     $stmt->bindParam(":email", $email);
     $stmt->execute();
