@@ -9,10 +9,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
-if ($_SERVER['REQUEST_METHOD'] === "POST") {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $email = $_POST['email'];
@@ -27,45 +27,45 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $captchaSuccess = json_decode($verify);
 
     if (!$captchaSuccess->success) {
-        $_SESSION['error'] = "Recaptcha Verification Failed";
+        $_SESSION['error'] = 'Recaptcha Verification Failed';
         header('Location: signup.php');
         exit();
     }
 
     if ($password !== $confirm_password) {
-        $_SESSION['error'] = "Password do not match";
+        $_SESSION['error'] = 'Password do not match';
         header('Location: signup.php');
         exit();
     }
 
     if (strlen($password) < 8) {
-        $_SESSION['error'] = "Password must be at least 8 characters long";
+        $_SESSION['error'] = 'Password must be at least 8 characters long';
         header('Location: signup.php');
         exit();
     }
 
     if (!preg_match('/[A-Z]/', $password)) {
-        $_SESSION['error'] = "Password must contain at least one uppercase letter";
+        $_SESSION['error'] = 'Password must contain at least one uppercase letter';
         header('Location: signup.php');
         exit();
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->bindParam(":email", $email);
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+    $stmt->bindParam(':email', $email);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['error'] = "Email exists";
+        $_SESSION['error'] = 'Email exists';
         header('Location: signup.php');
         exit();
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE phone_number = :phone_number");
-    $stmt->bindParam(":phone_number", $phone);
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE phone_number = :phone_number');
+    $stmt->bindParam(':phone_number', $phone);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['error'] = "Phone Number exists";
+        $_SESSION['error'] = 'Phone Number exists';
         header('Location: signup.php');
         exit();
     }
@@ -83,10 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     ];
 
     if (send_mail($email, $firstname, $lastname, $code)) {
-        header("Location: verify.php");
+        header('Location: verify.php');
+        exit();
     } else {
-        $_SESSION['error'] = "Failed to send verification email";
+        $_SESSION['error'] = 'Failed to send verification email';
         header('Location: signup.php');
+        exit();
     }
 }
 
@@ -100,7 +102,6 @@ function send_mail($email, $firstname, $lastname, $code)
 
     try {
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -111,7 +112,7 @@ function send_mail($email, $firstname, $lastname, $code)
 
         //Recipients
         $mail->setFrom($_ENV['APP_EMAIL'], $_ENV['APP_NAME']);
-        $mail->addAddress($email, $firstname . " " . $lastname);
+        $mail->addAddress($email, $firstname . ' ' . $lastname);
 
         //Content
         $mail->isHTML(true);
@@ -219,12 +220,12 @@ function send_mail($email, $firstname, $lastname, $code)
         </body>
         </html>
         ';
-        $mail->AltBody = "Your verification code is: $code";
+        $mail->AltBody = 'Your verification code is: $code';
 
         $mail->send();
         return true;
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        echo 'Message could not be sent. Mailer Error: {$mail->ErrorInfo}';
         return false;
     }
 }
