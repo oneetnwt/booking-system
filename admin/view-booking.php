@@ -150,7 +150,7 @@ try {
                                 <span class="label">Status:</span>
                                 <span class="value">
                                     <span class="status-badge <?php echo $booking['status']; ?>">
-                                        <?php echo ucfirst($booking['status']); ?>
+                                        <?php echo ucfirst($booking['status'] === 'done' ? "Completed" : "Pending"); ?>
                                     </span>
                                 </span>
                             </div>
@@ -220,14 +220,6 @@ try {
                                 <span class="label">Payment Method:</span>
                                 <span class="value"><?php echo ucfirst($booking['payment_method'] ?? 'N/A'); ?></span>
                             </div>
-                            <div class="detail-item">
-                                <span class="label">Payment Status:</span>
-                                <span class="value">
-                                    <span class="status-badge <?php echo $booking['payment_status'] ?? 'pending'; ?>">
-                                        <?php echo ucfirst($booking['payment_status'] ?? 'Pending'); ?>
-                                    </span>
-                                </span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -248,11 +240,8 @@ try {
                     <select name="status" id="status" required>
                         <option value="pending" <?php echo $booking['status'] === 'pending' ? 'selected' : ''; ?>>Pending
                         </option>
-                        <option value="confirmed" <?php echo $booking['status'] === 'confirmed' ? 'selected' : ''; ?>>
-                            Confirmed</option>
-                        <option value="cancelled" <?php echo $booking['status'] === 'cancelled' ? 'selected' : ''; ?>>
-                            Cancelled</option>
-                        <option value="done" <?php echo $booking['status'] === 'done' ? 'selected' : ''; ?>>Done</option>
+                        <option value="done" <?php echo $booking['status'] === 'done' ? 'selected' : ''; ?>></option>
+                        Completed</option>
                     </select>
                 </div>
                 <button type="submit" class="btn-primary">Update Status</button>

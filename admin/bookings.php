@@ -220,7 +220,7 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td>₱<?= number_format($booking['total_amount'] ?? 0, 2); ?></td>
                                         <td>
                                             <span class="status-badge <?php echo $booking['status']; ?>">
-                                                <?= ucfirst($booking['status']); ?>
+                                                <?= ucfirst($booking['status'] === 'done' ? "Completed" : "Pending") ?>
                                             </span>
                                         </td>
                                         <td>
@@ -284,7 +284,6 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <label for="status">Status:</label>
                     <select name="status" id="status" required>
                         <option value="pending">Pending</option>
-                        <option value="cancelled">Cancelled</option>
                         <option value="done">Done</option>
                     </select>
                 </div>

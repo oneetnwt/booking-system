@@ -160,7 +160,8 @@ foreach ($bookings as $booking) {
                                             <p>₱ <?= $booking['overnight'] === 'yes' ? $booking['child'] * 200 : $booking['child'] * 50 ?>.00
                                             </p>
                                             <p>Booking Fee 1%: <?= $booking['booking_fee'] ?? 0 ?></p>
-                                            <p style="color: #F74141; font-size: 1rem;"><?= strtoupper($booking['status']) ?>
+                                            <p style="color: #F74141; font-size: 1rem;">
+                                                <?= strtoupper($booking['status'] === 'done' ? "Completed" : "Pending") ?>
                                             </p>
                                             <p id="totalAmount">Total Amount: ₱ <?= $booking['amount'] ?></p>
                                             <div class="button-group">
