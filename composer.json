@@ -4,6 +4,6 @@
         "phpmailer/phpmailer": "^6.10",
         "firebase/php-jwt": "^6.11",
         "google/apiclient": "^2.18",
-        "cloudinary/cloudinary_php": "^3.1"
+        "mpdf/mpdf": "^8.2"
     }
 }

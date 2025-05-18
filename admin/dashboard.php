@@ -148,7 +148,15 @@ $recent_reviews = $pdo->query("
                 </div>
                 <div style=" display: flex; flex-direction: column; gap: 2rem;">
                     <div>
-                        <h3>Recent Bookings</h3>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Recent Bookings</h3>
+                            <a href="../lib/generate_pdf.php" class="btn-primary"
+                                style="text-decoration: none; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                <i class="fas fa-file-pdf"></i>
+                                Generate Report
+                            </a>
+                        </div>
                         <div class="table-container">
                             <table>
                                 <thead>
