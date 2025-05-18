@@ -12,6 +12,7 @@ session_start();
     <link rel="stylesheet" href="../styles/booking.styles.css">
     <link rel="stylesheet" href="../styles/payment.styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../assets/K&ALogo.png">
     <title>Booking Process</title>
     <script src="../js/payment.js"></script>
 </head>

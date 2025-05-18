@@ -275,7 +275,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="amenity-item">
                     <div class="amenity-image">
-                        <img src="../assets/wifi.png" alt="WiFi Access">
+                        <img src="../assets/pisowifi.jpg" alt="WiFi Access">
                     </div>
                     <div class="amenity-content">
                         <h3 class="amenity-title">WiFi Access</h3>
@@ -401,7 +401,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
             const navbar = document.getElementById("navbar");
             const bookBtn = document.getElementById("book-btn");
             if (window.scrollY > 500) {
-                navbar.style.backgroundColor = "#003366";
+                navbar.style.backgroundColor = "#102C57";
                 if (bookBtn) {
                     bookBtn.style.display = "flex";
                 }
