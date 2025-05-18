@@ -12,10 +12,21 @@ $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
 
-$token = $_COOKIE['token'];
-$decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 
-if (!isset($token) || $decoded->data->role !== 'admin') {
+if (!isset($_COOKIE['token'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+try {
+    $token = $_COOKIE['token'];
+    $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
+
+    if ($decoded->data->role !== 'admin') {
+        header("Location: ../home/home.php");
+        exit();
+    }
+} catch (Exception $e) {
     header("Location: ../auth/login.php");
     exit();
 }

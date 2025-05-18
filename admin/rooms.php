@@ -35,19 +35,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'add':
-                if (isset($_POST['room_name'], $_POST['room_price'], $_POST['room_description'], $_POST['image_path'])) {
-                    $stmt = $pdo->prepare("
-                        INSERT INTO room (room_name, room_price, room_description, image_path) 
-                        VALUES (?, ?, ?, ?)
-                    ");
-                    $stmt->execute([
-                        $_POST['room_name'],
-                        $_POST['room_price'],
-                        $_POST['room_description'],
-                        $_POST['image_path']
-                    ]);
-                    // Redirect to prevent form resubmission
-                    header("Location: rooms.php?success=added");
+                if (isset($_POST['room_name'], $_POST['room_price'], $_POST['room_description'])) {
+                    // Handle file upload
+                    $image_path = '';
+                    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                        $upload_dir = '../assets/rooms/';
+
+                        // Create directory if it doesn't exist
+                        if (!file_exists($upload_dir)) {
+                            mkdir($upload_dir, 0777, true);
+                        }
+
+                        $file_extension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+                        $allowed_extensions = ['jpg', 'jpeg', 'png'];
+
+                        if (!in_array($file_extension, $allowed_extensions)) {
+                            header("Location: rooms.php?error=invalid_format");
+                            exit();
+                        }
+
+                        // Check file size (5MB max)
+                        if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
+                            header("Location: rooms.php?error=file_too_large");
+                            exit();
+                        }
+
+                        // Generate unique filename
+                        $filename = uniqid() . '.' . $file_extension;
+                        $target_path = $upload_dir . $filename;
+
+                        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
+                            $image_path = 'rooms/' . $filename;
+                        } else {
+                            error_log('Failed to move uploaded file. Error: ' . error_get_last()['message']);
+                            header("Location: rooms.php?error=upload_failed");
+                            exit();
+                        }
+                    } else {
+                        // Log the file upload error
+                        $upload_error = isset($_FILES['image']) ? $_FILES['image']['error'] : 'No file uploaded';
+                        error_log('File upload error: ' . $upload_error);
+                        header("Location: rooms.php?error=upload_failed");
+                        exit();
+                    }
+
+                    try {
+                        $stmt = $pdo->prepare("
+                            INSERT INTO room (room_name, room_price, room_description, image_path) 
+                            VALUES (?, ?, ?, ?)
+                        ");
+                        $stmt->execute([
+                            $_POST['room_name'],
+                            $_POST['room_price'],
+                            $_POST['room_description'],
+                            $image_path
+                        ]);
+                        // Redirect to prevent form resubmission
+                        header("Location: rooms.php?success=added");
+                        exit();
+                    } catch (PDOException $e) {
+                        error_log('Database error: ' . $e->getMessage());
+                        header("Location: rooms.php?error=database_error");
+                        exit();
+                    }
+                } else {
+                    header("Location: rooms.php?error=missing_fields");
                     exit();
                 }
                 break;
@@ -91,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Add success message display
 $success_message = '';
+$error_message = '';
 if (isset($_GET['success'])) {
     switch ($_GET['success']) {
         case 'added':
@@ -103,6 +156,24 @@ if (isset($_GET['success'])) {
             $success_message = 'Room deleted successfully!';
             break;
     }
+}
+
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
+        case 'invalid_format':
+            $error_message = 'Invalid image format. Please upload JPG, JPEG, or PNG files only.';
+            break;
+        case 'upload_failed':
+            $error_message = 'Failed to upload image. Please try again.';
+            break;
+    }
+}
+
+// Debug information
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    error_log('POST request received');
+    error_log('POST data: ' . print_r($_POST, true));
+    error_log('FILES data: ' . print_r($_FILES, true));
 }
 
 // Fetch rooms with pagination and filters
@@ -231,6 +302,11 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
                             <?php echo $success_message; ?>
                         </div>
                     <?php endif; ?>
+                    <?php if ($error_message): ?>
+                        <div class="alert alert-danger" id="errorMessage">
+                            <?php echo $error_message; ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="table-container">
                         <table>
                             <thead>
@@ -299,7 +375,7 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Add New Room</h2>
-            <form id="addRoomForm" method="POST">
+            <form id="addRoomForm" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="add">
                 <div class="form-group">
                     <label for="room_name">Room Name:</label>
@@ -310,9 +386,9 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
                     <input type="number" name="room_price" id="room_price" min="0" step="0.01" required>
                 </div>
                 <div class="form-group">
-                    <label for="image_path">Image Path:</label>
-                    <input type="text" name="image_path" id="image_path" placeholder="e.g., ../assets/rooms/room1.jpg"
-                        required>
+                    <label for="image">Image:</label>
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg" required><br>
+                    <small>Max file size: 5MB. Allowed formats: JPG, JPEG, PNG</small>
                 </div>
                 <div class="form-group">
                     <label for="room_description">Description:</label>
@@ -477,6 +553,12 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </body>
