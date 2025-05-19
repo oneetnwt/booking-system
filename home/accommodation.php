@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <ul class="nav-links">
                         <li><a href="home.php">Home</a></li>
                         <li><a href="accommodation.php" class="active">Accommodation</a></li>
+                        <li><a href="reviews.php">Reviews</a></li>
                         <li><a href="#footer">Contact</a></li>
                     </ul>
                 </nav>

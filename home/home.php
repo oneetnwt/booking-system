@@ -27,6 +27,17 @@ if (isset($_COOKIE['token'])) {
 $stmt = $pdo->prepare("SELECT * FROM room ORDER BY room_price ASC LIMIT 3");
 $stmt->execute();
 $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt = $pdo->prepare("
+    SELECT r.*, u.firstname, u.lastname, rm.room_name 
+    FROM reviews r 
+    JOIN users u ON r.user_id = u.id 
+    JOIN room rm ON r.room_id = rm.id 
+    ORDER BY r.created_at DESC 
+    LIMIT 2
+");
+$stmt->execute();
+$reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -52,6 +63,7 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <ul class="nav-links">
                         <li><a href="home.php" class="active">Home</a></li>
                         <li><a href="accommodation.php">Accommodation</a></li>
+                        <li><a href="reviews.php">Reviews</a></li>
                         <li><a href="#footer">Contact</a></li>
                     </ul>
                 </nav>
@@ -292,51 +304,30 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="container">
             <div class="section-header">
                 <h2>What Our Guests Say</h2>
-                <a href="#" class="btn">See All →</a>
+                <a href="reviews.php" class="btn">See All →</a>
             </div>
             <div class="testimonial-container">
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">
-                            <img src="../assets/Danz.png" alt="Guest Avatar">
-                        </div>
-                        <div>
-                            <div class="testimonial-name">Danziel J.</div>
-                            <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
+                <?php foreach ($reviews as $review): ?>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">
+                                <img src="../assets/K&ALogo.png" alt="Guest Avatar">
+                            </div>
+                            <div>
+                                <div class="testimonial-name">
+                                    <?= htmlspecialchars($review['firstname'] . ' ' . $review['lastname']); ?>
+                                </div>
+                                <div class="rating">
+                                    <?php for ($i = 1; $i <= $review['rating']; $i++): ?>
+                                        <i class="fas fa-star active"></i>
+                                    <?php endfor; ?>
+                                </div>
                             </div>
                         </div>
+                        <p class="testimonial-text"><?= htmlspecialchars($review['comment']); ?></p>
+                        <div><?= number_format($review['rating'], 1); ?></div>
                     </div>
-                    <p class="testimonial-text">"Perfect getaway! We really enjoyed our stay here. The natural spring
-                        pools were amazing, very relaxing. The staff was friendly. The setting was beautiful with all
-                        the trees providing shade. We'll definitely be coming back!"</p>
-                    <div>5.0</div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">
-                            <img src="../assets/Jeff.png" alt="Guest Avatar">
-                        </div>
-                        <div>
-                            <div class="testimonial-name">Jeff Ivan</div>
-                            <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="testimonial-text">"Great place for a summer day! The pools are cool and refreshing. Kids
-                        had a blast on the slides. The cottages were clean and comfortable. Food services available
-                        on-site made our stay convenient. Would recommend to families!"</p>
-                    <div>5.0</div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
