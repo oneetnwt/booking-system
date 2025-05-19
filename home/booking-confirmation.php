@@ -283,12 +283,22 @@ if (isset($_SESSION['room_id'])) {
         function handleSubmit(event) {
             const checkIn = document.querySelector('input[name="check_in"]').value;
             const checkOut = document.querySelector('input[name="check_out"]').value;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set to start of day
 
             if (!checkIn || !checkOut) {
                 event.preventDefault();
                 alert('Please select both check-in and check-out dates before proceeding.');
                 return false;
             }
+
+            const checkInDate = new Date(checkIn);
+            if (checkInDate < today) {
+                event.preventDefault();
+                alert('Check-in date cannot be before today.');
+                return false;
+            }
+
             return true;
         }
 
@@ -296,9 +306,17 @@ if (isset($_SESSION['room_id'])) {
             const form = document.getElementById('booking-confirmation-form');
             const checkIn = document.querySelector('input[name="check_in"]').value;
             const checkOut = document.querySelector('input[name="check_out"]').value;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set to start of day
 
             if (!checkIn || !checkOut) {
                 alert('Please select both check-in and check-out dates before proceeding.');
+                return;
+            }
+
+            const checkInDate = new Date(checkIn);
+            if (checkInDate < today) {
+                alert('Check-in date cannot be before today.');
                 return;
             }
 

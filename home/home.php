@@ -24,7 +24,7 @@ if (isset($_COOKIE['token'])) {
     $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 }
 
-$stmt = $pdo->prepare("SELECT * FROM room");
+$stmt = $pdo->prepare("SELECT * FROM room ORDER BY room_price ASC LIMIT 3");
 $stmt->execute();
 $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -120,9 +120,9 @@ $accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="about-content">
                 <img src="../assets/K&A_Dark.png" alt="" height="75px">
                 <h2>About Us</h2>
-                <p>Leave your worries behind and find tranquility at <strong>K&A Natural Spring Resort</strong>, a
+                <p>Leave your worries behind and find tranquility at <strong>K&A Natural Spring Resort</strong>, a
                     beautiful escape into
-                    nature. Stroll through our green grounds, unwind by the sparkling pool, and enjoy friendly service
+                    nature. Stroll through our green grounds, unwind by the sparkling pool, and enjoy friendly service
                     in our comfortable rooms. A relaxing getaway is waiting for you.</p>
                 <!-- <a href="#" class="btn btn-primary">Learn More</a> -->
             </div>
