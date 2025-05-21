@@ -50,6 +50,94 @@ K&A Resort Booking is a web-based application that allows guests to check room a
 - **[Google API Client](https://github.com/googleapis/google-api-php-client)** - For Google authentication and API integration
 - **[mPDF](https://github.com/mpdf/mpdf)** - For generating PDF documents and reports
 
+## 🚀 Installation & Setup
+
+### Prerequisites
+
+- PHP 8.2 or higher
+- MySQL 10.4 or higher
+- Composer
+- XAMPP (or similar local server stack)
+- Web browser
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/booking-system.git
+cd booking-system
+```
+
+### Step 2: Install Dependencies
+
+```bash
+composer install
+```
+
+### Step 3: Database Setup
+
+1. Start your XAMPP server (Apache and MySQL)
+2. Open phpMyAdmin (http://localhost/phpmyadmin)
+3. Create a new database named `resort`
+4. Import the `resort.sql` file from the project root
+
+### Step 4: Environment Configuration
+
+1. Create a `.env` file in the root directory
+2. Copy the following configuration (update values as needed):
+
+```env
+# Database Configuration
+DB_SERVERNAME=localhost
+DB_USERNAME=root
+DB_PASSWORD=
+DB_NAME=resort
+
+# Application Email Configuration
+APP_EMAIL=your_email@gmail.com
+APP_PASSWORD=your_app_password
+APP_NAME=K&A Resort
+
+# reCAPTCHA Configuration
+RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
+
+# JWT Configuration
+JWT_SECRET_KEY=your_jwt_secret_key
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT=http://localhost/booking-system/google-auth/callback.php
+```
+
+### Step 5: Run the Application
+
+1. Place the project in your XAMPP's htdocs directory:
+
+   - Windows: `C:\xampp\htdocs\booking-system`
+   - Linux: `/opt/lampp/htdocs/booking-system`
+   - macOS: `/Applications/XAMPP/htdocs/booking-system`
+
+2. Start XAMPP services:
+
+   - Apache
+   - MySQL
+
+3. Access the application:
+   - Open your web browser
+   - Navigate to: `http://localhost/booking-system`
+
+### Default Admin Account
+
+- Email: admin@karesort.com
+- Password: admin123
+
+### Troubleshooting
+
+- If you encounter permission issues, ensure the web server has write access to the project directory
+- For email functionality, make sure to use an app password if using Gmail
+- If the database connection fails, verify your MySQL credentials in the `.env` file
+
 ## 📊 Database Schema
 
 The system uses MySQL/MariaDB with the following key tables:
