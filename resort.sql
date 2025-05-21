@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2025 at 01:53 PM
+-- Generation Time: May 21, 2025 at 01:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -52,13 +52,6 @@ CREATE TABLE `booking` (
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `booking`
---
-
-INSERT INTO `booking` (`id`, `room_id`, `payment_id`, `comment`, `transaction_id`, `booking_details_id`, `status`, `created_at`) VALUES
-(100006, 1000, 1008, '', 'KA_682db7a66b9dd4.66952505', 7, 'done', '2025-05-21 19:23:18');
-
 -- --------------------------------------------------------
 
 --
@@ -75,13 +68,6 @@ CREATE TABLE `booking_details` (
   `booking_fee` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `booking_details`
---
-
-INSERT INTO `booking_details` (`id`, `check_in`, `check_out`, `adult`, `child`, `overnight`, `booking_fee`) VALUES
-(7, '2025-05-24 19:21:00', '2025-05-25 19:21:00', 2, 0, 'yes', 54.00);
-
 -- --------------------------------------------------------
 
 --
@@ -92,13 +78,6 @@ CREATE TABLE `booking_invoice` (
   `user_id` int(11) NOT NULL,
   `booking_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `booking_invoice`
---
-
-INSERT INTO `booking_invoice` (`user_id`, `booking_id`) VALUES
-(100000002, 100006);
 
 -- --------------------------------------------------------
 
@@ -127,13 +106,6 @@ CREATE TABLE `payment` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `payment`
---
-
-INSERT INTO `payment` (`id`, `user_id`, `amount`, `payment_method`, `created_at`) VALUES
-(1008, 100000002, 5454.00, 'paypal', '2025-05-21 11:23:18');
-
 -- --------------------------------------------------------
 
 --
@@ -145,13 +117,6 @@ CREATE TABLE `paypal_payment` (
   `payment_id` int(11) NOT NULL,
   `paypal_email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `paypal_payment`
---
-
-INSERT INTO `paypal_payment` (`id`, `payment_id`, `paypal_email`) VALUES
-(5, 1008, 'jeffivanbiosanomayor@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -168,13 +133,6 @@ CREATE TABLE `reviews` (
   `created_at` datetime DEFAULT current_timestamp(),
   `booking_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `reviews`
---
-
-INSERT INTO `reviews` (`id`, `user_id`, `room_id`, `rating`, `comment`, `created_at`, `booking_id`) VALUES
-(6, 100000002, 1000, 5, 'The staff were very welcoming, and the room was extremely comfortable', '2025-05-21 19:26:30', NULL);
 
 -- --------------------------------------------------------
 
