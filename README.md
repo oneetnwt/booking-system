@@ -1,4 +1,4 @@
-# 🏖️ K&A Resort Booking System
+# K&A Resort Booking System
 
 K&A Resort Booking is a web-based application that allows guests to check room availability and book online anytime. It prevents double bookings by checking for date conflicts and requires login for both guests and staff. The system supports various payment methods and provides a centralized dashboard for resort staff to manage bookings, track revenue, and organize guest information, enhancing the reservation process.
 
