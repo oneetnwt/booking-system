@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="comment">Additional Comments</label>
+                            <label for="comment">Request</label>
                             <textarea name="comment" id="comment" rows="5"></textarea>
                         </div>
                         <div class="buttons">

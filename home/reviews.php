@@ -12,11 +12,6 @@ $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
 
-if (!isset($_COOKIE['token'])) {
-    header("Location: ../index.php?error=unauthorized");
-    exit();
-}
-
 try {
     $token = $_COOKIE['token'];
     $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));

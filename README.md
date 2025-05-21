@@ -1,83 +1,197 @@
-# Booking System
+# K&A Resort Booking System
 
-A web-based booking system with user authentication, including Google OAuth integration.
+**K&A Resort Booking System** is a dynamic web-based booking website designed for K&A Resort to book and manage reservations easily and efficiently. It allows guests to check room availability in real-time and book rooms online at any time. The system aims to address issues with manual bookings such as missed reservations and double bookings by automatically checks for check-in and check-out conflicts before confirming a reservation. It also includes secure log in for both guests and staff to protect information and mitigate acces. Users can make payments through different payment method like Paypal and e-wallets directly within the system. For the resort staff, there is a centralized dashboard to view and manage all bookings, track revenues, and keep guest details organized. Overall, this system aims to simplifies the booking process and help the resort run more smoothly.
 
-## Features
+### 🔑 Key Features:
 
-- User authentication (email/password and Google OAuth)
-- Booking management
-- User profile management
-- Admin dashboard
-- Conflict Booking Auto Checker
+- **Secure User Authentication**  
+  Allows only authorized guests and resort staff to manage their bookings and access the system, protecting data and preventing unauthorized changes.
 
-## Requirements
+- **Real-time Room Availability Checking**  
+  Shows up-to-date room availability via an interactive calendar for easy booking.
 
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- Composer
-- XAMPP (or similar local development environment)
+- **Automated Conflict Detection**  
+  Checks for overlapping bookings to prevent double reservations for a specific room.
 
-## Installation
+- **Multiple Payment Method Support**  
+  Supports secure payments through Paypal, e-wallets and bank transfers.
 
-1. Clone the repository:
+- **Invoice Generation**  
+  Automatically creates and displays detailed invoices for each booking to guests and resort staff.
 
-   ```
-   git clone https://github.com/yourusername/booking-system.git
-   cd booking-system
-   ```
+- **Centralized Admin Panel**  
+  Provides a single dashboard to manage bookings, track revenue, and handle guest information efficiently.
 
-2. Install dependencies:
+### ⚙ Tech Stack
 
-   ```
-   composer install
-   ```
+**Frontend:**
 
-3. Create a `.env` file in the root directory with the following variables:
+- **HTML** - For structuring the web pages
+- **CSS** - For styling and layout
+- **JavaScript** - For client-side interactivity and dynamic features
+- **Font Awesome Icons** - For scalable vector icons
+- **Material Design Icons** - For Google's Material Design icon set
 
-   ```
-   DB_HOST=localhost
-   DB_USER=your_database_user
-   DB_PASS=your_database_password
-   DB_NAME=booking_system
+**Backend:**
 
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
-   GOOGLE_REDIRECT=http://localhost/booking-system/google-auth/google-callback.php
-   ```
+- **PHP** - The main server-side programming language
+- **MySQL** - The database management system
+- **XAMPP** - the project is running on XAMPP which provides:
+  - _Apache_ web server
+  - _MySQL_ database
+  - _PHP_ runtime environment
+- **Composer** - PHP's dependency management tool
 
-4. Import the database schema:
+### 📦 Packages Used:
 
-   ```
-   mysql -u your_database_user -p your_database_name < resort.sql
-   ```
+- **[PHP-JWT](https://github.com/firebase/php-jwt)** - For handling JSON Web Tokens (JWT) authentication
+- **[PHP dotenv](https://github.com/vlucas/phpdotenv)** - For storing credentials and secret keys
+- **[PHPMailer](https://github.com/PHPMailer/PHPMailer)** - For sending email notifications and confirmations
+- **[Google API Client](https://github.com/googleapis/google-api-php-client)** - For Google authentication and API integration
+- **[mPDF](https://github.com/mpdf/mpdf)** - For generating PDF documents and reports
 
-5. Configure Google OAuth:
-   - Go to the [Google Cloud Console](https://console.cloud.google.com)
-   - Create a new project or select an existing one
-   - Enable the Google+ API
-   - Create OAuth 2.0 credentials
-   - Add the redirect URI: `http://localhost/booking-system/google-auth/google-callback.php`
+### 📊 Database Schema
 
-## Usage
+The system uses MySQL/MariaDB with the following key tables:
 
-1. Start your local server (XAMPP, etc.)
-2. Navigate to `http://localhost/booking-system/`
-3. Register a new account or log in with Google
+1. **Users and Authentication**
 
-## Project Structure
+   - `users` - Stores user accounts (firstname, lastname, email, phone, password)
 
-- `assets/` - Images, CSS, and JavaScript files
-- `auth/` - Authentication related files
-- `db/` - Database connection and queries
-- `google-auth/` - Google OAuth integration
-- `home/` - Main application pages
-- `styles/` - CSS stylesheets
-- `vendor/` - Composer dependencies
+2. **Room Management**
 
-## License
+   - `room` - Contains room information (name, description, price, images)
+   - Supports different room types (Upper Kubo, A-House, Cottage)
 
-[MIT License](LICENSE)
+3. **Booking System**
 
-## Contact
+   - `booking` - Main booking records with status tracking
+   - `booking_details` - Specific booking information (check-in/out, guests)
+   - `booking_invoice` - Links bookings to user invoices
 
-For any questions or issues, please contact [your-email@example.com](mailto:your-email@example.com).
+4. **Payment System**
+   - `payment` - Main payment records with amount and method
+   - `paypal_payment` - PayPal-specific payment details
+   - `gcash_payment` - GCash payment information
+   - `bank_payment` - Bank transfer details
+
+### 🔌 API Routes
+
+#### 🔐 Authentication Endpoints
+
+| Method | Endpoint                    | Description            |
+| ------ | --------------------------- | ---------------------- |
+| POST   | `/auth/login.auth.php`      | User login             |
+| POST   | `/auth/signup.auth.php`     | User registration      |
+| POST   | `/auth/forgot-password.php` | Request password reset |
+| POST   | `/auth/reset-password.php`  | Reset password         |
+| POST   | `/auth/send-code.php`       | Send verification code |
+| POST   | `/auth/verify.php`          | Verify user account    |
+| GET    | `/auth/logout.php`          | User logout            |
+
+#### 🛠️ Admin Endpoints
+
+| Method | Endpoint                  | Description                   |
+| ------ | ------------------------- | ----------------------------- |
+| GET    | `/admin/get_room.php`     | Get room details              |
+| GET    | `/admin/bookings.php`     | Get all bookings              |
+| GET    | `/admin/users.php`        | Get all users                 |
+| GET    | `/admin/rooms.php`        | Get all rooms                 |
+| GET    | `/admin/reviews.php`      | Get all reviews               |
+| GET    | `/admin/view-booking.php` | View specific booking details |
+| GET    | `/admin/dashboard.php`    | Get dashboard statistics      |
+
+### 📸 Screenshots
+
+#### 🏠 Home Page
+
+![Banner Section](screenshot/BannerSection.png)
+_Main banner section of the resort_
+
+![About Us](screenshot/AboutUs.png)
+_About Us section showcasing resort information_
+
+![Amenities](screenshot/Amenities.png)
+_Available amenities and facilities_
+
+![Entrance Rate](screenshot/EntranceRate.png)
+_Entrance rates and pricing information_
+
+#### 🏡 Accommodation
+
+![Accommodation](screenshot/Accommodation.png)
+_Overview of available accommodations_
+
+![Accommodation Page](screenshot/AccommodationPag.png)
+_Detailed accommodation page_
+
+#### 🔐 Authentication
+
+![Login](screenshot/Login.png)
+_User login page_
+
+![Signup](screenshot/Signup.png)
+_User registration page_
+
+#### 📅 Booking Process
+
+![Booking Process 1](screenshot/BookingProcess1.png)
+_Initial booking step_
+
+![Booking Process 2](screenshot/BookingProcess2.png)
+_Booking confirmation step_
+
+![Booking Payment](screenshot/BookingPayment.png)
+_Payment processing page_
+
+![Invoice](screenshot/Invoice.png)
+_Generated booking invoice_
+
+![Booking History](screenshot/BookingHistory.png)
+_User's booking history_
+
+#### 👤 User Profile
+
+![Edit Profile](screenshot/EditProfile.png)
+_Profile editing interface_
+
+#### 👨‍💼 Admin Panel
+
+![Admin Dashboard](screenshot/AdminDashboard.png)
+_Admin dashboard overview_
+
+![Admin Rooms](screenshot/AdminRooms.png)
+_Room management interface_
+
+![Admin Add Room](screenshot/AdminAddRoom.png)
+_Add new room interface_
+
+![Admin Room Details](screenshot/AdminRoomDetails.png)
+_Detailed room information management_
+
+![Admin Bookings](screenshot/AdminBooking.png)
+_Booking management interface_
+
+![Admin Users](screenshot/AdminUser.png)
+_User management interface_
+
+![Admin Reviews](screenshot/AdminReviews.png)
+_Review management interface_
+
+#### ⭐ Reviews & Ratings
+
+![Reviews](screenshot/Reviews.png)
+_User reviews section_
+
+![Rate](screenshot/Rate.png)
+_Rating interface_
+
+#### 📍 Location
+
+![Map](screenshot/Map.png)
+_Resort location map_
+
+#### 🏢 Footer
+
+![Footer](screenshot/Footer.png)
+_Website footer with contact information_
