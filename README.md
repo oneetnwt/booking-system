@@ -1,8 +1,8 @@
-# K&A Resort Booking System
+# 🏖️ K&A Resort Booking System
 
-**K&A Resort Booking System** is a dynamic web-based booking website designed for K&A Resort to book and manage reservations easily and efficiently. It allows guests to check room availability in real-time and book rooms online at any time. The system aims to address issues with manual bookings such as missed reservations and double bookings by automatically checks for check-in and check-out conflicts before confirming a reservation. It also includes secure log in for both guests and staff to protect information and mitigate acces. Users can make payments through different payment method like Paypal and e-wallets directly within the system. For the resort staff, there is a centralized dashboard to view and manage all bookings, track revenues, and keep guest details organized. Overall, this system aims to simplifies the booking process and help the resort run more smoothly.
+K&A Resort Booking is a web-based application that allows guests to check room availability and book online anytime. It prevents double bookings by checking for date conflicts and requires login for both guests and staff. The system supports various payment methods and provides a centralized dashboard for resort staff to manage bookings, track revenue, and organize guest information, enhancing the reservation process.
 
-### 🔑 Key Features:
+## 🔑 Key Features
 
 - **Secure User Authentication**  
   Allows only authorized guests and resort staff to manage their bookings and access the system, protecting data and preventing unauthorized changes.
@@ -22,9 +22,9 @@
 - **Centralized Admin Panel**  
   Provides a single dashboard to manage bookings, track revenue, and handle guest information efficiently.
 
-### ⚙ Tech Stack
+## ⚙️ Tech Stack
 
-**Frontend:**
+### Frontend
 
 - **HTML** - For structuring the web pages
 - **CSS** - For styling and layout
@@ -32,17 +32,17 @@
 - **Font Awesome Icons** - For scalable vector icons
 - **Material Design Icons** - For Google's Material Design icon set
 
-**Backend:**
+### Backend
 
 - **PHP** - The main server-side programming language
 - **MySQL** - The database management system
-- **XAMPP** - the project is running on XAMPP which provides:
+- **XAMPP** - The project is running on XAMPP which provides:
   - _Apache_ web server
   - _MySQL_ database
   - _PHP_ runtime environment
 - **Composer** - PHP's dependency management tool
 
-### 📦 Packages Used:
+## 📦 Packages Used
 
 - **[PHP-JWT](https://github.com/firebase/php-jwt)** - For handling JSON Web Tokens (JWT) authentication
 - **[PHP dotenv](https://github.com/vlucas/phpdotenv)** - For storing credentials and secret keys
@@ -50,13 +50,14 @@
 - **[Google API Client](https://github.com/googleapis/google-api-php-client)** - For Google authentication and API integration
 - **[mPDF](https://github.com/mpdf/mpdf)** - For generating PDF documents and reports
 
-### 📊 Database Schema
+## 📊 Database Schema
 
 The system uses MySQL/MariaDB with the following key tables:
 
 1. **Users and Authentication**
 
    - `users` - Stores user accounts (firstname, lastname, email, phone, password)
+   - `role` - Manages user roles (user/admin)
 
 2. **Room Management**
 
@@ -75,9 +76,9 @@ The system uses MySQL/MariaDB with the following key tables:
    - `gcash_payment` - GCash payment information
    - `bank_payment` - Bank transfer details
 
-### 🔌 API Routes
+## 🔌 API Routes
 
-#### 🔐 Authentication Endpoints
+### 🔐 Authentication Endpoints
 
 | Method | Endpoint                    | Description            |
 | ------ | --------------------------- | ---------------------- |
@@ -89,7 +90,7 @@ The system uses MySQL/MariaDB with the following key tables:
 | POST   | `/auth/verify.php`          | Verify user account    |
 | GET    | `/auth/logout.php`          | User logout            |
 
-#### 🛠️ Admin Endpoints
+### 🛠️ Admin Endpoints
 
 | Method | Endpoint                  | Description                   |
 | ------ | ------------------------- | ----------------------------- |
@@ -101,9 +102,9 @@ The system uses MySQL/MariaDB with the following key tables:
 | GET    | `/admin/view-booking.php` | View specific booking details |
 | GET    | `/admin/dashboard.php`    | Get dashboard statistics      |
 
-### 📸 Screenshots
+## 📸 Screenshots
 
-#### 🏠 Home Page
+### 🏠 Home Page
 
 ![Banner Section](screenshot/BannerSection.png)
 _Main banner section of the resort_
@@ -117,7 +118,7 @@ _Available amenities and facilities_
 ![Entrance Rate](screenshot/EntranceRate.png)
 _Entrance rates and pricing information_
 
-#### 🏡 Accommodation
+### 🏡 Accommodation
 
 ![Accommodation](screenshot/Accommodation.png)
 _Overview of available accommodations_
@@ -125,7 +126,7 @@ _Overview of available accommodations_
 ![Accommodation Page](screenshot/AccommodationPag.png)
 _Detailed accommodation page_
 
-#### 🔐 Authentication
+### 🔐 Authentication
 
 ![Login](screenshot/Login.png)
 _User login page_
@@ -133,7 +134,7 @@ _User login page_
 ![Signup](screenshot/Signup.png)
 _User registration page_
 
-#### 📅 Booking Process
+### 📅 Booking Process
 
 ![Booking Process 1](screenshot/BookingProcess1.png)
 _Initial booking step_
@@ -150,12 +151,12 @@ _Generated booking invoice_
 ![Booking History](screenshot/BookingHistory.png)
 _User's booking history_
 
-#### 👤 User Profile
+### 👤 User Profile
 
 ![Edit Profile](screenshot/EditProfile.png)
 _Profile editing interface_
 
-#### 👨‍💼 Admin Panel
+### 👨‍💼 Admin Panel
 
 ![Admin Dashboard](screenshot/AdminDashboard.png)
 _Admin dashboard overview_
@@ -178,7 +179,7 @@ _User management interface_
 ![Admin Reviews](screenshot/AdminReviews.png)
 _Review management interface_
 
-#### ⭐ Reviews & Ratings
+### ⭐ Reviews & Ratings
 
 ![Reviews](screenshot/Reviews.png)
 _User reviews section_
@@ -186,12 +187,12 @@ _User reviews section_
 ![Rate](screenshot/Rate.png)
 _Rating interface_
 
-#### 📍 Location
+### 📍 Location
 
 ![Map](screenshot/Map.png)
 _Resort location map_
 
-#### 🏢 Footer
+### 🏢 Footer
 
 ![Footer](screenshot/Footer.png)
 _Website footer with contact information_
