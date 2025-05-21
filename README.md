@@ -132,6 +132,11 @@ GOOGLE_REDIRECT=http://localhost/booking-system/google-auth/callback.php
 - Email: admin@karesort.com
 - Password: admin123
 
+### Default User Account
+
+- Email: user@karesort.com
+- Password: user123
+
 ### Troubleshooting
 
 - If you encounter permission issues, ensure the web server has write access to the project directory
