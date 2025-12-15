@@ -5,14 +5,25 @@ namespace App\Tests;
 use App\Services\JwtService;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Dotenv\Dotenv;
 
 class JwtServiceTest extends BaseTestCase
 {
     private JwtService $jwtService;
+    private string $testSecretKey;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Set up a test secret key
+        $this->testSecretKey = 'test_secret_key_for_testing_purposes_only';
+
+        // Temporarily set environment variable for testing
+        if (!isset($_ENV['JWT_SECRET_KEY'])) {
+            $_ENV['JWT_SECRET_KEY'] = $this->testSecretKey;
+        }
+
         $this->jwtService = new JwtService();
     }
 
@@ -31,8 +42,8 @@ class JwtServiceTest extends BaseTestCase
         $this->assertNotEmpty($token);
 
         // Verify the token can be decoded
-        $decoded = JWT::decode($token, new Key($_ENV['JWT_SECRET_KEY'] ?? 'test_secret_key', 'HS256'));
-        
+        $decoded = JWT::decode($token, new Key($this->testSecretKey, 'HS256'));
+
         $this->assertEquals($payload['user_id'], $decoded->data->user_id);
         $this->assertEquals($payload['firstname'], $decoded->data->firstname);
         $this->assertEquals($payload['lastname'], $decoded->data->lastname);

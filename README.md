@@ -626,44 +626,81 @@ The system uses MySQL/MariaDB with the following key tables:
 
 ## 🧪 Testing
 
-The application includes a comprehensive testing suite using PHPUnit. To run the tests:
+The application includes a comprehensive testing suite using PHPUnit to ensure reliability and maintainability. To run the tests:
 
+### Prerequisites
 1. Install the development dependencies:
    ```bash
    composer install
    ```
 
-2. Run all tests:
+### Running Tests
+1. Run all tests:
    ```bash
-   vendor/bin/phpunit
+   php vendor/bin/phpunit
    ```
 
-3. Run tests with coverage report:
+2. Run tests with coverage report:
    ```bash
-   vendor/bin/phpunit --coverage-html coverage/
+   php vendor/bin/phpunit --coverage-html coverage/
    ```
 
-4. Run specific test suite:
+3. Run specific test file:
    ```bash
-   vendor/bin/phpunit tests/AuthControllerTest.php
+   php vendor/bin/phpunit tests/JwtServiceTest.php
    ```
 
-The testing suite includes:
-- Unit tests for controllers (AuthController, BookingController, etc.)
-- Service tests (JwtService, EmailService, etc.)
-- Integration tests for complete user flows
-- Router functionality tests
-- Environment and configuration tests
+4. Run tests in verbose mode:
+   ```bash
+   php vendor/bin/phpunit --verbose
+   ```
 
-### Test Structure
-- `tests/`: Contains all test files
-- `tests/BaseTestCase.php`: Base test class with common setup
-- `tests/AuthControllerTest.php`: Tests for authentication functionality
-- `tests/BookingControllerTest.php`: Tests for booking functionality
-- `tests/JwtServiceTest.php`: Tests for JWT token handling
-- `tests/RouterTest.php`: Tests for routing functionality
-- `tests/EnvironmentTest.php`: Tests for environment setup
-- `tests/IntegrationTest.php`: Integration tests for complete flows
+5. Run tests with testdox format (human-readable output):
+   ```bash
+   php vendor/bin/phpunit --testdox
+   ```
+
+### Test Categories
+
+#### Unit Tests
+- Test individual components in isolation
+- Controllers: Authentication, Booking, Home, etc.
+- Services: JWT handling, Email service, PDF generation
+- Core components: Router, Database configuration
+
+#### Integration Tests
+- End-to-end user flows (registration, booking, payment)
+- API endpoint interactions
+- Database operations with real connections
+- Third-party service integrations (Google OAuth, Email)
+
+#### Test Organization
+The test suite follows a structured approach:
+- `tests/BaseTestCase.php`: Base class with common test setup
+- `tests/AuthControllerTest.php`: Authentication workflow tests
+- `tests/BookingControllerTest.php`: Booking process tests
+- `tests/JwtServiceTest.php`: Token generation and validation tests
+- `tests/RouterTest.php`: Route registration and dispatch tests
+- `tests/DatabaseTest.php`: Database connection and configuration tests
+- `tests/EnvironmentTest.php`: Environment setup verification tests
+- `tests/IntegrationTest.php`: Full workflow integration tests
+
+### Test Coverage
+The tests aim to cover:
+- Core business logic and validation
+- Error handling and edge cases
+- Security measures and authentication
+- Third-party service integrations
+- User interaction flows
+
+### Configuration
+Tests use a separate configuration from the application to avoid affecting production data:
+- Uses separate environment variables for testing
+- Mocks external dependencies where appropriate
+- Maintains test database isolation
+- Follows PHPUnit best practices
+
+For more details about the testing approach, see `tests/README.md`.
 
 ## 📸 Screenshots
 

@@ -45,6 +45,7 @@ $router->post('/booking/payment-verification', BookingController::class, 'paymen
 $router->get('/booking/invoice', BookingController::class, 'invoice');
 
 $router->get('/profile', ProfileController::class, 'profile');
+$router->post('/profile', ProfileController::class, 'profile');
 $router->get('/profile/my-bookings', ProfileController::class, 'myBookings');
 $router->post('/profile/booking-details', ProfileController::class, 'bookingDetails');
 $router->get('/profile/rate-us', ProfileController::class, 'rateUs');
