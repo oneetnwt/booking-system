@@ -173,7 +173,7 @@ JWT_SECRET_KEY=your_jwt_secret_key
 # Google OAuth Configuration
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT=http://localhost:8000/google-auth/google-callback.php
+GOOGLE_REDIRECT=http://localhost:8000/google/callback
 ```
 
 #### Detailed Configuration Instructions
@@ -217,8 +217,13 @@ GOOGLE_REDIRECT=http://localhost:8000/google-auth/google-callback.php
   3. Enable Google+ API
   4. Go to Credentials > Create Credentials > OAuth 2.0 Client IDs
   5. Set application type as 'Web application'
-  6. Add authorized redirect URIs (include http://localhost:8000/google-auth/google-callback.php)
+  6. Add authorized redirect URIs (include http://localhost:8000/google/callback)
   7. Copy Client ID and Secret to your .env file
+
+  **Architecture Note:** This application uses a modern MVC architecture with a central router at `public/index.php`. The Google authentication flow works as follows:
+  - Login button directs users to `/google/login` route (handled by GoogleAuthController::login)
+  - After authentication with Google, users are redirected back to `/google/callback` (handled by GoogleAuthController::callback)
+  - The callback controller verifies the user and creates a JWT token for session management
 
 ### Step 8: Run the Application
 
@@ -363,7 +368,7 @@ JWT_SECRET_KEY=your_jwt_secret_key
 # Google OAuth Configuration
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT=http://localhost:8000/google-auth/google-callback.php
+GOOGLE_REDIRECT=http://localhost:8000/google/callback
 ```
 
 #### Detailed Configuration Instructions
@@ -407,8 +412,13 @@ GOOGLE_REDIRECT=http://localhost:8000/google-auth/google-callback.php
   3. Enable Google+ API
   4. Go to Credentials > Create Credentials > OAuth 2.0 Client IDs
   5. Set application type as 'Web application'
-  6. Add authorized redirect URIs (include http://localhost:8000/google-auth/google-callback.php)
+  6. Add authorized redirect URIs (include http://localhost:8000/google/callback)
   7. Copy Client ID and Secret to your .env file
+
+  **Architecture Note:** This application uses a modern MVC architecture with a central router at `public/index.php`. The Google authentication flow works as follows:
+  - Login button directs users to `/google/login` route (handled by GoogleAuthController::login)
+  - After authentication with Google, users are redirected back to `/google/callback` (handled by GoogleAuthController::callback)
+  - The callback controller verifies the user and creates a JWT token for session management
 
 ### Step 6: Build and Run with Docker
 
