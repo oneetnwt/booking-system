@@ -189,6 +189,16 @@ GOOGLE_REDIRECT=http://localhost:8000/google/callback
 - `APP_PASSWORD`: App password for the email account (not your regular password)
 - `APP_NAME`: Name of your resort application
 
+**Gmail Setup (Required for APP_EMAIL):**
+Option A: Set up Gmail App Password (Recommended)
+   1. Enable 2-Step Verification: https://myaccount.google.com/security
+   2. Generate App Password: https://myaccount.google.com/apppasswords
+   3. Update .env:
+   ```
+   APP_EMAIL=your_gmail@gmail.com
+   APP_PASSWORD=your_16_char_app_password
+   ```
+
 **reCAPTCHA Configuration:**
 - `RECAPTCHA_SITE_KEY`: Public key obtained from Google reCAPTCHA dashboard
 - `RECAPTCHA_SECRET_KEY`: Private key obtained from Google reCAPTCHA dashboard
@@ -410,6 +420,16 @@ GOOGLE_REDIRECT=http://localhost:8000/google/callback
 - `APP_EMAIL`: Email address used to send notifications (Gmail recommended)
 - `APP_PASSWORD`: App password for the email account (not your regular password)
 - `APP_NAME`: Name of your resort application
+
+**Gmail Setup (Required for APP_EMAIL):**
+Option A: Set up Gmail App Password (Recommended)
+   1. Enable 2-Step Verification: https://myaccount.google.com/security
+   2. Generate App Password: https://myaccount.google.com/apppasswords
+   3. Update .env:
+   ```
+   APP_EMAIL=your_gmail@gmail.com
+   APP_PASSWORD=your_16_char_app_password
+   ```
 
 **reCAPTCHA Configuration:**
 - `RECAPTCHA_SITE_KEY`: Public key obtained from Google reCAPTCHA dashboard
