@@ -1,9 +1,11 @@
 # Environment files
 .env*
+.env.local
 
 # Composer
 vendor/
 composer.phar
+composer.lock
 
 # IDE files
 .vscode/
@@ -24,3 +26,13 @@ logs/
 cache/
 tmp/
 temp/
+
+# PHP files
+*.swp
+
+# Build artifacts
+build/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
