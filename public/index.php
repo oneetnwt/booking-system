@@ -26,6 +26,7 @@ $router->post('/auth/login', AuthController::class, 'login');
 $router->get('/auth/signup', AuthController::class, 'showSignup');
 $router->post('/auth/signup', AuthController::class, 'signup');
 $router->get('/auth/verify', AuthController::class, 'showVerify');
+$router->post('/auth/verify', AuthController::class, 'verify');
 $router->get('/auth/forgot-password', AuthController::class, 'showForgotPassword');
 $router->post('/auth/forgot-password', AuthController::class, 'forgotPassword');
 $router->get('/auth/send-code', AuthController::class, 'showSendCode');

@@ -74,9 +74,14 @@ class GoogleAuthController
                 $firstname = $userinfo->givenName ?? '';
                 $lastname = $userinfo->familyName ?? '';
                 $email = $userinfo->email;
-                
-                $insertStmt = $this->pdo->prepare("INSERT INTO users (firstname, lastname, email, role, email_verified) VALUES (?, ?, ?, 'user', 1)");
-                $insertStmt->execute([$firstname, $lastname, $email]);
+
+                // Generate a default password for Google users (since they don't set one)
+                $default_password = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
+
+                $phone_number = $userinfo->phoneNumber ?? 'N/A';
+
+                $insertStmt = $this->pdo->prepare("INSERT INTO users (firstname, lastname, email, phone_number, password, role) VALUES (?, ?, ?, ?, ?, 'user')");
+                $insertStmt->execute([$firstname, $lastname, $email, $phone_number, $default_password]);
                 
                 $user = [
                     'id' => $this->pdo->lastInsertId(),

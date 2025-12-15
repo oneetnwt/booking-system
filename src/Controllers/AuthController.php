@@ -179,6 +179,60 @@ class AuthController
         require_once __DIR__ . '/../Views/auth/verify.php';
     }
 
+    public function verify()
+    {
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: /auth/verify");
+            exit();
+        }
+
+        $code = $_POST['code'];
+
+        if (!isset($_SESSION['pending_user']) || !isset($_SESSION['pending_user']['code'])) {
+            $_SESSION['error'] = "Verification session expired";
+            header("Location: /auth/signup");
+            exit();
+        }
+
+        if ($code != $_SESSION['pending_user']['code']) {
+            $_SESSION['error'] = "Invalid verification code";
+            header("Location: /auth/verify");
+            exit();
+        }
+
+        // Insert the user into the database
+        $user = $_SESSION['pending_user'];
+        $stmt = $this->pdo->prepare("INSERT INTO users (firstname, lastname, email, phone_number, password, role) VALUES (?, ?, ?, ?, ?, 'user')");
+        $stmt->execute([
+            $user['firstname'],
+            $user['lastname'],
+            $user['email'],
+            $user['phone'],
+            $user['password']
+        ]);
+
+        // Clear the pending user session
+        unset($_SESSION['pending_user']);
+
+        // Generate JWT token
+        $newUserId = $this->pdo->lastInsertId();
+        $token = $this->jwtService->generateToken([
+            'user_id' => $newUserId,
+            'firstname' => $user['firstname'],
+            'lastname' => $user['lastname'],
+            'role' => 'user'
+        ]);
+
+        // Set the JWT cookie
+        setcookie("token", $token, time() + 3600, "/", "", true, true);
+
+        $_SESSION['success'] = "Account verified successfully!";
+        header("Location: /home");
+        exit();
+    }
+
     public function showForgotPassword()
     {
         session_start();

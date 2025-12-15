@@ -24,6 +24,13 @@ class EmailService
         $this->mail->Password = $_ENV['APP_PASSWORD'];
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mail->Port = 587;
+        $this->mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
         $this->mail->setFrom($_ENV['APP_EMAIL'], $_ENV['APP_NAME']);
         $this->mail->isHTML(true);
     }
@@ -34,8 +41,13 @@ class EmailService
             $this->mail->clearAddresses();
             $this->mail->addAddress($email, $firstname . ' ' . $lastname);
 
-            $logoPath = __DIR__ . '/../../assets/K&A_Dark.png';
-            $iconPath = __DIR__ . '/../../assets/K&ALogo.png';
+            $logoPath = __DIR__ . '/../../public/assets/K&A_Dark.png';
+            $iconPath = __DIR__ . '/../../public/assets/K&ALogo.png';
+
+            if (!file_exists($logoPath) || !file_exists($iconPath)) {
+                error_log("Email asset files not found: $logoPath or $iconPath");
+                throw new Exception("Email asset files not found");
+            }
 
             $logoContentId = md5('logo') . rand(1000, 9999);
             $iconContentId = md5('icon') . rand(1000, 9999);
@@ -61,8 +73,13 @@ class EmailService
             $this->mail->clearAddresses();
             $this->mail->addAddress($email, $firstname);
 
-            $logoPath = __DIR__ . '/../../assets/K&A_Dark.png';
-            $iconPath = __DIR__ . '/../../assets/K&ALogo.png';
+            $logoPath = __DIR__ . '/../../public/assets/K&A_Dark.png';
+            $iconPath = __DIR__ . '/../../public/assets/K&ALogo.png';
+
+            if (!file_exists($logoPath) || !file_exists($iconPath)) {
+                error_log("Email asset files not found: $logoPath or $iconPath");
+                throw new Exception("Email asset files not found");
+            }
 
             $logoContentId = md5('logo') . rand(1000, 9999);
             $iconContentId = md5('icon') . rand(1000, 9999);
