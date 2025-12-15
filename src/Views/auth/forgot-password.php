@@ -1,5 +1,5 @@
 <?php
-require '../../vendor/autoload.php';
+require '../../../vendor/autoload.php';
 require '../db/connectDB.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));

@@ -6,7 +6,7 @@ use Firebase\JWT\Key;
 session_start();
 
 require '../db/connectDB.php';
-require '../../vendor/autoload.php';
+require '../../../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();

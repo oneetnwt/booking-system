@@ -21,7 +21,7 @@ if (!isset($_POST['bookingId']) || empty($_POST['bookingId'])) {
 }
 
 
-require_once '../../vendor/autoload.php';
+require_once '../../../vendor/autoload.php';
 require '../db/connectDB.php';
 
 $stmt = $pdo->prepare("

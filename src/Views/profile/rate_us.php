@@ -1,5 +1,5 @@
 <?php
-require '../../vendor/autoload.php';
+require '../../../vendor/autoload.php';
 require '../db/connectDB.php';
 
 use Dotenv\Dotenv;

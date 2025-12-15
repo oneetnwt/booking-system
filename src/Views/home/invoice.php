@@ -10,7 +10,7 @@ use Dotenv\Dotenv;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-require_once '../../vendor/autoload.php';
+require_once '../../../vendor/autoload.php';
 require '../db/connectDB.php';
 
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
