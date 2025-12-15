@@ -5,25 +5,6 @@ if (isset($_SESSION['booking_details'])) {
     unset($_SESSION['room_id']);
 }
 
-require __DIR__ . "/../../../vendor/autoload.php";
-
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
-$dotenv->load();
-
-$secret_key = $_ENV['JWT_SECRET_KEY'];
-
-$stmt = $pdo->prepare("SELECT * FROM room");
-$stmt->execute();
-$accommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-if (isset($_COOKIE['token'])) {
-    $token = $_COOKIE['token'];
-    $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $room = $_POST['room'];
     $room = (int) $room;

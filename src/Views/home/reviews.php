@@ -1,33 +1,8 @@
 <?php
 
-require __DIR__ . "/../../../vendor/autoload.php";
+// JWT token decoding and reviews data should be handled by the controller
+// The view receives $decoded and $reviews from HomeController->reviews()
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
-$dotenv->load();
-
-$secret_key = $_ENV['JWT_SECRET_KEY'];
-
-try {
-    $token = $_COOKIE['token'];
-    $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
-} catch (Exception $e) {
-    header("Location: /home?error=unauthorized");
-    exit();
-}
-
-// Get all approved reviews with user and room information
-$stmt = $pdo->prepare("
-    SELECT r.*, u.firstname, u.lastname, rm.room_name 
-    FROM reviews r 
-    JOIN users u ON r.user_id = u.id 
-    JOIN room rm ON r.room_id = rm.id 
-    ORDER BY r.created_at DESC
-");
-$stmt->execute();
-$reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>

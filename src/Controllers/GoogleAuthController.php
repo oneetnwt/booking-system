@@ -16,13 +16,39 @@ class GoogleAuthController
     {
         $this->pdo = Database::getInstance()->getConnection();
         $this->jwtService = new JwtService();
-        
+
         $this->client = new \Google_Client();
         $this->client->setClientId($_ENV['GOOGLE_CLIENT_ID']);
         $this->client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
         $this->client->setRedirectUri($_ENV['GOOGLE_REDIRECT']);
         $this->client->addScope("email");
         $this->client->addScope("profile");
+
+        // Configure HTTP client for SSL verification
+        $httpConfig = ['http' => ['verify' => true]];
+
+        // Check for system certificate settings
+        $cafile = ini_get('openssl.cafile');
+        $cainfo = ini_get('curl.cainfo');
+
+        if ($cafile && file_exists($cafile)) {
+            $httpConfig['http']['verify'] = $cafile;
+        } elseif ($cainfo && file_exists($cainfo)) {
+            $httpConfig['http']['verify'] = $cainfo;
+        } elseif ($caBundlePath = $_ENV['CA_BUNDLE_PATH'] ?? null) {
+            // Use CA bundle path from environment if specified
+            $httpConfig['http']['verify'] = $caBundlePath;
+        }
+        // As a fallback for development environments, you might need to disable verification
+        // However, note that this is not secure for production use
+        elseif ($_ENV['APP_ENV'] === 'development') {
+            // For development only - do not use in production!
+            $httpConfig['http']['verify'] = false;
+        }
+
+        $this->client->setHttpClient(
+            new \GuzzleHttp\Client($httpConfig)
+        );
     }
 
     public function login()
