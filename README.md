@@ -193,10 +193,19 @@ GOOGLE_REDIRECT=http://localhost:8000/google/callback
 Option A: Set up Gmail App Password (Recommended)
    1. Enable 2-Step Verification: https://myaccount.google.com/security
    2. Generate App Password: https://myaccount.google.com/apppasswords
-   3. Update .env:
+   3. When generating the app password, Google displays it with spaces (e.g., "abcd efgh ijkl mnop")
+      BUT you must remove the spaces when adding it to your .env file
+   4. Update .env (remove spaces from app password):
    ```
    APP_EMAIL=your_gmail@gmail.com
-   APP_PASSWORD=your_16_char_app_password
+   APP_PASSWORD=abcdefghijkmnop
+   ```
+   Example:
+   ```
+   APP_EMAIL=floresaybaez574@gmail.com
+   APP_PASSWORD=nqna gipa kapn xgzr  # Google shows this with spaces
+   # BUT in .env file use (no spaces):
+   APP_PASSWORD=nqngipakapnxgzr
    ```
 
 **reCAPTCHA Configuration:**
@@ -425,10 +434,19 @@ GOOGLE_REDIRECT=http://localhost:8000/google/callback
 Option A: Set up Gmail App Password (Recommended)
    1. Enable 2-Step Verification: https://myaccount.google.com/security
    2. Generate App Password: https://myaccount.google.com/apppasswords
-   3. Update .env:
+   3. When generating the app password, Google displays it with spaces (e.g., "abcd efgh ijkl mnop")
+      BUT you must remove the spaces when adding it to your .env file
+   4. Update .env (remove spaces from app password):
    ```
    APP_EMAIL=your_gmail@gmail.com
-   APP_PASSWORD=your_16_char_app_password
+   APP_PASSWORD=abcdefghijkmnop
+   ```
+   Example:
+   ```
+   APP_EMAIL=floresaybaez574@gmail.com
+   APP_PASSWORD=nqna gipa kapn xgzr  # Google shows this with spaces
+   # BUT in .env file use (no spaces):
+   APP_PASSWORD=nqngipakapnxgzr
    ```
 
 **reCAPTCHA Configuration:**
