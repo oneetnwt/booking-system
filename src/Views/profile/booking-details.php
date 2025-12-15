@@ -21,9 +21,11 @@ if (!isset($_POST['bookingId']) || empty($_POST['bookingId'])) {
 }
 
 
-require_once '../../../vendor/autoload.php';
-require '../db/connectDB.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
+use App\Config\Database;
+
+$pdo = Database::getInstance()->getConnection();
 $stmt = $pdo->prepare("
     SELECT
         bi.*,

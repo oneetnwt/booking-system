@@ -1,10 +1,10 @@
 <?php
-require '../../../vendor/autoload.php';
-require '../db/connectDB.php';
+require __DIR__ . '/../../../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Config\Database;
 
 session_start();
 
@@ -13,11 +13,12 @@ if (!isset($_COOKIE['token'])) {
     exit();
 }
 
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
 $token = $_COOKIE['token'];
+$pdo = Database::getInstance()->getConnection();
 $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 
 $user_id = $decoded->data->user_id;
