@@ -1,2 +1,26 @@
+# Environment files
 .env*
-vendor*
+
+# Composer
+vendor/
+composer.phar
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+tmp/
+temp/
