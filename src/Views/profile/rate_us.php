@@ -26,7 +26,7 @@ $user_id = $decoded->data->user_id;
 // Get booking details
 $booking_id = $_GET['id'] ?? null;
 if (!$booking_id) {
-    header("Location: my-bookings.php");
+    header("Location: /profile/my-bookings");
     exit();
 }
 
@@ -51,7 +51,7 @@ $stmt->execute([$booking_id, $user_id]);
 $booking = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$booking) {
-    header("Location: my-bookings.php");
+    header("Location: /profile/my-bookings");
     exit();
 }
 
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
         $stmt->execute([$user_id, $booking['room_id'], $rating, $comment]);
 
-        header("Location: my-bookings.php");
+        header("Location: /profile/my-bookings");
         exit();
     } catch (PDOException $e) {
         $error = "Failed to submit rating. Please try again.";
@@ -100,12 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <nav>
                     <ul class="navlink">
                         <li>
-                            <a href="profile.php">
+                            <a href="/profile">
                                 <i class="fas fa-user-edit"></i>Edit Profile
                             </a>
                         </li>
                         <li class="active">
-                            <a href="my-bookings.php">
+                            <a href="/profile/my-bookings">
                                 <i class="fas fa-tasks"></i>My Bookings
                             </a>
                         </li>
@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="button-group">
                             <button type="submit">Submit Rating</button>
-                            <a href="my-bookings.php" class="cancel-btn">Cancel</a>
+                            <a href="/profile/my-bookings" class="cancel-btn">Cancel</a>
                         </div>
                     </form>
                 </div>

@@ -114,18 +114,18 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Booking Management - K&A Resort</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="styles/admin.styles.css">
-    <link rel="icon" href="../assets/K&ALogo.png">
+    <link rel="stylesheet" href="/styles/admin.styles.css">
+    <link rel="icon" href="/assets/K&ALogo.png">
 
 </head>
 
 <body>
     <header>
         <div class="logo">
-            <img src="../assets/K&ALogo.png" alt="" class="circle-logo">
-            <img src="../assets/K&A.png" alt="" class="logo-text">
+            <img src="/assets/K&ALogo.png" alt="" class="circle-logo">
+            <img src="/assets/K&A.png" alt="" class="logo-text">
         </div>
-        <a href="/">
+        <a href="/home">
             <span class="mdi mdi-home"></span>
             Home
         </a>
@@ -138,31 +138,31 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <nav>
                     <ul>
                         <li>
-                            <a href="dashboard.php">
+                            <a href="/admin/dashboard">
                                 <span class="mdi mdi-view-dashboard"></span>
                                 Dashboard
                             </a>
                         </li>
                         <li class="active">
-                            <a href="bookings.php">
+                            <a href="/admin/bookings">
                                 <span class="mdi mdi-file-tree"></span>
                                 Bookings
                             </a>
                         </li>
                         <li>
-                            <a href="users.php">
+                            <a href="/admin/users">
                                 <span class="mdi mdi-account-multiple"></span>
                                 Users
                             </a>
                         </li>
                         <li>
-                            <a href="reviews.php">
+                            <a href="/admin/reviews">
                                 <span class="mdi mdi-star-box"></span>
                                 Reviews and Ratings
                             </a>
                         </li>
                         <li>
-                            <a href="rooms.php">
+                            <a href="/admin/rooms">
                                 <span class="mdi mdi-bed"></span>
                                 Rooms
                             </a>

@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_COOKIE['token'])) {
-    header("Location: home.php");
+    header("Location: /home");
     exit();
 }
 
@@ -11,12 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if (!isset($booking_id)) {
-    header("Location: my-bookings.php");
+    header("Location: /profile/my-bookings");
     exit();
 }
 
 if (!isset($_POST['bookingId']) || empty($_POST['bookingId'])) {
-    header("Location: my-bookings.php");
+    header("Location: /profile/my-bookings");
     exit();
 }
 
@@ -167,7 +167,7 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
             </div>
             <p style="text-align: center; margin-top: 1rem;">&copy; <?= date("Y") ?> K&A Natural Spring Resort</p>
-            <a href="my-bookings.php"
+            <a href="/profile/my-bookings"
                 style="padding: 0.5rem 1rem; background-color: #3165e8; color: white; text-decoration: none; border-radius: 0.5rem; text-align: center; align-self: center; margin-top: 1rem;">Return</a>
         </div>
     </div>

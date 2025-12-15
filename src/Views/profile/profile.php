@@ -66,11 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $stmt->execute([$firstname, $lastname, $email, $phone_number, $user_id]);
 
         $_SESSION['success'] = "User data updated.";
-        header("Location: profile.php");
+        header("Location: /profile");
         exit();
     } catch (Exception $e) {
         $_SESSION['error'] = "Error in updating user data";
-        header("Location: profile.php");
+        header("Location: /profile");
         exit();
     }
 }
@@ -105,12 +105,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <nav>
                     <ul class="navlink">
                         <li class="active">
-                            <a href="profile.php">
+                            <a href="/profile">
                                 <i class="fas fa-user-edit"></i>Edit Profile
                             </a>
                         </li>
                         <li>
-                            <a href="my-bookings.php">
+                            <a href="/profile/my-bookings">
                                 <i class="fas fa-tasks"></i>My Bookings
                             </a>
                         </li>

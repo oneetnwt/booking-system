@@ -233,7 +233,7 @@ $room_types = $pdo->query("SELECT DISTINCT room_name FROM room")->fetchAll(PDO::
     <title>Room Management - K&A Resort</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles/admin.styles.css">
+    <link rel="stylesheet" href="/styles/admin.styles.css">
     <link rel="icon" href="../assets/K&ALogo.png">
 </head>
 
