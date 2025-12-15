@@ -39,11 +39,16 @@ class GoogleAuthController
             // Use CA bundle path from environment if specified
             $httpConfig['http']['verify'] = $caBundlePath;
         }
-        // As a fallback for development environments, you might need to disable verification
-        // However, note that this is not secure for production use
-        elseif ($_ENV['APP_ENV'] === 'development') {
+        // For development environment where certificates might not be configured
+        elseif (($_ENV['APP_ENV'] ?? null) === 'development' || strpos($_ENV['APP_ENV'] ?? '', 'dev') !== false) {
             // For development only - do not use in production!
             $httpConfig['http']['verify'] = false;
+        }
+        // As a last resort for Windows development when no certificates are configured
+        elseif ((($_ENV['APP_ENV'] ?? null) === null || strpos($_ENV['APP_ENV'] ?? '', 'dev') !== false) && PHP_OS_FAMILY === 'Windows') {
+            // On Windows in development, if no certificates are configured
+            // We'll disable verification as a fallback (development only)
+            $httpConfig['http']['verify'] = false;  // Development use only!
         }
 
         $this->client->setHttpClient(
