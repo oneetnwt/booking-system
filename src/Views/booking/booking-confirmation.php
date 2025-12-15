@@ -1,124 +1,14 @@
 <?php
-
-session_start();
-
-require '../db/connectDB.php';
+// The business logic has been moved to the controller
+// This view now only handles presentation logic
 
 if (!isset($_COOKIE['token'])) {
     header("Location: /home?error=unauthorized");
     exit();
 }
 
-// Initialize booking_details if not set
-if (!isset($_SESSION['booking_details'])) {
-    $stmt = $pdo->prepare("SELECT * FROM room WHERE id = ?");
-    $stmt->execute([$_SESSION['room_id']]);
-    $room = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $bookingFee = 0.01 * ($entranceFee ?? 0 + $room['room_price']);
-    $totalPrice = $entranceFee ?? 0 + $room['room_price'] + $bookingFee;
-
-    $_SESSION['booking_details'] = [
-        'check_in' => '',
-        'check_out' => '',
-        'days' => 0,
-        'adult' => 1,
-        'children' => 0,
-        'roomPrice' => $room['room_price'],
-        'entranceFee' => '50.00',
-        'bookingFee' => $bookingFee,
-        'totalPrice' => $totalPrice
-    ];
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    try {
-        $check_in = $_POST['check_in'];
-        $check_out = $_POST['check_out'];
-        $adult = (int) ($_POST['adult'] ?? 0);
-        $children = (int) ($_POST['children'] ?? 0);
-        $overnight = $_POST['overnight'] ?? 'no';
-
-        // Check if room is already booked for these dates
-        $stmt = $pdo->prepare("SELECT b.* FROM booking b 
-            INNER JOIN booking_details bd ON b.booking_details_id = bd.id 
-            WHERE b.room_id = ? AND b.status != 'cancelled' AND
-            ((bd.check_in BETWEEN ? AND ?) OR 
-            (bd.check_out BETWEEN ? AND ?) OR 
-            (? BETWEEN bd.check_in AND bd.check_out))");
-        $stmt->execute([
-            $_SESSION['room_id'],
-            $check_in,
-            $check_out,
-            $check_in,
-            $check_out,
-            $check_in
-        ]);
-
-        if ($stmt->rowCount() > 0) {
-            $_SESSION['error'] = "This room is already booked for the selected dates. Please choose different dates.";
-        } else {
-            $stmt = $pdo->prepare("SELECT * FROM room WHERE id = ?");
-            $stmt->execute([$_SESSION['room_id']]);
-            $room = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            $check_in = new DateTime($check_in);
-            $check_out = new DateTime($check_out);
-
-            $interval = $check_in->diff($check_out);
-            $days = $interval->days;
-
-            if ($days > 0) {
-                $overnight = 'yes';
-            } else {
-                $overnight = 'no';
-                $days = 1;
-            }
-
-            if ($overnight == 'no') {
-                $adultFee = 50;
-                $childrenFee = 30;
-
-                $entranceFee = ($adult * $adultFee) + ($children * $childrenFee);
-            } else {
-                $total = $adult + $children;
-                $entranceFee = $total * 200;
-            }
-
-            $bookingFee = 0.01 * ($entranceFee + $room['room_price']);
-            $totalPrice = $entranceFee + ($days * $room['room_price']) + $bookingFee;
-
-            // Update the booking details in session variables
-            $_SESSION['booking_details'] = [
-                'room_id' => $_SESSION['room_id'],
-                'check_in' => $check_in->format('Y-m-d\TH:i'),
-                'check_out' => $check_out->format('Y-m-d\TH:i'),
-                'days' => $days,
-                'adult' => $adult,
-                'children' => $children,
-                'overnight' => $overnight,
-                'roomPrice' => $room['room_price'],
-                'entranceFee' => $entranceFee,
-                'bookingFee' => $bookingFee,
-                'totalPrice' => $totalPrice
-            ];
-
-            // Redirect to next page after successful form submission
-            header('Location: /booking/process');
-            exit();
-        }
-    } catch (Exception $e) {
-        $_SESSION['error'] = "An error occurred: " . $e->getMessage();
-    }
-}
-
-// Get room details if room_id is set
-$room = null;
-if (isset($_SESSION['room_id'])) {
-    $stmt = $pdo->prepare("SELECT * FROM room WHERE id = ?");
-    $stmt->execute([$_SESSION['room_id']]);
-    $room = $stmt->fetch(PDO::FETCH_ASSOC);
-}
+// Get room details if room_id is set (data should be provided by the controller)
+$room = $room ?? null; // This will use the room variable provided by the controller
 ?>
 
 <!DOCTYPE html>

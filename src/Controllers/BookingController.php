@@ -30,6 +30,15 @@ class BookingController
             exit();
         }
 
+        if (isset($_GET['room_id'])) {
+            $_SESSION['room_id'] = $_GET['room_id'];
+        }
+
+        if (!isset($_SESSION['room_id'])) {
+            header("Location: /home?error=invalid_room");
+            exit();
+        }
+
         if (!isset($_SESSION['booking_details'])) {
             $stmt = $this->pdo->prepare("SELECT * FROM room WHERE id = ?");
             $stmt->execute([$_SESSION['room_id']]);
@@ -59,11 +68,11 @@ class BookingController
                 $children = (int) ($_POST['children'] ?? 0);
                 $overnight = $_POST['overnight'] ?? 'no';
 
-                $stmt = $this->pdo->prepare("SELECT b.* FROM booking b 
-                    INNER JOIN booking_details bd ON b.booking_details_id = bd.id 
+                $stmt = $this->pdo->prepare("SELECT b.* FROM booking b
+                    INNER JOIN booking_details bd ON b.booking_details_id = bd.id
                     WHERE b.room_id = ? AND b.status != 'cancelled' AND
-                    ((bd.check_in BETWEEN ? AND ?) OR 
-                    (bd.check_out BETWEEN ? AND ?) OR 
+                    ((bd.check_in BETWEEN ? AND ?) OR
+                    (bd.check_out BETWEEN ? AND ?) OR
                     (? BETWEEN bd.check_in AND bd.check_out))");
                 $stmt->execute([
                     $_SESSION['room_id'],
@@ -94,33 +103,29 @@ class BookingController
                         $days = 1;
                     }
 
+                    // Use the same calculation logic as in the original view
                     if ($overnight == 'no') {
                         $adultFee = 50;
                         $childrenFee = 30;
 
                         $entranceFee = ($adult * $adultFee) + ($children * $childrenFee);
-                        $roomPrice = $room['room_price'];
-                        $bookingFee = 0.01 * ($entranceFee + $roomPrice);
-                        $totalPrice = $entranceFee + $roomPrice + $bookingFee;
                     } else {
-                        $adultFee = 50;
-                        $childrenFee = 30;
-
-                        $entranceFee = ($adult * $adultFee) + ($children * $childrenFee);
-                        $roomPrice = $room['room_price'] * $days;
-                        $bookingFee = 0.01 * ($entranceFee + $roomPrice);
-                        $totalPrice = $entranceFee + $roomPrice + $bookingFee;
+                        $total = $adult + $children;
+                        $entranceFee = $total * 200;
                     }
+
+                    $bookingFee = 0.01 * ($entranceFee + $room['room_price']);
+                    $totalPrice = $entranceFee + ($days * $room['room_price']) + $bookingFee;
 
                     $_SESSION['booking_details'] = [
                         'room_id' => $_SESSION['room_id'],
-                        'check_in' => $check_in,
-                        'check_out' => $check_out,
+                        'check_in' => $check_in_date->format('Y-m-d\TH:i'),
+                        'check_out' => $check_out_date->format('Y-m-d\TH:i'),
                         'days' => $days,
                         'adult' => $adult,
                         'children' => $children,
                         'overnight' => $overnight,
-                        'roomPrice' => $roomPrice,
+                        'roomPrice' => $room['room_price'],
                         'entranceFee' => $entranceFee,
                         'bookingFee' => $bookingFee,
                         'totalPrice' => $totalPrice
@@ -138,7 +143,9 @@ class BookingController
         $stmt->execute([$_SESSION['room_id']]);
         $room = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        require_once __DIR__ . '/../Views/booking/confirmation.php';
+        // Make database connection available to the view
+        $pdo = $this->pdo;
+        require_once __DIR__ . '/../Views/booking/booking-confirmation.php';
     }
 
     public function process()
@@ -200,13 +207,13 @@ class BookingController
             exit();
         }
 
-        require_once __DIR__ . '/../Views/booking/process.php';
+        require_once __DIR__ . '/../Views/booking/booking-process.php';
     }
 
     public function payment()
     {
         session_start();
-        require_once __DIR__ . '/../Views/booking/payment.php';
+        require_once __DIR__ . '/../Views/booking/booking-payment.php';
     }
 
     public function paymentVerification()

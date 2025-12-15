@@ -16,6 +16,7 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../assets/K&ALogo.png">
     <link rel="stylesheet" href="../styles/auth.styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../js/loader.js"></script>
     <title>K&A | Create an Account</title>
 </head>
@@ -50,14 +51,24 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
                     </div>
                     <div class="form-group">
                         <label for="">Password:</label>
-                        <input type="password" placeholder="Enter your password" name="password">
+                        <div class="password-container">
+                            <input type="password" placeholder="Enter your password" name="password" id="password">
+                            <span class="password-toggle" id="togglePassword" onclick="togglePassword('password', 'togglePassword')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="">Confirm Password:</label>
-                        <input type="password" placeholder="Re-type your password" name="confirm-password">
+                        <div class="password-container">
+                            <input type="password" placeholder="Re-type your password" name="confirm-password" id="confirm-password">
+                            <span class="password-toggle" id="toggleConfirmPassword" onclick="togglePassword('confirm-password', 'toggleConfirmPassword')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
                     </div>
                     <div style="margin-bottom: 12px;" class="g-recaptcha" data-sitekey="<?= $site_key ?>"></div>
-                    <button>Sign up</button>
+                    <button type="submit" id="signup-btn">Sign up</button>
                     <?php if (isset($_SESSION['error'])): ?>
                         <p
                             style="color: #F74141; font-weight: 500; text-align: center; margin-bottom: 12px; font-style: italic;">
@@ -77,6 +88,69 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
         </div>
     </div>
     <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+        // Function to toggle password visibility
+        function togglePassword(inputId, toggleId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.getElementById(toggleId).querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Function to show loading animation on signup button
+        document.querySelector('form').addEventListener('submit', function() {
+            const signupBtn = document.getElementById('signup-btn');
+            const originalText = signupBtn.innerHTML;
+
+            // Disable button and show loading state
+            signupBtn.disabled = true;
+            signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing up...';
+
+            // Re-enable button after 5 seconds in case of error
+            setTimeout(function() {
+                if (signupBtn.disabled) {
+                    signupBtn.disabled = false;
+                    signupBtn.innerHTML = originalText;
+                }
+            }, 5000);
+        });
+    </script>
+    <style>
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-container input {
+            width: 100%;
+            padding-right: 40px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .password-toggle:hover {
+            color: #333;
+        }
+
+        #signup-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    </style>
 </body>
 
 </html>

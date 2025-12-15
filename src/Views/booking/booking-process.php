@@ -1,17 +1,18 @@
 <?php
 
-require __DIR__ . "/../vendor/autoload.php";
-require '../db/connectDB.php';
+require __DIR__ . "/../../../vendor/autoload.php";
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Config\Database;
 
 session_start();
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
+$pdo = Database::getInstance()->getConnection();
 $user = null;
 
 if (isset($_COOKIE['token'])) {
@@ -133,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <textarea name="comment" id="comment" rows="5"></textarea>
                         </div>
                         <div class="buttons">
-                            <a href="booking-confirmation.php"><i class="fa-solid fa-arrow-left"></i>Back</a>
+                            <a href="/booking/confirmation"><i class="fa-solid fa-arrow-left"></i>Back</a>
                             <button type="submit" class="a-submit">Next <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                     </form>

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $_SESSION['room_id'] = $room;
 
-    header("Location: booking-confirmation.php");
+    header("Location: /booking/confirmation");
     exit();
 }
 

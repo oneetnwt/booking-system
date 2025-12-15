@@ -35,7 +35,7 @@ if (isset($_COOKIE['token'])) {
 
 // Check if booking details exist in session
 if (!isset($_SESSION['booking_details'])) {
-    header('Location: booking-confirmation.php');
+    header('Location: /booking/confirmation');
     exit();
 }
 
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <textarea name="comment" id="comment" rows="5"></textarea>
                         </div>
                         <div class="buttons">
-                            <a href="booking-confirmation.php"><i class="fa-solid fa-arrow-left"></i>Back</a>
+                            <a href="/booking/confirmation"><i class="fa-solid fa-arrow-left"></i>Back</a>
                             <button type="submit" class="a-submit">Next <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                     </form>
