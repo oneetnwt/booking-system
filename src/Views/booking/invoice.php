@@ -164,7 +164,7 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
             </div>
             <p style="text-align: center; margin-top: 1rem;">&copy; <?= date("Y") ?> K&A Natural Spring Resort</p>
-            <a href="home.php"
+            <a href="/home"
                 style="padding: 0.5rem 1rem; background-color: #3165e8; color: white; text-decoration: none; border-radius: 0.5rem; text-align: center; align-self: center; margin-top: 1rem;">Return
                 to
                 Home</a>

@@ -1,17 +1,18 @@
 <?php
 
-require __DIR__ . "/../../vendor/autoload.php";
-require '../db/connectDB.php';
+require __DIR__ . '/../../../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Config\Database;
 
 session_start();
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
+$pdo = Database::getInstance()->getConnection();
 $user = null;
 
 if (isset($_COOKIE['token'])) {

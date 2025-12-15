@@ -9,15 +9,16 @@ if (!isset($_COOKIE['token'])) {
 use Dotenv\Dotenv;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Config\Database;
 
-require_once '../../../vendor/autoload.php';
-require '../db/connectDB.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
 $token = $_COOKIE['token'];
+$pdo = Database::getInstance()->getConnection();
 
 $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
 

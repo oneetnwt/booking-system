@@ -2,7 +2,9 @@
 
 session_start();
 
-require '../db/connectDB.php';
+require __DIR__ . '/../../../vendor/autoload.php';
+use App\Config\Database;
+$pdo = Database::getInstance()->getConnection();
 
 if (!isset($_COOKIE['token'])) {
     header("Location: ../index.php?error=unauthorized");

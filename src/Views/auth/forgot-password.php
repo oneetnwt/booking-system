@@ -1,11 +1,13 @@
 <?php
-require '../../../vendor/autoload.php';
-require '../db/connectDB.php';
+require __DIR__ . '/../../../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
+use App\Config\Database;
+
 session_start();
+$pdo = Database::getInstance()->getConnection();
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

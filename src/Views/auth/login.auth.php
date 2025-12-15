@@ -1,15 +1,16 @@
 <?php
 
-require '../db/connectDB.php';
-require_once __DIR__ . "/../../vendor/autoload.php";
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Config\Database;
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
 $secret_key = $_ENV['JWT_SECRET_KEY'];
+$pdo = Database::getInstance()->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $email = $_POST['email'];

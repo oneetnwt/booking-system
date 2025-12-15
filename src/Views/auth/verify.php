@@ -11,7 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $stored = $_SESSION['pending_user'];
 
     if ($stored && $input_code == $stored['code']) {
-        require '../db/connectDB.php';
+        require __DIR__ . '/../../../vendor/autoload.php';
+        use App\Config\Database;
+        $pdo = Database::getInstance()->getConnection();
         $stmt = $pdo->prepare("INSERT INTO users (firstname, lastname, email, phone_number, password) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([
             $stored['firstname'],

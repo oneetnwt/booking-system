@@ -624,6 +624,47 @@ The system uses MySQL/MariaDB with the following key tables:
 | GET    | `/admin/view-booking.php` | View specific booking details |
 | GET    | `/admin/dashboard.php`    | Get dashboard statistics      |
 
+## 🧪 Testing
+
+The application includes a comprehensive testing suite using PHPUnit. To run the tests:
+
+1. Install the development dependencies:
+   ```bash
+   composer install
+   ```
+
+2. Run all tests:
+   ```bash
+   vendor/bin/phpunit
+   ```
+
+3. Run tests with coverage report:
+   ```bash
+   vendor/bin/phpunit --coverage-html coverage/
+   ```
+
+4. Run specific test suite:
+   ```bash
+   vendor/bin/phpunit tests/AuthControllerTest.php
+   ```
+
+The testing suite includes:
+- Unit tests for controllers (AuthController, BookingController, etc.)
+- Service tests (JwtService, EmailService, etc.)
+- Integration tests for complete user flows
+- Router functionality tests
+- Environment and configuration tests
+
+### Test Structure
+- `tests/`: Contains all test files
+- `tests/BaseTestCase.php`: Base test class with common setup
+- `tests/AuthControllerTest.php`: Tests for authentication functionality
+- `tests/BookingControllerTest.php`: Tests for booking functionality
+- `tests/JwtServiceTest.php`: Tests for JWT token handling
+- `tests/RouterTest.php`: Tests for routing functionality
+- `tests/EnvironmentTest.php`: Tests for environment setup
+- `tests/IntegrationTest.php`: Integration tests for complete flows
+
 ## 📸 Screenshots
 
 ### 🏠 Home Page

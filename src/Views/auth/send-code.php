@@ -1,7 +1,9 @@
 <?php
 session_start();
 
-require '../db/connectDB.php';
+require __DIR__ . '/../../../vendor/autoload.php';
+use App\Config\Database;
+$pdo = Database::getInstance()->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $enteredCode = $_POST['code'];
