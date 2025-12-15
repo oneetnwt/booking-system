@@ -2,6 +2,9 @@
 .env*
 .env.local
 
+# But keep the example file
+!.env.example
+
 # Composer
 vendor/
 composer.phar

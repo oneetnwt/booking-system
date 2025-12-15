@@ -143,7 +143,13 @@ mysql -u root -p resort < resort.sql
 
 ### Step 7: Environment Configuration
 
-Create a `.env` file in the root directory:
+**Option 1:** Copy the example environment file and modify the values:
+
+```bash
+cp .env.example .env
+```
+
+**Option 2:** Create a `.env` file manually in the root directory with the following structure:
 
 ```env
 # Database Configuration
@@ -169,6 +175,50 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT=http://localhost:8000/google-auth/google-callback.php
 ```
+
+#### Detailed Configuration Instructions
+
+**Database Configuration:**
+- `DB_SERVERNAME`: Host address of your MySQL server (usually 'localhost')
+- `DB_USERNAME`: Your MySQL username (typically 'root' for local development)
+- `DB_PASSWORD`: Your MySQL password
+- `DB_NAME`: Name of the database you created (should be 'resort' if following previous steps)
+
+**Application Email Configuration:**
+- `APP_EMAIL`: Email address used to send notifications (Gmail recommended)
+- `APP_PASSWORD`: App password for the email account (not your regular password)
+- `APP_NAME`: Name of your resort application
+
+**reCAPTCHA Configuration:**
+- `RECAPTCHA_SITE_KEY`: Public key obtained from Google reCAPTCHA dashboard
+- `RECAPTCHA_SECRET_KEY`: Private key obtained from Google reCAPTCHA dashboard
+
+  To obtain these keys:
+  1. Visit [Google reCAPTCHA Admin Console](https://www.google.com/recaptcha/admin)
+  2. Register a new site with type "reCAPTCHA v2" or "Invisible reCAPTCHA"
+  3. Add your domain (localhost for local development)
+  4. Copy the Site Key and Secret Key to your .env file
+
+**JWT Configuration:**
+- `JWT_SECRET_KEY`: Random string used to sign JWT tokens securely
+  Generate a strong secret key using a password generator or command like:
+  ```bash
+  openssl rand -hex 32
+  ```
+
+**Google OAuth Configuration:**
+- `GOOGLE_CLIENT_ID`: Client ID from Google Developer Console
+- `GOOGLE_CLIENT_SECRET`: Client Secret from Google Developer Console
+- `GOOGLE_REDIRECT`: The URL where Google redirects after authentication
+
+  To set up Google OAuth:
+  1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+  2. Create a new project or select existing one
+  3. Enable Google+ API
+  4. Go to Credentials > Create Credentials > OAuth 2.0 Client IDs
+  5. Set application type as 'Web application'
+  6. Add authorized redirect URIs (include http://localhost:8000/google-auth/google-callback.php)
+  7. Copy Client ID and Secret to your .env file
 
 ### Step 8: Run the Application
 
@@ -283,7 +333,13 @@ RUN chown -R www-data:www-data /var/www/html
 
 ### Step 5: Environment Configuration
 
-Create a `.env` file:
+**Option 1:** Copy the example environment file and modify the values:
+
+```bash
+cp .env.example .env
+```
+
+**Option 2:** Create a `.env` file manually with the Docker-specific database configuration:
 
 ```env
 # Database Configuration (for Docker)
@@ -309,6 +365,50 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT=http://localhost:8000/google-auth/google-callback.php
 ```
+
+#### Detailed Configuration Instructions
+
+**Database Configuration:**
+- `DB_SERVERNAME`: Host address of your MySQL server (use 'db' when using Docker, 'localhost' otherwise)
+- `DB_USERNAME`: Your MySQL username (typically 'root' for local development)
+- `DB_PASSWORD`: Your MySQL password (should match the one set in docker-compose.yml)
+- `DB_NAME`: Name of the database you created (should be 'resort' if following previous steps)
+
+**Application Email Configuration:**
+- `APP_EMAIL`: Email address used to send notifications (Gmail recommended)
+- `APP_PASSWORD`: App password for the email account (not your regular password)
+- `APP_NAME`: Name of your resort application
+
+**reCAPTCHA Configuration:**
+- `RECAPTCHA_SITE_KEY`: Public key obtained from Google reCAPTCHA dashboard
+- `RECAPTCHA_SECRET_KEY`: Private key obtained from Google reCAPTCHA dashboard
+
+  To obtain these keys:
+  1. Visit [Google reCAPTCHA Admin Console](https://www.google.com/recaptcha/admin)
+  2. Register a new site with type "reCAPTCHA v2" or "Invisible reCAPTCHA"
+  3. Add your domain (localhost for local development)
+  4. Copy the Site Key and Secret Key to your .env file
+
+**JWT Configuration:**
+- `JWT_SECRET_KEY`: Random string used to sign JWT tokens securely
+  Generate a strong secret key using a password generator or command like:
+  ```bash
+  openssl rand -hex 32
+  ```
+
+**Google OAuth Configuration:**
+- `GOOGLE_CLIENT_ID`: Client ID from Google Developer Console
+- `GOOGLE_CLIENT_SECRET`: Client Secret from Google Developer Console
+- `GOOGLE_REDIRECT`: The URL where Google redirects after authentication
+
+  To set up Google OAuth:
+  1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+  2. Create a new project or select existing one
+  3. Enable Google+ API
+  4. Go to Credentials > Create Credentials > OAuth 2.0 Client IDs
+  5. Set application type as 'Web application'
+  6. Add authorized redirect URIs (include http://localhost:8000/google-auth/google-callback.php)
+  7. Copy Client ID and Secret to your .env file
 
 ### Step 6: Build and Run with Docker
 
