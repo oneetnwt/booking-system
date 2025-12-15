@@ -72,6 +72,7 @@ class AuthController
     public function showSignup()
     {
         session_start();
+        unset($_SESSION['form_data']);
         require_once __DIR__ . '/../Views/auth/signup.php';
     }
 
@@ -90,6 +91,13 @@ class AuthController
         $phone = $_POST['phone_number'];
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm-password'];
+
+        $_SESSION['form_data'] = [
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'email' => $email,
+            'phone_number' => $phone
+        ];
 
         $recaptchaSecret = $_ENV['RECAPTCHA_SECRET_KEY'];
         $recaptchaResponse = $_POST['g-recaptcha-response'];
@@ -143,6 +151,8 @@ class AuthController
 
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $code = rand(100000, 999999);
+
+        unset($_SESSION['form_data']);
 
         $_SESSION['pending_user'] = [
             'firstname' => $firstname,

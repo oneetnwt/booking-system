@@ -199,6 +199,33 @@ GOOGLE_REDIRECT=http://localhost:8000/google/callback
   3. Add your domain (localhost for local development)
   4. Copy the Site Key and Secret Key to your .env file
 
+  **Note:** If you're using an existing reCAPTCHA key and want to add localhost, follow these steps:
+
+  Adding localhost to existing reCAPTCHA site:
+
+    1. Go to https://www.google.com/recaptcha/admin
+    2. Sign in with your Google account
+    3. Find your site with key 6LeEcywsAAAAAOjPox8h2M8kixKCXmT3bAvf3y78
+    4. Click on the settings/gear icon or site name
+    5. Scroll to Domains section
+    6. Click Add a new domain
+    7. Add localhost and click save
+    8. Click Add a new domain again
+    9. Add 127.0.0.1 and click save
+
+   OR create new reCAPTCHA for localhost:
+
+    1. Go to https://www.google.com/recaptcha/admin
+    2. Click + button (Create)
+    3. Label: Booking System - Localhost
+    4. reCAPTCHA type: Select reCAPTCHA v2 → "I'm not a robot" Checkbox
+    5. Domains:
+       - Add localhost
+       - Add 127.0.0.1
+    6. Accept terms and click Submit
+    7. Copy the new Site Key and Secret Key
+    8. Update your .env file with the new keys
+
 **JWT Configuration:**
 - `JWT_SECRET_KEY`: Random string used to sign JWT tokens securely
   Generate a strong secret key using a password generator or command like:
@@ -393,6 +420,33 @@ GOOGLE_REDIRECT=http://localhost:8000/google/callback
   2. Register a new site with type "reCAPTCHA v2" or "Invisible reCAPTCHA"
   3. Add your domain (localhost for local development)
   4. Copy the Site Key and Secret Key to your .env file
+
+  **Note:** If you're using an existing reCAPTCHA key and want to add localhost, follow these steps:
+
+  Adding localhost to existing reCAPTCHA site:
+
+    1. Go to https://www.google.com/recaptcha/admin
+    2. Sign in with your Google account
+    3. Find your site with key 6LeEcywsAAAAAOjPox8h2M8kixKCXmT3bAvf3y78
+    4. Click on the settings/gear icon or site name
+    5. Scroll to Domains section
+    6. Click Add a new domain
+    7. Add localhost and click save
+    8. Click Add a new domain again
+    9. Add 127.0.0.1 and click save
+
+   OR create new reCAPTCHA for localhost:
+
+    1. Go to https://www.google.com/recaptcha/admin
+    2. Click + button (Create)
+    3. Label: Booking System - Localhost
+    4. reCAPTCHA type: Select reCAPTCHA v2 → "I'm not a robot" Checkbox
+    5. Domains:
+       - Add localhost
+       - Add 127.0.0.1
+    6. Accept terms and click Submit
+    7. Copy the new Site Key and Secret Key
+    8. Update your .env file with the new keys
 
 **JWT Configuration:**
 - `JWT_SECRET_KEY`: Random string used to sign JWT tokens securely

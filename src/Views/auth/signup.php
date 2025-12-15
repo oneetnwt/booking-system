@@ -33,20 +33,20 @@ $site_key = $_ENV['RECAPTCHA_SITE_KEY'];
                     <div class="name">
                         <div class="form-group">
                             <label for="">First Name:</label>
-                            <input type="text" placeholder="First Name" name="firstname">
+                            <input type="text" placeholder="First Name" name="firstname" value="<?= htmlspecialchars($_SESSION['form_data']['firstname'] ?? '') ?>">
                         </div>
                         <div class="form-group">
                             <label for="">Last Name:</label>
-                            <input type="text" placeholder="Last Name" name="lastname">
+                            <input type="text" placeholder="Last Name" name="lastname" value="<?= htmlspecialchars($_SESSION['form_data']['lastname'] ?? '') ?>">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="">Email:</label>
-                        <input type="email" placeholder="Enter your email" name="email">
+                        <input type="email" placeholder="Enter your email" name="email" value="<?= htmlspecialchars($_SESSION['form_data']['email'] ?? '') ?>">
                     </div>
                     <div class="form-group">
                         <label for="">Phone Number:</label>
-                        <input type="number" placeholder="Enter your phone number" name="phone_number">
+                        <input type="number" placeholder="Enter your phone number" name="phone_number" value="<?= htmlspecialchars($_SESSION['form_data']['phone_number'] ?? '') ?>">
                     </div>
                     <div class="form-group">
                         <label for="">Password:</label>
