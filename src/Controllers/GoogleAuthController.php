@@ -24,31 +24,23 @@ class GoogleAuthController
         $this->client->addScope("email");
         $this->client->addScope("profile");
 
-        // Configure HTTP client for SSL verification
-        $httpConfig = ['http' => ['verify' => true]];
+        $httpConfig = ['verify' => true];
 
-        // Check for system certificate settings
         $cafile = ini_get('openssl.cafile');
         $cainfo = ini_get('curl.cainfo');
 
         if ($cafile && file_exists($cafile)) {
-            $httpConfig['http']['verify'] = $cafile;
+            $httpConfig['verify'] = $cafile;
         } elseif ($cainfo && file_exists($cainfo)) {
-            $httpConfig['http']['verify'] = $cainfo;
+            $httpConfig['verify'] = $cainfo;
         } elseif ($caBundlePath = $_ENV['CA_BUNDLE_PATH'] ?? null) {
-            // Use CA bundle path from environment if specified
-            $httpConfig['http']['verify'] = $caBundlePath;
+            $httpConfig['verify'] = $caBundlePath;
         }
-        // For development environment where certificates might not be configured
         elseif (($_ENV['APP_ENV'] ?? null) === 'development' || strpos($_ENV['APP_ENV'] ?? '', 'dev') !== false) {
-            // For development only - do not use in production!
-            $httpConfig['http']['verify'] = false;
+            $httpConfig['verify'] = false;
         }
-        // As a last resort for Windows development when no certificates are configured
         elseif ((($_ENV['APP_ENV'] ?? null) === null || strpos($_ENV['APP_ENV'] ?? '', 'dev') !== false) && PHP_OS_FAMILY === 'Windows') {
-            // On Windows in development, if no certificates are configured
-            // We'll disable verification as a fallback (development only)
-            $httpConfig['http']['verify'] = false;  // Development use only!
+            $httpConfig['verify'] = false;
         }
 
         $this->client->setHttpClient(
