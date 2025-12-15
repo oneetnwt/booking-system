@@ -71,9 +71,20 @@ class GoogleAuthController
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$user) {
-                $_SESSION['error'] = "User not found";
-                header("Location: /auth/login");
-                exit();
+                $firstname = $userinfo->givenName ?? '';
+                $lastname = $userinfo->familyName ?? '';
+                $email = $userinfo->email;
+                
+                $insertStmt = $this->pdo->prepare("INSERT INTO users (firstname, lastname, email, role, email_verified) VALUES (?, ?, ?, 'user', 1)");
+                $insertStmt->execute([$firstname, $lastname, $email]);
+                
+                $user = [
+                    'id' => $this->pdo->lastInsertId(),
+                    'firstname' => $firstname,
+                    'lastname' => $lastname,
+                    'email' => $email,
+                    'role' => 'user'
+                ];
             }
 
             $jwt_token = $this->jwtService->generateToken([
