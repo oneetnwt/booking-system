@@ -1,0 +1,37 @@
+services:
+  web:
+    image: php:8.2-apache
+    container_name: booking-system-web
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DB_SERVERNAME=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=resort
+    command: >
+      bash -c "
+        docker-php-ext-install mysqli pdo pdo_mysql &&
+        a2enmod rewrite &&
+        sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf &&
+        apache2-foreground
+      "
+
+  db:
+    image: mysql:8.0
+    container_name: booking-system-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: resort
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./resort.sql:/docker-entrypoint-initdb.d/resort.sql
+
+volumes:
+  db_data:

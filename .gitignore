@@ -1,2 +1,40 @@
+# Environment files
 .env*
-vendor*
+.env.local
+
+# But keep the example file
+!.env.example
+
+# Composer
+vendor/
+composer.phar
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+tmp/
+temp/
+
+# PHP files
+*.swp
+
+# Build artifacts
+build/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
